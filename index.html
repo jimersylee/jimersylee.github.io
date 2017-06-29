@@ -162,27 +162,22 @@
 
     
         <div class="content">
-            <p>#卸载CentOS中自带openjdk</p>
-<p>CentOS自带openjdk，可以先用Java –version检测是否存在jdk版本。如果存在，最好在安装Oracle的jdk之前最好卸载，可以使用如下指令</p>
+            <h1 id="卸载CentOS中自带openjdk"><a href="#卸载CentOS中自带openjdk" class="headerlink" title="卸载CentOS中自带openjdk"></a>卸载CentOS中自带openjdk</h1><p>CentOS自带openjdk，可以先用Java –version检测是否存在jdk版本。如果存在，最好在安装Oracle的jdk之前最好卸载，可以使用如下指令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y remove java java-1.4.2-gcj-compat-1.4.2.0-40jpp.115</div><div class="line">yum -y remove java java-1.6.0-openjdk-1.6.0.0-1.7.b09.el5</div></pre></td></tr></table></figure>
-<p>#安装JDK</p>
-<p>先从oracle官网下载对应的JDK版本 <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a><br>本人选择的是Linux x86 .tar.gz版本<br>下载完成后在/usr 中创建java目录，用来存放跟java有关的文件。然后把下载jdk压缩包的文件解压到该路径下</p>
+<h1 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h1><p>先从oracle官网下载对应的JDK版本 <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a><br>本人选择的是Linux x86 .tar.gz版本<br>下载完成后在/usr 中创建java目录，用来存放跟java有关的文件。然后把下载jdk压缩包的文件解压到该路径下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar –xzvf jdk jdk-8u45-linux-i586.tar.gz</div></pre></td></tr></table></figure>
 <p>顺便重命名一下，方便以后写路径</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mv jdk1.8.0_45 jdk1.8</div></pre></td></tr></table></figure>
-<p>#配置环境变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div></pre></td></tr></table></figure>
+<h1 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div></pre></td></tr></table></figure>
 <p>然后添加环境变量</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/usr/java/jdk1.8 </div><div class="line">export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar </div><div class="line">export PATH=$PATH:$JAVA_HOME/bin</div></pre></td></tr></table></figure>
 <p>让其立刻生效</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source /etc/profile</div></pre></td></tr></table></figure>
 <p>然后可以执行 java –version 看其版本号是否为1.8，如果有结果了且为1.8，至此jdk安装成</p>
-<p>#安装idea</p>
-<p>到<a href="https://www.jetbrains.com/idea" target="_blank" rel="external">https://www.jetbrains.com/idea</a> 下载对应版本的文件，然后将其解压。然后进入到解压后文件夹的bin目录下执行</p>
+<h1 id="安装idea"><a href="#安装idea" class="headerlink" title="安装idea"></a>安装idea</h1><p>到<a href="https://www.jetbrains.com/idea" target="_blank" rel="external">https://www.jetbrains.com/idea</a> 下载对应版本的文件，然后将其解压。然后进入到解压后文件夹的bin目录下执行</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./idea.sh</div></pre></td></tr></table></figure>
 <p>将进入安装程序，因为该程序为gui界面的程序，所以不能在command界面下安装。<br>切记，在安装前必须配置好JAVA环境变量。</p>
-<p>#安装tomcat</p>
-<p>从<a href="http://tomcat.apache.org/下载需要的版本，下载完后将其解压到/usr/java中，然后进入到bin目录下执行" target="_blank" rel="external">http://tomcat.apache.org/下载需要的版本，下载完后将其解压到/usr/java中，然后进入到bin目录下执行</a></p>
+<h1 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h1><p>从<a href="http://tomcat.apache.org/下载需要的版本，下载完后将其解压到/usr/java中，然后进入到bin目录下执行" target="_blank" rel="external">http://tomcat.apache.org/下载需要的版本，下载完后将其解压到/usr/java中，然后进入到bin目录下执行</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./startup.sh</div></pre></td></tr></table></figure>
 <p>然后在浏览器访问127.0.0.1:8080，如果显示tomcat的管理页面，就表示安装成功了。-</p>
 
