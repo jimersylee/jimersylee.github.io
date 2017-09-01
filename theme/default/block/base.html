@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+{% block head %}
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="keywords" content="{% block keywords %}{{ site.keywords }},{{ site.title }}{% endblock %}">
+	<meta name="description" content="{% block description %}{{ site.description }}{% endblock %}">
+
+	<!--[if lt IE 9]>
+	<script src="{{ site.url }}theme/default/js/html5.js"></script>
+	<![endif]-->
+	<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+	
+	<title>{% block title %}{{ site.title }}{% endblock %}</title>
+	
+	<link rel="stylesheet" href="{{ site.url }}theme/default/css/genericons.css?ver={{ site.version }}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{{ site.url }}theme/default/css/style.css?ver={{ site.version }}" type="text/css" media="all" />
+	<link rel="stylesheet" href="{{ site.url }}theme/default/css/markdown.css?ver={{ site.version }}" type="text/css" media="all" />
+	<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}feed.xml" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="{{ site.url }}theme/default/css/ie.css?ver={{ site.version }}" type="text/css" media="all" />
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" href="{{ site.url }}theme/default/css/ie7.css?ver={{ site.version }}" type="text/css" media="all" />
+	<![endif]-->
+	
+	<script type="text/javascript" src="{{ site.url }}theme/default/js/jquery/jquery.js?ver={{ site.version }}"></script>
+	<script type="text/javascript" src="{{ site.url }}theme/default/js/jquery/jquery-migrate.min.js?ver={{ site.version }}"></script>
+	
+	{% if site.baiduAnalytics %}<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?{{ site.baiduAnalytics }}";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	{% endif %}
+
+{% endblock %}
+</head>
+
+<body>
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	
+	{% block sidebar %}{% endblock %}
+	{% block content %}{% endblock %}
+	{% block footer %}{% endblock %}
+	
+</div><!-- .site -->
+{% include "block/script.html" %}
+
+{% if site.highlight %}
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endif %}
+
+{% if site.katex %}
+<link rel="stylesheet" href="//cdn.bootcss.com/KaTeX/0.6.0/katex.min.css">
+<script src="//cdn.bootcss.com/KaTeX/0.6.0/katex.min.js"></script>
+<script src="//cdn.bootcss.com/KaTeX/0.6.0/contrib/auto-render.min.js"></script>
+<script type="text/javascript">
+render_option = {
+	delimiters: [
+		// 段落模式 $$...$$ \[...\]
+		{left: "$$", right: "$$", display: true},
+		{left: "\\[", right: "\\]", display: true},
+		// 行内模式 $...$ \(...\)
+		{left: "$", right: "$", display: false},
+		{left: "\\(", right: "\\)", display: false}
+	],
+	ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+}
+renderMathInElement(document.body, render_option);
+</script>
+{% elseif site.mathjax %}
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endif %}
+
+</body>
+</html>
