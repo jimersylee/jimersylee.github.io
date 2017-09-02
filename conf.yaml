@@ -9,10 +9,10 @@ highlight: true
 mathjax: true
 katex: false
 youyan: 2142981
-baiduAnalytics:
+baiduAnalytics: ad6130507d4c044cd731ac40594106a0
 keywords: Jimersy Lee,jimersylee
 description: >
-    GitBlog是一个简单易用的Markdown博客系统
+    这是Jimersy Lee的个人博客
 version: 2.3.2
 author:
     name: jimersylee
@@ -28,4 +28,4 @@ blog:
 text:
     title: 介绍
     intro: >
-          啦啦啦~
+            能搜索到我的人都不是等闲之辈,毕竟英雄惺惺相惜,人以群分,哈哈哈~
