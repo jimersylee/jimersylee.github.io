@@ -7,7 +7,7 @@ tags: CENTOS,JENKINS
 images: 
 category: devops
 status: publish
-summary: Hello World
+summary: 本文展示了如何在CentOS上通过yum安装jenkins,而不是使用war包,以及tomcat容器启动jenkins
 -->
 
 
