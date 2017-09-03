@@ -7,7 +7,7 @@ tags: Blog
 images: 
 category: 
 status: publish
-summary: Hello World
+summary: 本人精通各种编程语言              的hello world!
 -->
 
 
@@ -18,8 +18,10 @@ summary: Hello World
 ```
 echo "hello world";
 printf "hello world";
-System.Out.println("hello world");
-print "hello world"
+System.out.println("hello world");
+print("hello world")
 alert("hello world");
+std::cout << "hello world" << std::endl;
+Console.WriteLine("hello world"); 
 
 ```
