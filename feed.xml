@@ -4,8 +4,8 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-09-02 23:09:37</pubDate>
-        <lastBuildDate>2017-09-02 23:09:37</lastBuildDate>
+        <pubDate>2017-09-03 00:09:03</pubDate>
+        <lastBuildDate>2017-09-03 00:09:03</lastBuildDate>
         <generator>Gitblog v1.0</generator>
                 <item>
             <title>CentOS7安装Jenkins</title>
