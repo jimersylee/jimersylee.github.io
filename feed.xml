@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Jimersy Lee's Blog</title>
+        <description>这是Jimersy Lee的个人博客</description>
+        <link>/</link>
+        <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
+        <pubDate>2017-09-02 23:09:37</pubDate>
+        <lastBuildDate>2017-09-02 23:09:37</lastBuildDate>
+        <generator>Gitblog v1.0</generator>
+                <item>
+            <title>CentOS7安装Jenkins</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-01-01
+title: CentOS7安装Jenkins
+tags: CENTOS,JENKINS
+images: 
+category: devops
+status: publish
+summary: 本文展示了如何在CentOS上通过yum安装jenkins,而不是使用war包,以及tomcat容器启动jenkins
+--&gt;
+&lt;p&gt;环境:CentOS7&lt;/p&gt;
+&lt;p&gt;1.下载安装包
+在https://jenkins.io/download/找到相应的包下载地址&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;wget https://pkg.jenkins.io/redhat/jenkins-2.76-1.1.noarch.rpm&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;2.安装包&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo rpm -i jenkins-2.76-1.1.noarch.rpm&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;3.启动jenkins&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo service jenkins start&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;4.配置nginx&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vim /etc/nginx/conf.d/jenkins.conf
+server {
+ 2         listen       443;
+ 3         server_name  jenkins.jimersylee.com;
+ 4         ssl on;
+ 5         ssl_certificate /data/ssl_cert/Nginx/1_jimersylee.com_bundle.crt;
+ 6         ssl_certificate_key /data/ssl_cert/Nginx/2_jimersylee.com.key;
+ 7         ssl_session_timeout 5m;
+ 8         ssl_protocols TLSv1 TLSv1.1 TLSv1.2; #按照这个协议配置
+ 9         ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;#按照这个套件配置
+10         ssl_prefer_server_ciphers on;
+11        # root /data/www/www;
+
+12
+13         index index.html index.htm index.php;
+14         location /
+15         {
+16             proxy_pass http://127.0.0.1:8080;
+17         }
+18
+19         access_log /data/logs/jenkins/jenkins.log main;
+20         }
+21
+22 server {
+23     listen 80;
+24     server_name jenkins.jimersylee.com;
+25     rewrite ^ https://$server_name$request_uri? permanent;
+26     }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;5.访问https://jenkins.jimersylee.com/
+发现没有账号密码,修改jenkins为不需要账号密码&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vim /var/lib/jenkins/config.xml
+&amp;lt;useSecurity&amp;gt;true&amp;lt;/useSecurity&amp;gt;修改为false
+重启jenkins
+sudo service jenkins restart
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;6.访问https://jenkins.jimersylee.com/
+系统管理-&amp;gt;Configure Global Security 勾选启用安全,勾选使用jenkins专有数据库&lt;/p&gt;
+&lt;p&gt;7.因为要使用某个特定账号如dev去执行shell,因此将jenkins的默认启动账号jenkins修改为dev&lt;/p&gt;
+&lt;p&gt;8.如何修改运行jenkins进程的linux帐号？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;找到jenkins的配置文件，一般是/etc/sysconfig/jenkins&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;修改下面的参数为相应的用户，比如JENKINS_USER=&amp;quot;dev&amp;quot;
+&lt;pre&gt;&lt;code&gt;## Type:        string
+## Default:     &quot;jenkins&quot;
+## ServiceRestart: jenkins
+#
+# Unix user account that runs the Jenkins daemon
+# Be careful when you change this, as you need to update
+# permissions of $JENKINS_HOME and /var/log/jenkins.
+#
+JENKINS_USER=&quot;dev&quot;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;修改下来文件或目录的权限&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;chown dev:dev file
+chown -R admin:admin directory
+/var/lib/jenkins/
+/var/log/jenkins/
+/var/cache/jenkins/
+/usr/lib/jenkins/jenkins.war
+/etc/sysconfig/jenkins&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;重启jenkins：service jenkins restart&lt;/li&gt;
+&lt;/ul&gt;            </description>
+            <pubDate>2017-09-02 08:58:06</pubDate>
+            <link>//blog/devops/InstallJenkinsOnCentOS7.html</link>
+            <guid isPermaLink="true">//blog/devops/InstallJenkinsOnCentOS7.html</guid>
+                                               <category>devops</category>
+                                    </item>
+                <item>
+            <title>Hello World</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-01-01
+title: Hello World
+tags: Blog
+images: 
+category: 
+status: publish
+summary: Hello World
+--&gt;
+&lt;h1&gt;Hello World&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本人精通各种语言              的hello world!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;echo &quot;hello world&quot;;
+printf &quot;hello world&quot;;
+System.Out.println(&quot;hello world&quot;);
+print &quot;hello world&quot;
+alert(&quot;hello world&quot;);
+&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-02 08:55:29</pubDate>
+            <link>//blog/test.html</link>
+            <guid isPermaLink="true">//blog/test.html</guid>
+                    </item>
+            </channel>
+</rss>
