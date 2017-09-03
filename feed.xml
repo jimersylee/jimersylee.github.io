@@ -4,9 +4,39 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-09-03 00:09:03</pubDate>
-        <lastBuildDate>2017-09-03 00:09:03</lastBuildDate>
+        <pubDate>2017-09-03 08:09:23</pubDate>
+        <lastBuildDate>2017-09-03 08:09:23</lastBuildDate>
         <generator>Gitblog v1.0</generator>
+                <item>
+            <title>Hello World</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-01-01
+title: Hello World
+tags: Blog
+images: 
+category: 
+status: publish
+summary: 本人精通各种编程语言              的hello world!
+--&gt;
+&lt;h1&gt;Hello World&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本人精通各种语言              的hello world!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;echo &quot;hello world&quot;;
+printf &quot;hello world&quot;;
+System.out.println(&quot;hello world&quot;);
+print(&quot;hello world&quot;)
+alert(&quot;hello world&quot;);
+std::cout &amp;lt;&amp;lt; &quot;hello world&quot; &amp;lt;&amp;lt; std::endl;
+Console.WriteLine(&quot;hello world&quot;); 
+&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-03 08:34:23</pubDate>
+            <link>//blog/HelloWorld.html</link>
+            <guid isPermaLink="true">//blog/HelloWorld.html</guid>
+                    </item>
                 <item>
             <title>CentOS7安装Jenkins</title>
             <description>
@@ -101,33 +131,5 @@ chown -R admin:admin directory
             <guid isPermaLink="true">//blog/devops/InstallJenkinsOnCentOS7.html</guid>
                                                <category>devops</category>
                                     </item>
-                <item>
-            <title>Hello World</title>
-            <description>
-            &lt;!--
-author: Jimersy Lee
-head: 
-date: 2014-01-01
-title: Hello World
-tags: Blog
-images: 
-category: 
-status: publish
-summary: Hello World
---&gt;
-&lt;h1&gt;Hello World&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;本人精通各种语言              的hello world!&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;echo &quot;hello world&quot;;
-printf &quot;hello world&quot;;
-System.Out.println(&quot;hello world&quot;);
-print &quot;hello world&quot;
-alert(&quot;hello world&quot;);
-&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-02 08:55:29</pubDate>
-            <link>//blog/test.html</link>
-            <guid isPermaLink="true">//blog/test.html</guid>
-                    </item>
             </channel>
 </rss>
