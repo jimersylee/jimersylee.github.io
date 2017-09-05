@@ -211,6 +211,20 @@ var screenReaderText = {"expand":"<span class=\"screen-reader-text\">\u5c55\u5f0
 /* ]]> */
 </script>
 <script type="text/javascript" src="/theme/default/js/functions.js?ver=2.3.2"></script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
 
 <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/github.min.css">
 <script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
