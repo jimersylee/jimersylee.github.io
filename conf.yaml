@@ -2,7 +2,7 @@
 ---
 url: /
 title: Jimersy Lee's Blog
-subtitle: 拥抱开源世界
+subtitle: 典型程序员的日常
 theme: default
 enableCache: true
 highlight: true
@@ -10,7 +10,7 @@ mathjax: true
 katex: false
 youyan: 2142981
 baiduAnalytics: ad6130507d4c044cd731ac40594106a0
-keywords: Jimersy Lee,jimersylee
+keywords: Jimersy Lee,jimersylee,java,php,python,js,html,github
 description: >
     这是Jimersy Lee的个人博客
 version: 2.3.2
