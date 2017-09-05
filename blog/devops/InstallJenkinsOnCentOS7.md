@@ -108,3 +108,28 @@ sudo service jenkins restart
   /etc/sysconfig/jenkins
   ```
    - 重启jenkins：service jenkins restart
+
+
+
+#通过war包安装
+1. 安装tomcat
+mkdir /data/java_app/jenkins && cd /data/java_app/jenkins
+
+wget https://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-9/v9.0.0.M26/bin/apache-tomcat-9.0.0.M26.zip
+
+unzip apache-tomcat-9.0.0.M26.zip
+mv apache-tomcat-9.0.0.M26 tomcat9
+cd tomcat9/webapps
+wget http://mirrors.jenkins.io/war/latest/jenkins.war
+cd ../bin
+sh catalina.sh
+
+2. 访问127.0.0.1:8080/jenkins
+
+
+3. 需要输入初始密码
+cat /home/username/.jenkins/secrets/initialAdminPassword
+
+4. 然后配置插件什么的
+
+
