@@ -4,8 +4,8 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-09-08 07:09:52</pubDate>
-        <lastBuildDate>2017-09-08 07:09:52</lastBuildDate>
+        <pubDate>2017-09-08 11:09:31</pubDate>
+        <lastBuildDate>2017-09-08 11:09:31</lastBuildDate>
         <generator>Gitblog v1.0</generator>
                 <item>
             <title>PHP的Swoole扩展安装与学习</title>
@@ -207,6 +207,51 @@ summary: 学习使用python的scrapy写爬虫
             <guid isPermaLink="true">//blog/python/scrapy.html</guid>
                                                <category>python</category>
                                     </item>
+                <item>
+            <title>spacevim安装与使用</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-08-03
+title: spacevim安装与使用
+tags: VIM,SPACEVIM
+images: 
+category: 
+status: publish
+summary: 学习使用vim的一个扩展项目,spacevim,打造更好的vim编程环境
+--&gt;
+&lt;h1&gt;安装&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;安装spacevim的前提是安装好vim,一般linux系统自带
+&lt;pre&gt;&lt;code&gt;
+#redhat系列
+sudo yum install vim / sudo dnf install vim
+#debian系列
+sudo apt install vim 
+#或者
+sudo apt-get install vim &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;- 安装spacevim&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;curl -sLf &lt;a href=&quot;https://spacevim.org/install.sh&quot;&gt;https://spacevim.org/install.sh&lt;/a&gt; | bash&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+- 启动spacevim,等待下载插件&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;vim test.txt&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- 使用
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;打开目录&lt;/h1&gt;
+&lt;p&gt;vim path&lt;/p&gt;
+&lt;h1&gt;右边就会出现目录,移动光标到目录上,按回车键,就能进入目录;移动到文件上,按回车键就能打开文件;按退格键能返回上级目录&lt;/h1&gt;
+&lt;h1&gt;切换工程目录区与编辑的文件&lt;/h1&gt;
+&lt;p&gt;&amp;lt;ctrl+tab&amp;gt;&lt;/p&gt;
+&lt;h1&gt;创建文件&lt;/h1&gt;
+&lt;p&gt;在工程区移动到文件夹下,按&amp;lt;shift+n&amp;gt;,下方提示栏就会出现提示,输入文件名,回车,创建文件&lt;/p&gt;
+&lt;h1&gt;删除文件&lt;/h1&gt;
+&lt;p&gt;在工程区移动到文件夹下,按&lt;dd&gt;,下方提示栏就会出现提示,是否要删除,输入yes删除&lt;/p&gt;            </description>
+            <pubDate>2017-09-08 11:51:30</pubDate>
+            <link>//blog/vim/spacevim.html</link>
+            <guid isPermaLink="true">//blog/vim/spacevim.html</guid>
+                    </item>
                 <item>
             <title>PHP字符串常用函数学习</title>
             <description>
