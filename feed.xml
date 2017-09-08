@@ -4,9 +4,64 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-09-08 04:09:35</pubDate>
-        <lastBuildDate>2017-09-08 04:09:35</lastBuildDate>
+        <pubDate>2017-09-08 07:09:52</pubDate>
+        <lastBuildDate>2017-09-08 07:09:52</lastBuildDate>
         <generator>Gitblog v1.0</generator>
+                <item>
+            <title>PHP的Swoole扩展安装与学习</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2017-09-08
+title: PHP的Swoole扩展安装与学习
+tags: PHP,SWOOLE
+images: 
+category: php
+status: publish
+summary: PHP的Swoole扩展安装与学习
+--&gt;
+&lt;h1&gt;安装swoole&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;#直接使用pecl安装扩展
+sudo pecl install swoole
+#检测是否安装成功
+php -m|grep swoole
+#如果有swoole则安装成功,否则,在php.ini中增加扩展
+#获取php.ini的绝对路径
+php -i |grep php.ini
+cd  path
+vim php.ini
+#增加扩展
+extension=swoole&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;跑测试例程&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;#创建文件
+vim http_server.php
+
+#输入代码
+&amp;lt;?
+$http = new swoole_http_server(&quot;0.0.0.0&quot;, 9501);
+
+$http-&amp;gt;on('request', function ($request, $response) {
+    var_dump($request-&amp;gt;get, $request-&amp;gt;post);
+    $response-&amp;gt;header(&quot;Content-Type&quot;, &quot;text/html; charset=utf-8&quot;);
+    $response-&amp;gt;end(&quot;&amp;lt;h1&amp;gt;Hello Swoole. #&quot;.rand(1000, 9999).&quot;&amp;lt;/h1&amp;gt;&quot;);
+});
+
+$http-&amp;gt;start();
+
+#启动程序
+php http_server.php
+
+#看看成功没有
+curl http://127.0.0.1:9501
+
+#如果正确输出,那就启动成功啦
+&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-08 07:21:52</pubDate>
+            <link>//blog/php/swoole.html</link>
+            <guid isPermaLink="true">//blog/php/swoole.html</guid>
+                                               <category>php</category>
+                                    </item>
                 <item>
             <title>为域名配置免费SSL证书</title>
             <description>
