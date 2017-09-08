@@ -4,8 +4,8 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-09-05 12:09:41</pubDate>
-        <lastBuildDate>2017-09-05 12:09:41</lastBuildDate>
+        <pubDate>2017-09-08 04:09:35</pubDate>
+        <lastBuildDate>2017-09-08 04:09:35</lastBuildDate>
         <generator>Gitblog v1.0</generator>
                 <item>
             <title>为域名配置免费SSL证书</title>
@@ -120,6 +120,466 @@ nginx  #启动Nginx
             <link>//blog/devops/ssl.html</link>
             <guid isPermaLink="true">//blog/devops/ssl.html</guid>
                                                <category>devops</category>
+                                    </item>
+                <item>
+            <title>使用scrapy写爬虫</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-08-04
+title: 使用scrapy写爬虫
+tags: PYTHON,SCRAPY,CRAWLER
+images: 
+category: python
+status: publish
+summary: 学习使用python的scrapy写爬虫
+--&gt;
+&lt;p&gt;一开始想在windows环境下安装scrapy,无奈安装多次都失败,转向linux&lt;/p&gt;
+&lt;p&gt;linux自带python2.7 因此只需要安装scrapy模块就行&lt;/p&gt;
+&lt;p&gt;先用pip安装Scrapy 失败&lt;/p&gt;
+&lt;p&gt;于是安装easy_install&lt;/p&gt;
+&lt;p&gt;命令行 sudo apt-get install python-setuptools&lt;/p&gt;
+&lt;p&gt;sudo easy_install Scrapy&lt;/p&gt;
+&lt;p&gt;出现错误,搜索知道必须使用python的dev版本&lt;/p&gt;
+&lt;p&gt;于是  sudo apt-get install python-dev&lt;/p&gt;
+&lt;p&gt;再次 sudo easy_install Scrapy&lt;/p&gt;
+&lt;p&gt;安装成功&lt;/p&gt;
+&lt;p&gt;然后安装mongodb&lt;/p&gt;
+&lt;p&gt;sudo easy_instal pymongo&lt;/p&gt;            </description>
+            <pubDate>2017-09-08 04:02:34</pubDate>
+            <link>//blog/python/scrapy.html</link>
+            <guid isPermaLink="true">//blog/python/scrapy.html</guid>
+                                               <category>python</category>
+                                    </item>
+                <item>
+            <title>PHP字符串常用函数学习</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-07-09
+title: PHP字符串常用函数学习
+tags: PHP,STRING
+images: 
+category: php
+status: publish
+summary: 包括字符串的常用操作
+--&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=utf-8&quot;&amp;gt;
+&amp;lt;body&amp;gt;
+
+&amp;lt;/body&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;/html&amp;gt;
+&amp;lt;?php
+
+echo '1 int crc32(string str),产生32位长的crc多项式,比如crc32(&quot;helllo&quot;)&amp;lt;br/&amp;gt;';
+echo crc32 (&quot;jkkajjjk\n&quot;);
+echo '&amp;lt;br/&amp;gt;';
+
+echo '2 string bin2hex(string str) , 把二进制转换为十六进制,比如bin2hex(&quot;helloworld&quot;)&amp;lt;br/&amp;gt;';
+echo bin2hex(&quot;hello world&quot;);
+echo '&amp;lt;br/&amp;gt;';
+
+echo '3 string chop(string str),移除str后面多余的空白,返回新的字符串&amp;lt;br/&amp;gt;';
+echo 'kkkj l ';
+echo 'hahah';
+echo chop(&quot;kkkj l &quot;);
+echo 'hahah';
+echo '&amp;lt;br/&amp;gt;';
+
+echo '4 string chr(int ascii),返回指定ascii码表示的字符,如chr(100)&amp;lt;br/&amp;gt;';
+echo chr(100);
+echo '&amp;lt;br/&amp;gt;';
+echo '5 int ord(string str),返回str字符串第一个字符的ascii码,如ord(&quot;d&quot;),&amp;lt;br/&amp;gt;';
+echo ord(&quot;d&quot;);
+echo &quot;&amp;lt;br/&amp;gt;&quot;;
+echo '6 string chunk_split(string str,int chunklen, string end),把字符串没隔一定数目就分割,如chunk_split(&quot;jasdjkasjdkasadas&quot;,5,&quot;|&quot;),就是把字符串每5个字符用|分割&amp;lt;br/&amp;gt;';
+echo chunk_split(&quot;jasdjkasjdkasadas&quot;,5,&quot;|&quot;);
+echo '&amp;lt;br/&amp;gt;';
+echo '7 string crypt(string str,string salt),单向加密,无解密函数~';
+echo '&amp;lt;br/&amp;gt;';
+echo crypt(&quot;hello world&quot;,&quot;kk&quot;);
+echo '&amp;lt;br/&amp;gt;';
+echo '
+CRYPT_STD_DES - 基于标准 DES 算法的散列使用 &quot;./0-9A-Za-z&quot; 字符中的两个字符作为盐值。在盐值中使用非法的字符将导致 crypt() 失败。
+CRYPT_EXT_DES - 扩展的基于 DES 算法的散列。其盐值为 9 个字符的字符串，由 1 个下划线后面跟着 4 字节循环次数和 4 字节盐值组成。它们被编码成可打印字符，每个字符 6 位，有效位最少的优先。0 到 63 被编码为 &quot;./0-9A-Za-z&quot;。在盐值中使用非法的字符将导致 crypt() 失败。
+CRYPT_MD5 - MD5 散列使用一个以 $1$ 开始的 12 字符的字符串盐值。
+CRYPT_BLOWFISH - Blowfish 算法使用如下盐值：“$2a$”，一个两位 cost 参数，“$” 以及 64 位由 “./0-9A-Za-z” 中的字符组合而成的字符串。在盐值中使用此范围之外的字符将导致 crypt() 返回一个空字符串。两位 cost 参数是循环次数以 2 为底的对数，它的范围是 04-31，超出这个范围将导致 crypt() 失败。
+CRYPT_SHA256 - SHA-256 算法使用一个以 $5$ 开头的 16 字符字符串盐值进行散列。如果盐值字符串以 “rounds=&amp;lt;N&amp;gt;$” 开头，N 的数字值将被用来指定散列循环的执行次数，这点很像 Blowfish 算法的 cost 参数。默认的循环次数是 5000，最小是 1000，最大是 999,999,999。超出这个范围的 N 将会被转换为最接近的值。
+CRYPT_SHA512 - SHA-512 算法使用一个以 $6$ 开头的 16 字符字符串盐值进行散列。如果盐值字符串以 “rounds=&amp;lt;N&amp;gt;$” 开头，N 的数字值将被用来指定散列循环的执行次数，这点很像 Blowfish 算法的 cost 参数。默认的循环次数是 5000，最小是 1000，最大是 999,999,999。超出这个范围的 N 将会被转换为最接近的值。
+
+';
+
+if (CRYPT_STD_DES == 1)
+{
+echo &quot;Standard DES: &quot;.crypt(&quot;hello world&quot;).&quot;\n&amp;lt;br /&amp;gt;&quot;;
+}
+else
+{
+echo &quot;Standard DES not supported.\n&amp;lt;br /&amp;gt;&quot;;
+}
+
+if (CRYPT_EXT_DES == 1)
+{
+echo &quot;Extended DES: &quot;.crypt(&quot;hello world&quot;).&quot;\n&amp;lt;br /&amp;gt;&quot;;
+}
+else
+{
+echo &quot;Extended DES not supported.\n&amp;lt;br /&amp;gt;&quot;;
+}
+
+if (CRYPT_MD5 == 1)
+{
+echo &quot;MD5: &quot;.crypt(&quot;hello world&quot;).&quot;\n&amp;lt;br /&amp;gt;&quot;;
+}
+else
+{
+echo &quot;MD5 not supported.\n&amp;lt;br /&amp;gt;&quot;;
+}
+
+if (CRYPT_BLOWFISH == 1)
+{
+echo &quot;Blowfish: &quot;.crypt(&quot;hello world&quot;);
+}
+else
+{
+echo &quot;Blowfish DES not supported.&quot;;
+}
+
+echo '&amp;lt;br/&amp;gt;';
+
+echo ' 8 array explode (string separator, string string [, int limit]),传回一个字符串的数组，以参数 separator为界线将参数 string切开，如果有设定参数 limit，则传回的数组最多将会包含 limit个元素，而最后一个元素将会包含 string全部剩余的部份。&amp;lt;br/&amp;gt;';
+$pizza=&quot;haa kkkk kllom lljjijj iioo &quot;;
+$pieces=explode(&quot; &quot;,$pizza);
+foreach($pieces as $val){
+echo $val;
+
+}
+echo '&amp;lt;br/&amp;gt;';
+
+echo '9 string implode (string glue, array pieces) 以参数glue将数组pieces的各个元素结合起来成字符串返回.与join(string glue,array pieces)相同用法&amp;lt;br/&amp;gt;';
+
+echo implode (&quot;:&quot;, $pieces);
+echo '&amp;lt;br/&amp;gt;';
+
+echo '10 array split (string pattern, string string [, int limit]),以正则把字符串切开 '
+
+?&amp;gt;&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-08 04:02:34</pubDate>
+            <link>//blog/php/php-string.html</link>
+            <guid isPermaLink="true">//blog/php/php-string.html</guid>
+                                               <category>php</category>
+                                    </item>
+                <item>
+            <title>Linux快捷键</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-11-14
+title: Linux快捷键
+tags: LINUX,SHORTCUT-KEY,CENTOS
+images: 
+category: linux
+status: publish
+summary: CentOS桌面版常用的快捷键,以及Linux常用命令
+--&gt;
+&lt;h1&gt;linux系统快捷键&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;
+文件和目录:
+
+# cd /home                        进入 '/home' 目录
+
+# cd ..                                返回上一级目录
+
+# cd ../..                             返回上两级目录
+
+# cd -                                 返回上次所在目录
+
+# cp file1 file2                    将file1复制为file2
+
+# cp -a dir1 dir2                 复制一个目录
+
+# cp -a /tmp/dir1 .              复制一个目录到当前工作目录（.代表当前目录）
+
+# ls                                    查看目录中的文件
+
+# ls -a                                显示隐藏文件
+
+# ls -l                                 显示详细信息
+
+# ls -lrt                               按时间显示文件（l表示详细列表，r表示反向排序，t表示按时间排序）
+
+# pwd                                显示工作路径
+
+# mkdir dir1                       创建 'dir1' 目录
+
+# mkdir dir1 dir2                同时创建两个目录
+
+# mkdir -p /tmp/dir1/dir2    创建一个目录树
+
+# mv dir1 dir2                    移动/重命名一个目录
+
+# rm -f file1                        删除 'file1'
+
+# rm -rf dir1                       删除 'dir1' 目录及其子目录内容
+
+查看文件内容:
+
+# cat file1                          从第一个字节开始正向查看文件的内容
+
+# head -2 file1                   查看一个文件的前两行
+
+# more file1                       查看一个长文件的内容
+
+# tac file1                          从最后一行开始反向查看一个文件的内容
+
+# tail -3 file1                      查看一个文件的最后三行
+
+文本处理:
+
+# grep str /tmp/test            在文件 '/tmp/test' 中查找 &quot;str&quot;
+
+# grep ^str /tmp/test           在文件 '/tmp/test' 中查找以 &quot;str&quot; 开始的行
+
+# grep [0-9] /tmp/test         查找 '/tmp/test' 文件中所有包含数字的行
+
+# grep str -r /tmp/*             在目录 '/tmp' 及其子目录中查找 &quot;str&quot;
+
+# diff file1 file2                   找出两个文件的不同处
+
+# sdiff file1 file2                 以对比的方式显示两个文件的不同
+
+查找:
+
+# find / -name file1                                                 从 '/' 开始进入根文件系统查找文件和目录
+
+# find / -user user1                                                查找属于用户 'user1' 的文件和目录
+
+# find /home/user1 -name \*.bin                            在目录 '/ home/user1' 中查找以 '.bin' 结尾的文件
+
+# find /usr/bin -type f -atime +100                         查找在过去100天内未被使用过的执行文件
+
+# find /usr/bin -type f -mtime -10                           查找在10天内被创建或者修改过的文件
+
+# locate \*.ps                                                         寻找以 '.ps' 结尾的文件，先运行 'updatedb' 命令
+
+# find -name '*.[ch]' | xargs grep -E 'expr'              在当前目录及其子目录所有.c和.h文件中查找 'expr'
+
+# find -type f -print0 | xargs -r0 grep -F 'expr'        在当前目录及其子目录的常规文件中查找 'expr'
+
+# find -maxdepth 1 -type f | xargs grep -F 'expr'    在当前目录中查找 'expr'
+
+压缩和解压:
+
+# bzip2 file1                                   压缩 file1
+
+# bunzip2 file1.bz2                        解压 file1.bz2
+
+# gzip file1                                     压缩 file1
+
+# gzip -9 file1                                最大程度压缩 file1
+
+# gunzip file1.gz                            解压 file1.gz
+
+# tar -cvf archive.tar file1               把file1打包成 archive.tar
+
+（-c: 建立压缩档案；-v: 显示所有过程；-f: 使用档案名字，是必须的，是最后一个参数）
+
+# tar -cvf archive.tar file1 dir1        把 file1，dir1 打包成 archive.tar
+
+# tar -tf archive.tar                         显示一个包中的内容
+
+# tar -xvf archive.tar                      释放一个包
+
+# tar -xvf archive.tar -C /tmp         把压缩包释放到 /tmp目录下
+
+# zip file1.zip file1                          创建一个zip格式的压缩包
+
+# zip -r file1.zip file1 dir1               把文件和目录压缩成一个zip格式的压缩包
+
+# unzip file1.zip                             解压一个zip格式的压缩包到当前目录
+
+# unzip test.zip -d /tmp/                 解压一个zip格式的压缩包到 /tmp 目录
+
+yum工具:
+
+# yum -y install [package]              下载并安装一个rpm包
+
+# yum localinstall [package.rpm]    安装一个rpm包，使用你自己的软件仓库解决所有依赖关系
+
+# yum -y update                              更新当前系统中安装的所有rpm包
+
+# yum update [package]                 更新一个rpm包
+
+# yum remove [package]                删除一个rpm包
+
+# yum list                                        列出当前系统中安装的所有包
+
+# yum search [package]                 在rpm仓库中搜寻软件包
+
+# yum clean [package]                   清除缓存目录（/var/cache/yum）下的软件包
+
+# yum clean headers                      删除所有头文件
+
+# yum clean all                                删除所有缓存的包和头文件
+
+网络:
+
+# ifconfig eth0                                                                       显示一个以太网卡的配置
+
+# ifconfig eth0 192.168.1.1 netmask 255.255.255.0            配置网卡的IP地址
+
+# ifdown eth0                                                                        禁用 'eth0' 网络设备
+
+# ifup eth0                                                                            启用 'eth0' 网络设备
+
+# iwconfig eth1                                                                     显示一个无线网卡的配置
+
+# iwlist scan                                                                         显示无线网络
+
+# ip addr show                                                                     显示网卡的IP地址
+
+其他:
+
+# su -                                 切换到root权限（与su有区别）
+
+# shutdown -h now           关机
+
+# shutdown -r now            重启
+
+# top                                  罗列使用CPU资源最多的linux任务 （输入q退出）
+
+# pstree                             以树状图显示程序
+
+# man ping                        查看参考手册（例如ping 命令）
+
+# passwd                          修改密码
+
+# df -h                               显示磁盘的使用情况
+
+# cal -3                             显示前一个月，当前月以及下一个月的月历
+
+# cal 10 1988                   显示指定月，年的月历
+
+# date --date '1970-01-01 UTC 1427888888 seconds'   把一相对于1970-01-01 00:00的秒数转换成时间
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;桌面用快捷键&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;Ctrl + u            删除光标之前到行首的字符
+
+Ctrl + k            删除光标之前到行尾的字符
+
+Ctrl + c            取消当前行输入的命令，相当于Ctrl + Break
+
+Ctrl + a            光标移动到行首（ahead of line），相当于通常的Home键
+
+Ctrl + e            光标移动到行尾（end of line）
+
+Ctrl + f             光标向前（forward）移动一个字符位置
+
+Ctrl + b            光标往回（backward）移动一个字符位置
+
+Ctrl + l             清屏，相当于执行clear命令
+
+Ctrl + r            显示:号提示，根据用户输入查找相关历史命令（reverse-i-search）
+
+Ctrl + w           删除从光标位置前到当前所处单词（word）的开头
+
+Ctrl + t             交换光标位置前的两个字符
+
+Ctrl + y            粘贴最后一次被删除的单词
+
+Ctrl + Alt + d   显示桌面
+
+Alt + b             光标往回（backward）移动到前一个单词
+
+Alt + d             删除从光标位置到当前所处单词的末尾
+
+Alt + F2           运行
+
+Alt + F4           关闭当前窗口
+
+Alt + F9           最小化当前窗口
+
+Alt + F10         最大化当前窗口
+
+Alt + Tab         切换窗口
+
+Alt +按住左键  移动窗口（或在最下面的任务栏滚动鼠标滑轮）
+
+[鼠标中间键] 粘贴突出显示的文本。使用鼠标左键来选择文本。把光标指向想粘贴文本的地方。点击鼠标中间键来粘贴。
+
+[Tab] 命令行自动补全。使用 shell 提示时可使用这一方式。键入命令或文件名的前几个字符，然后按 [Tab] 键，它会自动补全命令或显示匹配键入字符的所有命令。
+
+在桌面或文件管理器中直接按 / 就可以输入位置，打开文件管理器。
+
+快速搜索：在 vi 或 Firefox 中直接按 / 即可进入搜索状态。
+
+网站链接和图片可直接拖放到桌面或者目录，可以马上下载。
+
+直接将文件管理器中的文件拖到终端中就可以在终端中得到完整的路径名。
+
+在滚动条的空白处点击鼠标中键，屏幕即滚动到那个地方。&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-08 04:02:34</pubDate>
+            <link>//blog/linux/centos-shortcut-key.html</link>
+            <guid isPermaLink="true">//blog/linux/centos-shortcut-key.html</guid>
+                                               <category>linux</category>
+                                    </item>
+                <item>
+            <title>养成好习惯</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-08-20
+title: 养成好习惯
+tags: Blog
+images: 
+category: 
+status: publish
+summary: &gt;安装了一个新的app 叫微习惯 督促自己每天都做一些事
+--&gt;
+&lt;p&gt;安装了一个新的app 叫微习惯 督促自己每天都做一些事
+今天努力完成了所有小事 就差一个30分钟的写作了
+于是现在在写
+每做完一件事然后打勾 还是很有成就感的
+父母在我很小的时候就教育我 说人生最难的就是坚持 小时候不以为意 现在明白了 人都是倾向于虎头蛇尾的 坚持的确是件最难的事
+但是 我希望可以改变 可以从一个个的小习惯开始 改变自己
+加油
+明天早点起床&lt;/p&gt;            </description>
+            <pubDate>2017-09-08 04:02:34</pubDate>
+            <link>//blog/thoughts/20140820-good-habbit.html</link>
+            <guid isPermaLink="true">//blog/thoughts/20140820-good-habbit.html</guid>
+                    </item>
+                <item>
+            <title>游泳杂感</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-07-23
+title: 游泳杂感
+tags: BLOG
+images: 
+category: thoughts
+status: publish
+summary: 游泳杂感
+--&gt;
+&lt;p&gt;七月二十三日， 晴，热。&lt;/p&gt;
+&lt;p&gt;于是去游泳。&lt;/p&gt;
+&lt;p&gt;一个人，一条裤衩，不戴泳镜，更不需要救生圈。
+地点是泄洪坝底下下冲刷而成的水潭，虽没有桃花潭水深千尺，但是十尺还是有的。前几日连绵大雨，所以泄洪了，于是水潭中都是新鲜的水库水，经过水的冲刷，现在水底很清澈，可以直接看到水底。也没有水藻。非常适合游泳呐。
+在靠近岸边的地方下水，岸边还是很浅的，踩着圆润的水底砂石，仿佛有种回到童年的感觉。那个瘦瘦小小的小孩，双手撑在河底，双脚扑腾着学习游泳的小孩。嘴巴进水，鼻子进水，咳嗽，鼻酸，长时间潜水后强烈想要呼吸的感觉，潜到深处胸腔感受到的压力，以及水中唯一听得到的隆隆声，虽历历在目，声声在耳，却是多久没感受过了。&lt;/p&gt;
+&lt;p&gt;自由泳，蛙泳，仰泳，潜泳，狗刨式，全部来一套。原来游泳这个技能，一旦学会，就完全不会忘呢。什么学会呢，先天技能，幼时就在子宫里游来游去。
+水底的世界就像是近视眼看到的世界一样，模糊，但是色彩斑斓。尤其对白色的物体尤为敏感。白色的石头，闪着光。随意潜入水中，就可以捞起一些石头，这是幼时最喜爱的游泳游戏。可是现在，却没有幼时的欣喜。&lt;/p&gt;            </description>
+            <pubDate>2017-09-08 04:02:34</pubDate>
+            <link>//blog/thoughts/20140723.html</link>
+            <guid isPermaLink="true">//blog/thoughts/20140723.html</guid>
+                                               <category>thoughts</category>
                                     </item>
                 <item>
             <title>CentOS7安装Jenkins</title>
