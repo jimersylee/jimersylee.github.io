@@ -5,7 +5,7 @@ date: 2015-04-08
 title: 设计模式之观察者模式
 tags: JAVA,PATTERN
 images: 
-category: 
+category: java
 status: publish
 summary: 观察者模式(Observer),让你的对象知悉现况
 -->
