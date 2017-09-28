@@ -4,9 +4,522 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-09-12 10:09:05</pubDate>
-        <lastBuildDate>2017-09-12 10:09:05</lastBuildDate>
+        <pubDate>2017-09-28 05:09:47</pubDate>
+        <lastBuildDate>2017-09-28 05:09:47</lastBuildDate>
         <generator>Gitblog v1.0</generator>
+                <item>
+            <title><Go:build web application>的中文翻译版-第三章-连接数据</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2017-09-22
+title: &lt;Go:build web application&gt;的中文翻译版-第三章-连接数据
+tags: GO
+images: 
+category: go
+status: publish
+summary: 
+在上一章中,我们探索了在web应用中如何处理URLS和指引他们转到不同的页面.同时,我们通过net/http中的handle创建了动态的链接和动态的结果.在这一章中,我们将学习以下几个主题,连接数据库,使用GUID美化URLs,处理404页面
+--&gt;
+&lt;p&gt;在上一章中,我们探索了在web应用中如何处理URLS和指引他们转到不同的页面.同时,我们通过net/http中的handle创建了动态的链接和动态的结果.&lt;/p&gt;
+&lt;p&gt;通过实现和扩展Gorilla toolkit的mux路由,我们通过正则表达式扩展了路由的能力,使其给予我们的应用更大的灵活性.&lt;/p&gt;
+&lt;p&gt;其实这是一些最流行的web服务器的特性.比如说Apache和Nginx都在路由中提供了方法去解析正则表达式.&lt;/p&gt;
+&lt;p&gt;但是这仅仅是构成web应用的基石.为了更加深入,我们需要去看看如何引入数据.&lt;/p&gt;
+&lt;p&gt;前一章的例子中静态文件服务依赖于硬编码,这显然是过时的且难以控制的.&lt;/p&gt;
+&lt;p&gt;但是幸运的是,从90年代末期开始,网站变得动态化,数据库开始统治世界.虽然APIs,微服务和NoSQL在某些领域替代了这些架构,但是这个架构在当今的Web开发中还是万金油的角色.&lt;/p&gt;
+&lt;p&gt;所以,事不宜迟,让我们开始获取一些动态数据&lt;/p&gt;
+&lt;p&gt;在这一章中,我们将学习以下几个主题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;连接数据库&lt;/li&gt;
+&lt;li&gt;使用GUID美化URLs&lt;/li&gt;
+&lt;li&gt;处理404页面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;连接一个数据库&lt;/h2&gt;
+&lt;p&gt;为了连接数据库,Go的SQL接口提供了一个非常简单且可信赖的方式去连接拥有驱动的不同种类的数据库服务器.&lt;/p&gt;
+&lt;p&gt;目前,大部分流行的数据库都支持-MySQL,Postgres,SQLite,MSSQL和相当多的实现了Go提供的database/sql接口的数据库驱动.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note:在本书中,我们将会把MySQL和Postgres数据库使用最好的实践运用在多个例子上.安装MySQL和Postgres在Nix,Windows,OS X 系统的机器上是相当基础的工作&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;创建MySQL数据库&lt;/h2&gt;
+&lt;p&gt;你可以选择设计任何你想要的应用,但是在这些例子中,我们将着手一个非常的简单的博客.&lt;/p&gt;
+&lt;p&gt;我们的目标是尽可能地在数据库中创建一些博客的入口,最好可以使用GUID在数据库中直接地获取数据和展示,如果博客的入口不存在,将展示错误页面.&lt;/p&gt;
+&lt;p&gt;为了实现这个需求,我们将创建一个包含了我们的页面的MySQL数据库.这个数据库将包含一个整数型的,自动递增的ID,一个全局唯一的标识,或者GUID,还有一些博客的初始数据.&lt;/p&gt;
+&lt;p&gt;简单起见,我们创建一个叫存储标题的page_title字段,存储页面内容的page_content字段,还有一个使用Unix时间戳的字段page_date.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;CREATE TABLE `pages` (
+`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`page_guid` varchar(256) NOT NULL DEFAULT '',
+`page_title` varchar(256) DEFAULT NULL,
+`page_content` mediumtext,
+`page_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON
+UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY (`id`),
+UNIQUE KEY `page_guid` (`page_guid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf-8;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;将page_guid标记为UNIQUE_KEY相当重要,如果我们允许出现重复的page_guid,在浏览某个网址的时候可能出现不准确的情况.
+我们使用以下的语句插入一些blog数据&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;INSERT INTO `pages` (`id`, `page_guid`, `page_title`,
+`page_content`, `page_date`) VALUES (NULL, 'hello-world', 'Hello,
+World', 'I\'m so glad you found this page! It\'s been sitting
+patiently on the Internet for some time, just waiting for a
+visitor.', CURRENT_TIMESTAMP);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;执行了上面的语句之后,我们就获得了初始数据
+使用下面的代码来获得连接数据库的能力&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package main
+import (
+&quot;database/sql&quot;
+&quot;fmt&quot;
+_ &quot;github.com/go-sql-driver/mysql&quot;
+&quot;log&quot;
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们导入MySQL驱动包来完成需求.通常,这意味着驱动是另一个包的实现.你能注意到使用&lt;em&gt; 符号来导入包.你可能已经熟悉这点,作为一种快速且脏的方式去忽略类的实例的返回值.比如说x,&lt;/em&gt; :=something() 允许你去忽略第二个返回值.这经常也被开发者用在计划去使用一个库,但是目前还没有用到的情况.通过这种方式准备包,它允许导入声明而不引起编译期报错.虽然这不是推荐的做法,但是在预载入方法中使用下划线_或者空白标识符,好处是这是很常见的做法也普遍被接受.
+其实,这全部依赖于你怎样以及为何使用标识符.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const (
+DBHost = &quot;127.0.0.1&quot;
+DBPort = &quot;:3306&quot;
+DBUser = &quot;root&quot;
+DBPass = &quot;password!&quot;
+DBDbase = &quot;cms&quot;
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;记得使用你自己的配置去替换以上值&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var database *sql.db&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;为了避免大量重复代码,我们可以将数据库连接引用作为一个全局变量.为了清晰可见,我们将在代码开头定义.其实也没有什么事会阻止你把这个定义为一个常量,但是如果这样我们将会失去一定的灵活性,比如说添加多个数据库到单个应用中&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;type Page struct {
+Title string
+Content string
+Date string
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个结构,跟我们的数据表结构非常匹配了,有标题,内容,时间.我们马上也将在本书中看到更好的数据结构设计.你需要确保你结构的字段是可以导出的或者公共的.任何小写的字段将不会被导出,因此也不能被模板化.我们将在后面讨论更多.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;func main(){
+    dbConn:=fmt.Sprintf(&quot;%s:%s@tcp(%s)/%s&quot;,DBUser,DBPass,DBHost,DBDbase)
+    db,err:=sql.Open(&quot;mysql&quot;,dbConn)
+    if err!=nil{
+        log.Println(&quot;Couldn't connect&quot;)
+        log.Println(err.Error())
+    }
+    log.Println(&quot;Connect successfully&quot;)
+    database=db
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;正如我们之前提到的一样,这主要是脚手架.我们唯一想做的就是确保我们可以连接我们的数据库.如果出现一个错误,检查你的连接配置和输出的日志.
+如果如我们期望的那样,我们使用上面的代码连接上数据库,我们就可以创建通用的路由代码来匹配请求中GUID,然后去数据库查询数据.&lt;/p&gt;
+&lt;p&gt;为了以上的目标,我们需要去重新实现Gorilla,创建单个路由,然后实现一个handler去匹配我们的数据库&lt;/p&gt;
+&lt;p&gt;看看下面的修改&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package main
+import (
+&quot;database/sql&quot;
+&quot;fmt&quot;
+_ &quot;github.com/go-sql-driver/mysql&quot;
+&quot;github.com/gorilla/mux&quot;
+&quot;log&quot;
+&quot;net/http&quot;
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;比较大的变化是我们在项目中引入了Gorilla和net/http 库.很显然我们需要这些来构建服务&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const (
+DBHost = &quot;127.0.0.1&quot;
+DBPort = &quot;:3306&quot;
+DBUser = &quot;root&quot;
+DBPass = &quot;password!&quot;
+DBDbase = &quot;cms&quot;
+PORT = &quot;:8080&quot;
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们增加了PORT常量,用来绑定HTTP 服务器端口&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var database *sql.DB
+
+type Page struct{
+    Title string
+    Content string
+    Date string
+}
+
+/**
+数据库连接测试
+ */
+func main(){
+    dbConn:=fmt.Sprintf(&quot;%s:%s@/%s&quot;,DBUser,DBPass,DBDbase)
+    db,err:=sql.Open(&quot;mysql&quot;,dbConn)
+    if err!=nil{
+        log.Println(&quot;Couldn't connect&quot;)
+        log.Println(err.Error())
+    }
+    log.Println(&quot;Connect successfully&quot;)
+    database=db
+
+    //设置路由
+    routes:=mux.NewRouter()
+    routes.HandleFunc(&quot;/page/{id:[0-9a-zA\\-]+&quot;,ServePage)
+    http.Handle(&quot;/&quot;,routes)
+    http.ListenAndServe(PORT,nil)
+}
+
+func ServePage(w http.ResponseWriter,r *http.Request){
+    vars:=mux.Vars(r)
+    pageID:=vars[&quot;id&quot;]
+    thisPage:=Page{}
+    fmt.Println(&quot;pageID:&quot;+pageID,&quot;guid:&quot;+pageGUID)
+    err:=database.QueryRow(&quot;select page_title,page_content,page_date from pages where id=?&quot;,pageID).Scan(&amp;amp;thisPage.Title,&amp;amp;thisPage.Content,&amp;amp;thisPage.Date)
+    if err!=nil{
+        log.Println(&quot;Couldn't get page: +pageID&quot;)
+        log.Println(err.Error())
+    }
+
+    html:=`&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;` + thisPage.Title +
+`&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;h1&amp;gt;` + thisPage.Title + `&amp;lt;/h1&amp;gt;&amp;lt;div&amp;gt;` +
+thisPage.Content + `&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;`
+    fmt.Fprintln(w,html)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ServePage()是一个从mux.Vars中获取id,然后查询数据库的方法.最简单的查询数据库的方法就是使用使用预处理语句,比如Query,QueryRow或者Prepare.利用其中任何一个包含可注入的变量的声明语句,可以避免手工构建查询语句的风险.&lt;/p&gt;
+&lt;p&gt;Scan方法获取结果然后解析成数据结构.在这个例子中,我们解析page_title,page_content,page_date到Page结构中的Title,Content,Date&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;func main() {
+dbConn := fmt.Sprintf(&quot;%s:%s@/%s&quot;, DBUser, DBPass, DBDbase)
+fmt.Println(dbConn)
+db, err := sql.Open(&quot;mysql&quot;, dbConn)
+if err != nil {
+log.Println(&quot;Couldn't connect to&quot;+DBDbase)
+log.Println(err.Error)
+}
+database = db
+routes := mux.NewRouter()
+routes.HandleFunc(&quot;/page/{id:[0-9]+}&quot;, ServePage)
+http.Handle(&quot;/&quot;, routes)
+http.ListenAndServe(PORT, nil)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;看看我们这的正则表达式:只获取数字&lt;/p&gt;
+&lt;p&gt;还记得们谈论过使用内置的GUID?我们将马上会用到,现在我们看看访问localhost:8080/page/1的结果&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Hello, World
+
+I'm so glad you found this page! It's been sitting patiently on the Internet for some time, just waiting for a visitor.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在前面的例子中,我们可以看到在数据库中的博客内容.&lt;/p&gt;
+&lt;h2&gt;使用GUID来美化URLs&lt;/h2&gt;
+&lt;p&gt;在本章的前几段我们讨论过使用GUID来作为所有请求的URL标识符.&lt;/p&gt;
+&lt;p&gt;我们需要去修改正则表达式和SQL语句&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;routes.HandleFunc(&quot;/page/{id:[0-9a-zA\\-]+}&quot;, ServePage)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;修改为&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;routes.HandleFunc(&quot;/page/{guid:[0-9a-zA\\-]+}&quot;, ServePage)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;修改相关方法和SQL&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;func ServePage(w http.ResponseWriter, r *http.Request) {
+vars := mux.Vars(r)
+pageGUID := vars[&quot;guid&quot;]
+thisPage := Page{}
+fmt.Println(pageGUID)
+err := database.QueryRow(&quot;SELECT page_title,page_content,page_date
+FROM pages WHERE page_guid=?&quot;,
+pageGUID).Scan(&amp;amp;thisPage.Title, &amp;amp;thisPage.Content, &amp;amp;thisPage.Date)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在完成之后,我们访问 localhost:8080/page/hello-world,可以获得之前访问localhost:8080/page/1同样的结果,但是修改后的url可读性更高,而且对搜索引擎更加友好&lt;/p&gt;
+&lt;h2&gt;处理404&lt;/h2&gt;
+&lt;p&gt;我们之前的代码有个显而易见的问题就是它不处理无效的ID(或GUID)的请求.&lt;/p&gt;
+&lt;p&gt;真实的情况是,一个访问/page/999的请求,将返回空白页,控制台将会输出&lt;em&gt;Couldn't get page!&lt;/em&gt; &lt;/p&gt;
+&lt;p&gt;解决这个问题最简单的方法就是使用合适的错误.在上一章中,我们探索过定制的404页面,在这里我们可以实现其中一种,但是在一个请求不能找到时最简单的方法就是直接返回一个HTTP 状态码,允许浏览器去处理.&lt;/p&gt;
+&lt;p&gt;在我们之前的代码中,我们有一个错误处理器,仅仅是写日志,让我们把它变得更加丰富&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;err:=database.QueryRow(&quot;select page_title,page_content,page_date from pages where page_guid=?&quot;,pageGUID).Scan(&amp;amp;thisPage.Title,&amp;amp;thisPage.Content,&amp;amp;thisPage.Date)
+    if err!=nil{
+        http.Error(w,http.StatusText(404),http.StatusNotFound)
+        log.Println(&quot;Couldn't get page: +pageID&quot;)
+        log.Println(err.Error())
+        return
+    }&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样子的话当遇到错误页面的时候将会有一个友好的提示页面&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;http://127.0.0.1:8080/page/hello-world22
+
+Not Found&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/go/go-build-web-app-chapter-3.html</link>
+            <guid isPermaLink="true">//blog/go/go-build-web-app-chapter-3.html</guid>
+                                               <category>go</category>
+                                    </item>
+                <item>
+            <title><Go:build web application>的中文翻译版本目录</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2017-09-20
+title: &lt;Go:build web application&gt;的中文翻译版本目录
+tags: GO
+images: 
+category: go
+status: publish
+summary: &lt;Go:build web application&gt;的中文翻译版本
+--&gt;
+&lt;h2&gt;&lt;Go:build web application&gt;的中文翻译版本&lt;/h2&gt;
+&lt;h1&gt;目录&lt;/h1&gt;
+&lt;h2&gt;模块1:学习Go的Web开发&lt;/h2&gt;
+&lt;h3&gt;第一章:介绍和安装Go环境&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;安装Go&lt;/li&gt;
+&lt;li&gt;构建一个项目&lt;/li&gt;
+&lt;li&gt;引入包&lt;/li&gt;
+&lt;li&gt;介绍net包&lt;/li&gt;
+&lt;li&gt;你好,Web&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第二章:服务和路由&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;直接的文件服务&lt;/li&gt;
+&lt;li&gt;基本路由&lt;/li&gt;
+&lt;li&gt;使用Gorilla实现更复杂的路由&lt;/li&gt;
+&lt;li&gt;转发请求&lt;/li&gt;
+&lt;li&gt;处理基本的错误&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第三章:连接数据&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;连接一个数据库&lt;/li&gt;
+&lt;li&gt;使用GUID美化URLs&lt;/li&gt;
+&lt;li&gt;处理404错误&lt;/li&gt;
+&lt;li&gt;总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第四章:使用模板&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;介绍模板,上下文和可视化&lt;/li&gt;
+&lt;li&gt;HTML模板和文本模板&lt;/li&gt;
+&lt;li&gt;渲染变量和安全性&lt;/li&gt;
+&lt;li&gt;使用逻辑和控制结构&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第五章:使用RESTful APIs进行前端集成&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;设置基本的API结构&lt;/li&gt;
+&lt;li&gt;RESTful架构和最佳实践&lt;/li&gt;
+&lt;li&gt;创建我们的第一个API&lt;/li&gt;
+&lt;li&gt;实现安全&lt;/li&gt;
+&lt;li&gt;使用POST创建数据&lt;/li&gt;
+&lt;li&gt;使用PUT更改数据&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第六章:Session和Cookies&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;设置cookies&lt;/li&gt;
+&lt;li&gt;存储用户的信息&lt;/li&gt;
+&lt;li&gt;初始化一个服务端的session&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第七章:微服务和通讯&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;介绍引入微服务&lt;/li&gt;
+&lt;li&gt;使用微服务的利弊&lt;/li&gt;
+&lt;li&gt;理解微服务的内核&lt;/li&gt;
+&lt;li&gt;微服务之间的通讯&lt;/li&gt;
+&lt;li&gt;在线上放一个信息&lt;/li&gt;
+&lt;li&gt;从其他服务读取信息&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第八章:记录日志和测试&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;介绍Go中的日志&lt;/li&gt;
+&lt;li&gt;记录日志到IO中&lt;/li&gt;
+&lt;li&gt;格式化你的输出&lt;/li&gt;
+&lt;li&gt;使用panics和fatal errors&lt;/li&gt;
+&lt;li&gt;介绍Go中的测试&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第九章:安全&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在任何地方使用HTTPS-实现TLS&lt;/li&gt;
+&lt;li&gt;防止SQL注入&lt;/li&gt;
+&lt;li&gt;防范XSS攻击&lt;/li&gt;
+&lt;li&gt;防范CSRF跨站攻击&lt;/li&gt;
+&lt;li&gt;加密cookies&lt;/li&gt;
+&lt;li&gt;使用安全中间件&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第十章:缓存,代理和提高性能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;确定瓶颈&lt;/li&gt;
+&lt;li&gt;实现反向代理&lt;/li&gt;
+&lt;li&gt;实现缓存&lt;/li&gt;
+&lt;li&gt;实现HTTP/2&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;模块2:Go 编程蓝皮书&lt;/h2&gt;
+&lt;h3&gt;第一章:使用Web Sockets构建的聊天应用&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一个简单的Web服务器&lt;/li&gt;
+&lt;li&gt;在服务器上建模一个聊天室和客户端&lt;/li&gt;
+&lt;li&gt;构建一个使用HTML和JavaScript的聊天客户端&lt;/li&gt;
+&lt;li&gt;跟踪代码获取内在的流程&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第二章:增加权限&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;拦截所有请求&lt;/li&gt;
+&lt;li&gt;创建一个社交化的登录页面&lt;/li&gt;
+&lt;li&gt;动态路径&lt;/li&gt;
+&lt;li&gt;OAuth2&lt;/li&gt;
+&lt;li&gt;把你的APP告诉权限提供者&lt;/li&gt;
+&lt;li&gt;实现额外的登录&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第三章:3个方法去实现文件缩略图&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在权限服务器上的头像&lt;/li&gt;
+&lt;li&gt;实现Gravatar&lt;/li&gt;
+&lt;li&gt;上传头像图片&lt;/li&gt;
+&lt;li&gt;整合3种实现&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第四章:查询域名的命令行工具&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;命令行工具的管道设计&lt;/li&gt;
+&lt;li&gt;5个简单的程序&lt;/li&gt;
+&lt;li&gt;编写所有5个程序&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第五章:构建分布式系统,与复杂的数据交互&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;系统设计&lt;/li&gt;
+&lt;li&gt;安装环境&lt;/li&gt;
+&lt;li&gt;获取Twitter的投票&lt;/li&gt;
+&lt;li&gt;计算投票&lt;/li&gt;
+&lt;li&gt;运行我们的解决方案&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第六章:通过RESTful web数据接口对外提供数据和功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;RESTful API 设计&lt;/li&gt;
+&lt;li&gt;在处理器间共享数据&lt;/li&gt;
+&lt;li&gt;包装处理函数&lt;/li&gt;
+&lt;li&gt;响应&lt;/li&gt;
+&lt;li&gt;理解请求&lt;/li&gt;
+&lt;li&gt;一个简单的主函数去处理我们的API&lt;/li&gt;
+&lt;li&gt;处理节点&lt;/li&gt;
+&lt;li&gt;一个web客户端去消费API&lt;/li&gt;
+&lt;li&gt;运行解决方案&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第七章:随机推荐Web服务&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;项目预览&lt;/li&gt;
+&lt;li&gt;用代码展示数据&lt;/li&gt;
+&lt;li&gt;构造随机推荐&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第八章:文件备份系统&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;解决方案设计&lt;/li&gt;
+&lt;li&gt;备份包&lt;/li&gt;
+&lt;li&gt;用户命令行工具&lt;/li&gt;
+&lt;li&gt;备份守护工具&lt;/li&gt;
+&lt;li&gt;测试解决方案&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;模块3:精通Go的高并发&lt;/h2&gt;
+&lt;h3&gt;第一章:介绍Go并发编程&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;介绍协程&lt;/li&gt;
+&lt;li&gt;实现延迟控制机制&lt;/li&gt;
+&lt;li&gt;理解协程与协同&lt;/li&gt;
+&lt;li&gt;实现通道&lt;/li&gt;
+&lt;li&gt;关闭与协程&lt;/li&gt;
+&lt;li&gt;构建一个使用协程和通道的爬虫&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第二章:理解并发模型&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;理解协程如何工作&lt;/li&gt;
+&lt;li&gt;同步和异步协程&lt;/li&gt;
+&lt;li&gt;可视化并发&lt;/li&gt;
+&lt;li&gt;RSS实战&lt;/li&gt;
+&lt;li&gt;CSP的一点介绍&lt;/li&gt;
+&lt;li&gt;Go和角色模型&lt;/li&gt;
+&lt;li&gt;面向对象&lt;/li&gt;
+&lt;li&gt;使用并发&lt;/li&gt;
+&lt;li&gt;管理线程&lt;/li&gt;
+&lt;li&gt;使用同步和互斥锁住数据&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第三章:开发并行策略&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在复杂的并发中提高效率&lt;/li&gt;
+&lt;li&gt;使用竞争检查识别竞争条件&lt;/li&gt;
+&lt;li&gt;同步我们的并发操作&lt;/li&gt;
+&lt;li&gt;项目-多用户预约日历&lt;/li&gt;
+&lt;li&gt;一个多用户预约日历&lt;/li&gt;
+&lt;li&gt;风格说明&lt;/li&gt;
+&lt;li&gt;不变性说明&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第四章:应用中的数据完整性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;深入理解互斥与同步&lt;/li&gt;
+&lt;li&gt;协程的代价&lt;/li&gt;
+&lt;li&gt;处理文件&lt;/li&gt;
+&lt;li&gt;更底层-实现C&lt;/li&gt;
+&lt;li&gt;分布式的Go&lt;/li&gt;
+&lt;li&gt;几种常见的一致性模型&lt;/li&gt;
+&lt;li&gt;使用memcached&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第五章:锁,区块和更好的通道&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;理解Go中的区块方法&lt;/li&gt;
+&lt;li&gt;清除协程&lt;/li&gt;
+&lt;li&gt;创建通道的通道&lt;/li&gt;
+&lt;li&gt;Pprof-一个令人惊叹的工具&lt;/li&gt;
+&lt;li&gt;处理死锁和错误&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第六章:C10K-Go中的一个无锁的Web服务器&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;攻克C10K问题&lt;/li&gt;
+&lt;li&gt;创建我们的C10K Web服务器&lt;/li&gt;
+&lt;li&gt;提供页面服务&lt;/li&gt;
+&lt;li&gt;多线程和利用多核&lt;/li&gt;
+&lt;li&gt;探索我们的Web服务器&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第七章:性能与可扩展性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Go的高性能&lt;/li&gt;
+&lt;li&gt;使用App Engine&lt;/li&gt;
+&lt;li&gt;分布式的Go&lt;/li&gt;
+&lt;li&gt;一些有用的库&lt;/li&gt;
+&lt;li&gt;内存维护&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第八章:并发程序架构&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;设计我们的并发程序&lt;/li&gt;
+&lt;li&gt;确定我们的需求&lt;/li&gt;
+&lt;li&gt;在Go中使用NoSQL作为数据存储&lt;/li&gt;
+&lt;li&gt;监控文件系统的变化&lt;/li&gt;
+&lt;li&gt;管理日志文件&lt;/li&gt;
+&lt;li&gt;处理配置文件&lt;/li&gt;
+&lt;li&gt;检测文件变化&lt;/li&gt;
+&lt;li&gt;备份文件&lt;/li&gt;
+&lt;li&gt;设计Web接口&lt;/li&gt;
+&lt;li&gt;还原文件的历史-命令行&lt;/li&gt;
+&lt;li&gt;检查服务器的健康度&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第九章:在Go中记录日志和测试并发&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;处理错误和记录日志&lt;/li&gt;
+&lt;li&gt;使用log4go包作为健壮的日志组件&lt;/li&gt;
+&lt;li&gt;使用runtime包作为细粒度的堆栈跟踪组件&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;第十章:先进的并发和最佳实践&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用channels跨越基础&lt;/li&gt;
+&lt;li&gt;构建工作者&lt;/li&gt;
+&lt;li&gt;实现空通道区块&lt;/li&gt;
+&lt;li&gt;使用tomb实现对协程更多的细粒度的控制&lt;/li&gt;
+&lt;li&gt;使用通道定时&lt;/li&gt;
+&lt;li&gt;通过并发模式构建负载均衡器&lt;/li&gt;
+&lt;li&gt;选择单向和双向通道&lt;/li&gt;
+&lt;li&gt;使用泛型通道&lt;/li&gt;
+&lt;li&gt;使用Go的单元测试&lt;/li&gt;
+&lt;li&gt;使用Google的App Engine&lt;/li&gt;
+&lt;li&gt;使用最佳实践&lt;/li&gt;
+&lt;li&gt;本章总结&lt;/li&gt;
+&lt;/ul&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/go/go-build-web-app-catalog.html</link>
+            <guid isPermaLink="true">//blog/go/go-build-web-app-catalog.html</guid>
+                                               <category>go</category>
+                                    </item>
                 <item>
             <title>PHP的Swoole扩展安装与学习</title>
             <description>
@@ -76,7 +589,7 @@ category: thoughts
 status: publish
 summary: 所谓没有规矩,不成方圆,就算是再小的团队,工作也需要规范的流程.
 --&gt;
-&lt;h2&gt;基于SVN的信息存储&lt;/h2&gt;
+&lt;h2&gt;基于自建SVN的信息存储&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;存放开发文档&lt;/li&gt;
 &lt;li&gt;存放测试用例&lt;/li&gt;
@@ -84,8 +597,13 @@ summary: 所谓没有规矩,不成方圆,就算是再小的团队,工作也需�
 &lt;li&gt;存放同事的学习记录与分享&lt;/li&gt;
 &lt;li&gt;存放会议纪要&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;测试&lt;/h2&gt;
-&lt;h3&gt;完善的测试流程&lt;/h3&gt;
+&lt;h2&gt;基于git的开发流程&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;代码全部托管于git服务上&lt;/li&gt;
+&lt;li&gt;完善的分支规范,区分开发,测试,生产分支&lt;/li&gt;
+&lt;li&gt;基于gitflow的开发流程,区分feature,bugfix,hotfix等分支创建规则&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;完善的测试流程&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;产品出文档测试即开始编写测试用例&lt;/li&gt;
 &lt;li&gt;测试版本开发完成开始测试&lt;/li&gt;
@@ -93,7 +611,7 @@ summary: 所谓没有规矩,不成方圆,就算是再小的团队,工作也需�
 &lt;li&gt;开发处理bug,在bugout上提交&lt;/li&gt;
 &lt;li&gt;测试再次测试直到通过&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1&gt;构建&lt;/h1&gt;
+&lt;h1&gt;基于持续构建工具的构建流程&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;使用jenkin持续构建,单元测试,Sonar代码分析&lt;/li&gt;
 &lt;li&gt;每个项目至少3个分支,dev,master,release分支&lt;/li&gt;
@@ -101,15 +619,652 @@ summary: 所谓没有规矩,不成方圆,就算是再小的团队,工作也需�
 &lt;li&gt;dev分支自动提交构建&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;平台架构&lt;/h1&gt;
-&lt;p&gt;分布式的微服务架构&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分布式的微服务架构&lt;/li&gt;
+&lt;li&gt;保证单机宕机对整体服务没有影响,做到自动切换主备&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1&gt;统一开发环境与工具&lt;/h1&gt;
-&lt;p&gt;后端开发统一Jetbrains全家桶
-接口调试使用Postman
-文档使用showdoc&lt;/p&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+&lt;ul&gt;
+&lt;li&gt;后端开发统一Jetbrains全家桶&lt;/li&gt;
+&lt;li&gt;接口调试使用Postman&lt;/li&gt;
+&lt;li&gt;文档使用showdoc&lt;/li&gt;
+&lt;li&gt;代码管理使用git&lt;/li&gt;
+&lt;li&gt;统一使用邮件沟通&lt;/li&gt;
+&lt;/ul&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
             <link>//blog/thoughts/dev-rule.html</link>
             <guid isPermaLink="true">//blog/thoughts/dev-rule.html</guid>
                                                <category>thoughts</category>
+                                    </item>
+                <item>
+            <title>actuator模块简介</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2017-04-29
+title: actuator模块简介
+tags: SPRING-CLOUD
+images: 
+category: spring
+status: publish
+summary: spring-boot-starter-actuator模块简介,此模块提供监控与采集功能,通过在pom中引用此依赖,可以方便地使用其功能
+--&gt;
+&lt;p&gt;此模块提供监控与采集功能,通过在pom中引用此依赖,可以方便地使用其功能&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-boot-starter-actuator&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;原生端点&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;应用配置类:获取应用程序中加载的应用配置,环境变量,自动化配置报告等与SpringBoot应用密切相关的配置类信息&lt;/li&gt;
+&lt;li&gt;度量指标类:获取应用程序运行过程中用户监控的度量指标,比如内存信息,线程池信息,HTTP请求统计等&lt;/li&gt;
+&lt;li&gt;操作控制类:提供了对应用的关闭操作类功能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;应用配置类&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;/autoconfig:该端点用来获取应用的自动化配置报告.包括条件匹配成功以及不成功的配置&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;positiveMatches中返回是条件匹配成功的自动化配置&lt;/li&gt;
+&lt;li&gt;negativeMatches中返回的是条件匹配不成功的自动化配置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;/beans:该端点用来获取应用上下文中创建的所有Bean&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[
+    {
+        &quot;context&quot;:&quot;application&quot;,
+        &quot;parent&quot;:null,
+        &quot;beans&quot;:[
+            {
+                &quot;bean&quot;:&quot;helloApplication&quot;,
+                &quot;aliases&quot;:[
+
+                ],
+                &quot;scope&quot;:&quot;singleton&quot;,
+                &quot;type&quot;:&quot;com.jimersylee.hello.HelloApplication$$EnhancerBySpringCGLIB$$d3ebe421&quot;,
+                &quot;resource&quot;:&quot;null&quot;,
+                &quot;dependencies&quot;:[
+
+                ]
+            },&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;每个Bean中都包含了下面这些信息&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;bean:Bean的名称&lt;/li&gt;
+&lt;li&gt;scope:Bean的作用域&lt;/li&gt;
+&lt;li&gt;type:Bean的Java类型&lt;/li&gt;
+&lt;li&gt;resource:class文件的具体路径&lt;/li&gt;
+&lt;li&gt;dependencies:依赖的Bean名称&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;/configprops:该端点用来获取应用中配置的属性信息报告,可以通过使用endpoints.configprops.enabled=false来关闭&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;env:该端点与/configprops不同,它用来获取应用所有可用的环境属性报告&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    &quot;profiles&quot;:[
+
+    ],
+    &quot;server.ports&quot;:{
+        &quot;local.server.port&quot;:8080
+    },
+    &quot;servletContextInitParams&quot;:{
+
+    },
+    &quot;systemProperties&quot;:{
+        &quot;java.runtime.name&quot;:&quot;Java(TM) SE Runtime Environment&quot;,
+        &quot;awt.useSystemAAFontSettings&quot;:&quot;gasp&quot;,
+        &quot;sun.boot.library.path&quot;:&quot;/opt/jdk1.8.0_144/jre/lib/amd64&quot;,
+        &quot;java.vm.version&quot;:&quot;25.144-b01&quot;,
+        &quot;maven.multiModuleProjectDirectory&quot;:&quot;/home/jimersylee/projects/java/spring-cloud-action/hello&quot;,
+        ...&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;/mappings:该端点用来返回所有Spring MVC的控制器映射关系报告.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    &quot;/webjars/**&quot;:{
+        &quot;bean&quot;:&quot;resourceHandlerMapping&quot;
+    },
+    &quot;/**&quot;:{
+        &quot;bean&quot;:&quot;resourceHandlerMapping&quot;
+    },
+    &quot;/**/favicon.ico&quot;:{
+        &quot;bean&quot;:&quot;faviconHandlerMapping&quot;
+    },
+    &quot;{[/hello]}&quot;:{
+        &quot;bean&quot;:&quot;requestMappingHandlerMapping&quot;,
+        &quot;method&quot;:&quot;public java.lang.String com.jimersylee.hello.web.HelloController.index()&quot;
+    },
+    &quot;{[/error],produces=[text/html]}&quot;:{
+        &quot;bean&quot;:&quot;requestMappingHandlerMapping&quot;,
+        &quot;method&quot;:&quot;public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)&quot;
+    },
+    .
+    .
+    .&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;/info:该端点用来返回一些应用自定义的信息.我们可以在application.properties中通过info前缀来设置一些属性,比如:
+&lt;pre&gt;&lt;code&gt;info.app.name=spring-boot-hello
+info.app.version=v1.0.0 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;再访问/info.获得下面的报告&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    &quot;app&quot;:{
+        &quot;name&quot;:&quot;spring-boot-hello&quot;,
+        &quot;version&quot;:&quot;v1.0.0&quot;
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;度量指标类&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;/metrics:该端点用来返回当前应用的各类重要度量指标,比如内存信息,线程信息,垃圾回收信息等&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    &quot;mem&quot;:565018,
+    &quot;mem.free&quot;:427032,
+    &quot;processors&quot;:4,
+    &quot;instance.uptime&quot;:1276647,
+    &quot;uptime&quot;:1287345,
+    &quot;systemload.average&quot;:1.98,
+    &quot;heap.committed&quot;:496128,
+    &quot;heap.init&quot;:176128,
+    &quot;heap.used&quot;:69095,
+    &quot;heap&quot;:2494464,
+    &quot;nonheap.committed&quot;:70608,
+    &quot;nonheap.init&quot;:2496,
+    &quot;nonheap.used&quot;:68891,
+    &quot;nonheap&quot;:0,
+    ...&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;系统信息:处理器processors,运行时间uptime和instance.uptime,系统平均负载,systemload.average&lt;/li&gt;
+&lt;li&gt;mem.*:内存概要信息&lt;/li&gt;
+&lt;li&gt;heap.*:堆内存使用情况.&lt;/li&gt;
+&lt;li&gt;nonheap.*:非堆内存使用情况.&lt;/li&gt;
+&lt;li&gt;threads.*:线程使用情况,包括线程数,守护线程数(daemon),线程峰值(peak)&lt;/li&gt;
+&lt;li&gt;classes.*:应用加载和卸载的类统计.&lt;/li&gt;
+&lt;li&gt;gc.*:垃圾收集器的详细信息.包括垃圾回收次数gc.ps_scavenge.count,垃圾回收消耗时间gc.ps_scavenge.time,标记-清除算法的次数gc.ps_marksweep.count,标记-清除算法的消耗时间,gc.ps_marksweep.time&lt;/li&gt;
+&lt;li&gt;httpsessions.*:Tomcat容器的会话使用情况.&lt;/li&gt;
+&lt;li&gt;gauge.*:HTTP请求的性能指标之一,如gauge.response.hello: 5,它表示上一次hello请求的延迟时间为5毫秒&lt;/li&gt;
+&lt;li&gt;counter.*:HTTP请求的性能指标之一,,它主要作为计数器来使用.如counter.status.200.hello:11代表hello请求返回的200状态的次数为11&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们还可以通过/metrics/{name}接口来更细粒度地获取度量信息,如果可以通过访问/metrics/mem.free来获取当前可用内存数量&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;/health:获取健康指标信息.
+有时候我们还会用到Spring Boot封装的产品进行开发,比如RocketMQ.我们需要实现org.springframework.boot.actuate.health.HealthIndicator接口来实现一个对RocketMQ的检测器类&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@Component
+public class RocketMQHealthIndicator implements HealthIndicator {
+    @Override
+    public Health health() {
+        int errorCode=this._check();
+        if(errorCode!=0){
+            return Health.down().withDetail(&quot;Error Code&quot;,errorCode).build();
+        }
+        return Health.up().build();
+    }
+
+    private int _check() {
+        //对监控对象的检测操作
+
+        return 0;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;返回结果&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    &quot;status&quot;: &quot;UP&quot;,
+    &quot;rocketMQ&quot;: {
+        &quot;status&quot;: &quot;UP&quot;
+    },
+    &quot;diskSpace&quot;: {
+        &quot;status&quot;: &quot;UP&quot;,
+        &quot;total&quot;: 125484777472,
+        &quot;free&quot;: 65173798912,
+        &quot;threshold&quot;: 10485760
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;/dump:该端点用来暴露程序运行中的线程信息&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;/trace:该端点用来返回基本的HTTP跟踪信息,始终保留最近的100条请求记录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;操作类控制器&lt;/h3&gt;
+&lt;p&gt;可以进行关键操作,需要通过属性来配置开启操作.在原生端点中,只提供了一个用来关闭应用的端点:/shutdown(后续引入Eureka之后,会引入更多控制端点).我们可以通过配置开启它&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;endpoint.shutdown.enable=true&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;由于开放关闭应用本身是一件非常危险的事,需要对其加入一定的保护机制,比如定制actuator的端口路径,整合Spring Security进行安全校验.&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/spring/spring-boot-starter-actuator.html</link>
+            <guid isPermaLink="true">//blog/spring/spring-boot-starter-actuator.html</guid>
+                                               <category>spring</category>
+                                    </item>
+                <item>
+            <title>Hello World</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2017-04-28
+title: Hello World
+tags: Spring Cloud 简介
+images: 
+category: spring
+status: publish
+summary: 
+--&gt;
+&lt;h1&gt;Spring Cloud 简介&lt;/h1&gt;
+&lt;p&gt;Spring Cloud Config:配置管理工具&lt;/p&gt;
+&lt;p&gt;Spring Cloud Netflix:核心组件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Eureka:服务治理组件&lt;/li&gt;
+&lt;li&gt;Hystrix:容错管理组件&lt;/li&gt;
+&lt;li&gt;Ribbon:客户端负载均衡的服务调用组件&lt;/li&gt;
+&lt;li&gt;Feign:基于Ribbon和Hystrix的生命是服务调用组件&lt;/li&gt;
+&lt;li&gt;Zuul:网关组件&lt;/li&gt;
+&lt;li&gt;外部化配置组件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Spring Cloud Bus:事件,消息总线&lt;/p&gt;
+&lt;p&gt;Spring Cloud Cluster:针对Zookeeper,Redis,Hazelcast,Consul的选举算法和通用状态模式的实现&lt;/p&gt;
+&lt;p&gt;Spring Cloud CloudFoundry:与Pivatal Cloudfoundy的整合支持&lt;/p&gt;
+&lt;p&gt;Spring Cloud Consul:服务发现与配置管理工具&lt;/p&gt;
+&lt;p&gt;Spring Cloud Stream:通过Redis,RabbitMQ和Kafka实现的消费微服务,可以通过简单的声明式模型来发送和接收消息&lt;/p&gt;
+&lt;p&gt;Spring Cloud AWS:用于简化整合Amazon Web Service的组件&lt;/p&gt;
+&lt;p&gt;Spring Cloud Security:安全工具包,提供在Zuul代理中对OAuth2客户端请求的中继器&lt;/p&gt;
+&lt;p&gt;Spring Cloud Sleuth:Spring Cloud的应用分布式跟踪系统,可以完美整合Zipkin&lt;/p&gt;
+&lt;p&gt;Spring Cloud Zookeeper:基于Zookeeper的服务发现与配置管理组件&lt;/p&gt;
+&lt;p&gt;Spring Cloud Starters:Spring Cloud的基础组件,它是基于Spring Boot风格项目的基础依赖模块&lt;/p&gt;
+&lt;p&gt;Spring Cloud CLI:用于在Groovy中快速创建Spring Cloud应用的Spring Boot CLI的插件&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/spring/spring-cloud-summury.html</link>
+            <guid isPermaLink="true">//blog/spring/spring-cloud-summury.html</guid>
+                                               <category>spring</category>
+                                    </item>
+                <item>
+            <title><深入理解Java虚拟机>学习笔记-第三章</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-08-20
+title: &lt;深入理解Java虚拟机&gt;学习笔记-第三章
+tags: JAVA,JVM
+images: 
+category: java
+status: publish
+summary: 
+--&gt;
+&lt;h1&gt;第三章 垃圾收集器与内存分配策略&lt;/h1&gt;
+&lt;p&gt;项目地址: &lt;a href=&quot;'http://github.com/jimersylee/javaStudy'&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/javaStudy&quot;&gt;http://github.com/jimersylee/javaStudy&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;3.1概述&lt;/h2&gt;
+&lt;p&gt;垃圾收集(Garbage Collection,GC),大部分人都把这项技术当做Java语言的伴生产物,事实上,1960年诞生于MIT的Lisp蚕食第一门真正使用内存动态分配和垃圾收集技术的语言&lt;/p&gt;
+&lt;p&gt;GC的3件事情&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;那些内存需要回收&lt;/li&gt;
+&lt;li&gt;什么时候回收&lt;/li&gt;
+&lt;li&gt;如何回收&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;目前GC的技术已经相当成熟,为什么我们要了解&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当需要排查各种内存溢出,内存泄露问题时&lt;/li&gt;
+&lt;li&gt;当垃圾收集成为系统达到更高并发量瓶颈时&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;3.2对象已死吗&lt;/h2&gt;
+&lt;p&gt;Java堆中存在对象实例,垃圾收集器在对堆进行回收前,第一件事就是要确定哪些对象还&amp;quot;活着&amp;quot;,哪些已经&amp;quot;死去&amp;quot;&lt;/p&gt;
+&lt;h2&gt;3.2.1 引用计数算法&lt;/h2&gt;
+&lt;p&gt;给对象中添加一个引用计数器:每当有一个地方引用它时,计数器加1;当引用失效时,计数器减1;任何时刻计数器为0的对象就是不可能再被使用的&lt;/p&gt;
+&lt;p&gt;引用计数算法(Reference Counting)的实现简单,判定效率也高,例如FlashPlayer,Python都使用引用计数算法了内存管理,但是Java虚拟机中没有选用引用计数算法来管理内存,其实最重要的原因是它很难解决对象之间相互循环引用的问题&lt;/p&gt;
+&lt;p&gt;testGC()方法,虽然两个对象已经不可能被访问,但是因为互相引用着,导致他们计数器都不为0,于是引用计数算法无法通知GC收集器来回收它们&lt;/p&gt;
+&lt;p&gt;GC日志中包含了6747K-&amp;gt;416K(51200K),意味着虚拟机并没有因为这两个对象互相引用就不回收它们,这也从侧面说明虚拟机并不是通过引用计数算法来判断对象是否是存活的&lt;/p&gt;
+&lt;h2&gt;3.2.2 可达性分析算法&lt;/h2&gt;
+&lt;p&gt;在主流的商用程序语言(Java,C#,甚至古老的Lisp)的主流实现中,都是通过可达性分析(Reachability Analysis)来判定对象是否存活的.这个算法的基本思路就是通过一系列的称为&amp;quot;GC Roots&amp;quot;的对象作为起始点,从这些节点开始向下搜索,搜索所走过的路径称为引用链(Reference Chain),当一个对象到GC Roots没有任何引用链(用图论的话来说,就是从GC Root到这个对象不可达),则证明此对象是不可用的.&lt;/p&gt;
+&lt;p&gt;在Java语言中,可作为GC Roots的对象包括下面几种:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;虚拟机栈(栈帧中的本地变量表)中引用的对象&lt;/li&gt;
+&lt;li&gt;方法区中类静态属性引用的对象&lt;/li&gt;
+&lt;li&gt;方法区中常量引用的对象&lt;/li&gt;
+&lt;li&gt;本地方法栈中JNI(Native方法)引用的对象&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;3.2.3 再谈引用&lt;/h2&gt;
+&lt;p&gt;jdk1.2后,对引用的概念进行了扩充&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;强引用
+类型Object obj=new Object();这类的,只要强引用还在,垃圾收集器永远不会回收掉被引用的对象&lt;/li&gt;
+&lt;li&gt;软引用
+软引用用来描述一些还有用但并非必需的对象.在系统将要发生内存溢出异常之前,将会把这些对象列进回收范围内进行二次回收.如果这次回收还没有足够的内存,才会抛出内存溢出异常.在JDK1.2后,提供了SoftReference类来实现软引用.&lt;/li&gt;
+&lt;li&gt;弱引用
+弱引用也是用来描述非必需对象.当垃圾收集器工作时,无论当前内存是否足够,都会回收掉只被弱引用关联的对象.在JDK1.2后,提供了WeakReference类实现弱引用.&lt;/li&gt;
+&lt;li&gt;虚引用
+虚引用也称为幽灵引用或者幻影引用.一个对象是否有虚引用的存在,完全不会对其生存时间构成影响,也无法通过虚引用来获得一个对象实例.为一个对象设置虚引用是为了能在这个对象被回收时能收到系统通知.在JDK1.2后,提供了PhantomReference类实现虚引用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;3.2.4 生存还是死亡&lt;/h2&gt;
+&lt;p&gt;即使在可达性分析算法中不可达的对象,也并非是&amp;quot;非死不可&amp;quot;的,要宣告一个对象死亡,至少经历两次标记过程
+代码清单3-2 一次对象自我拯救的演示&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * 此代码演示了两点
+ * 1.对象可以在被GC时自我拯救
+ * 2.这个自救机会只有一次
+ *
+ * @author jimersylee
+ */
+public class FinalizeEscapeGC {
+    public static FinalizeEscapeGC SAVE_HOOK = null;
+
+    public void isAlive() {
+        System.out.println(&quot;yes,i am still alive&quot;);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        System.out.println(&quot;finalize method executed&quot;);
+        FinalizeEscapeGC.SAVE_HOOK = this;
+    }
+
+    public static void main(String[] args) throws Throwable {
+        SAVE_HOOK = new FinalizeEscapeGC();
+        //对象第一次成功拯救自己演示
+
+        //释放对象
+        SAVE_HOOK = null;
+        System.gc();
+        //因为finalize方法优先度低,所以暂停0.5秒等待它
+        Thread.sleep(500);
+        if (SAVE_HOOK != null) {
+            SAVE_HOOK.isAlive();
+        } else {
+            System.out.println(&quot;no,i am dead :(&quot;);
+        }
+
+        //下面这段代码与上面的完全相同,但是这次自救却失败了
+        SAVE_HOOK = null;
+        System.gc();
+        //因为finalize方法优先度低,所以暂停0.5秒等待它
+        Thread.sleep(500);
+        if (SAVE_HOOK != null) {
+            SAVE_HOOK.isAlive();
+        } else {
+            System.out.println(&quot;no,i am dead :(&quot;);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;3.2.5 回收方法区&lt;/h2&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/jvm-chapter-3.html</link>
+            <guid isPermaLink="true">//blog/java/jvm-chapter-3.html</guid>
+                                               <category>java</category>
+                                    </item>
+                <item>
+            <title><深入理解Java虚拟机>学习笔记-第二章</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-08-11
+title: &lt;深入理解Java虚拟机&gt;学习笔记-第二章
+tags: JAVA,JVM
+images: 
+category: java
+status: publish
+summary: 
+--&gt;
+&lt;h1&gt;Java与C++的区别&lt;/h1&gt;
+&lt;p&gt;项目地址: &lt;a href=&quot;'http://github.com/jimersylee/javaStudy'&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/javaStudy&quot;&gt;http://github.com/jimersylee/javaStudy&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;2.1 概述&lt;/h2&gt;
+&lt;p&gt;内存管理领域&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;c,c++开发人员拥有最高权利,可以操作每一个对象,又需要维护每个对象的开始与销毁&lt;/li&gt;
+&lt;li&gt;java开发人员不需要为每一个对象写配对的delete/free代码,不容易出现内存泄露与内存溢出问题,不过,出现内存方面的问题,排查又是一项异常艰难的工作
+&lt;h2&gt;2.2运行时数据区域&lt;/h2&gt;&lt;/li&gt;
+&lt;li&gt;方法区Method Area&lt;/li&gt;
+&lt;li&gt;虚拟机栈VM Stack&lt;/li&gt;
+&lt;li&gt;本地方法栈Native Method Stack&lt;/li&gt;
+&lt;li&gt;堆 Heap&lt;/li&gt;
+&lt;li&gt;程序计数器 program Counter Register
+&lt;h3&gt;2.2.1 程序计数器&lt;/h3&gt;
+&lt;p&gt;java虚拟机通过线程轮换来分配处理器执行时间,为了线程切换后能恢复到正确的执行位置,每条线程都需要一个独立的程序计数器,为&lt;em&gt;线程私有&lt;/em&gt;内存&lt;/p&gt;
+&lt;h3&gt;2.2.2 Java虚拟机栈&lt;/h3&gt;
+&lt;p&gt;与程序计数器一样,Java虚拟机栈也是线程私有的,它的生命周期与线程相同.&lt;/p&gt;
+&lt;h3&gt;2.2.3 本地方法栈&lt;/h3&gt;
+&lt;p&gt;本地方法栈为虚拟机使用到的Native方法服务&lt;/p&gt;
+&lt;h3&gt;2.2.4 Java堆&lt;/h3&gt;
+&lt;p&gt;Java堆(Heap)是Java虚拟机所管理的 内存中最大的一块,Java对是被所有线程共享的一块内存区域,在虚拟机启动时创建.此内存区域的唯一目的就是存放对象实例.
+Java堆是垃圾收集器管理的主要区域
+现在的收集器基本采用分代收集算法&lt;/p&gt;
+&lt;h4&gt;Java堆&lt;/h4&gt;&lt;/li&gt;
+&lt;li&gt;新生代&lt;/li&gt;
+&lt;li&gt;老年代
+更细致&lt;/li&gt;
+&lt;li&gt;Eden空间&lt;/li&gt;
+&lt;li&gt;From Survivor空间&lt;/li&gt;
+&lt;li&gt;To Survivor空间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Java堆可以处于物理上不连续的空间中,只要逻辑上连续即可,既可以实现成固定大小的,也可以是可扩展的,通过 &lt;em&gt;-Xmx&lt;/em&gt; 和 &lt;em&gt;-Xms&lt;/em&gt;控制,如果堆中没有足够的内存完成实例分配,则报 &lt;em&gt;OutOfMemory&lt;/em&gt; 异常&lt;/p&gt;
+&lt;h3&gt;2.2.5&lt;/h3&gt;
+&lt;p&gt;方法区与Java堆一样,是各个线程共享的内存区域,用于存放已被虚拟机加载的类信息,敞亮,静态变量,即时编译器编译后的代码等数据&lt;/p&gt;
+&lt;p&gt;HotSpot上,方法区习惯性称为 &lt;em&gt;永久代(Permanent Generation)&lt;/em&gt; &lt;/p&gt;
+&lt;p&gt;永久代有 &lt;em&gt;-XX:MaxPermSize&lt;/em&gt; 上限&lt;/p&gt;
+&lt;h3&gt;2.2.6 运行时常量池&lt;/h3&gt;
+&lt;p&gt;运行时常量池(Runtime Constant Pool)是方法区的一部分.用于存放编译期生成的各种字面量和符号引用.&lt;/p&gt;
+&lt;p&gt;当常量池无法申请到内存报OutOfMemory异常&lt;/p&gt;
+&lt;h3&gt;直接内存&lt;/h3&gt;
+&lt;p&gt;JDK1.4中新加入NIO(New Input/Output)类,引入了一种基于通道(Channel)与缓冲区(Buffer)的I/O方式,它可以使用Native函数库直接分配堆外内存,然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用记性操作.
+作用:提高性能
+直接内存不收Java堆大小的限制,但是受本机总内存限制.除了设置 -Xmx等参数信息,也要注意直接内存&lt;/p&gt;
+&lt;h2&gt;2.3 HotSpot虚拟机对象探秘&lt;/h2&gt;
+&lt;h3&gt;2.3.1 对象的创建&lt;/h3&gt;
+&lt;h4&gt;划分内存&lt;/h4&gt;
+&lt;p&gt;虚拟机遇到一条new指令时,首先检查常量池中有没有这个类的符号引用,检查是否已被加载,解析,初始化过.如果没有,那必须先执行相应的类加载过程
+通过检查之后,接下来虚拟机将为新生对象分配内存.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;指针碰撞(Bump the Pointer):&lt;/em&gt; 如果内存是规整的,那么就将指针从已使用内存向空闲内存移动对象大小的距离&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;空闲列表(Free List):&lt;/em&gt; 如果内存是不规整的,已使用的内存和空闲的内存项目交错,虚拟机就必须尾货一个列表,记录那些内存块是可用的,分配内存块,更新列表&lt;/p&gt;
+&lt;p&gt;选择那种分配方式由垃圾收集器是否带有压缩整理功能决定&lt;/p&gt;
+&lt;p&gt;指针碰撞,代用Compact过程的收集器&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Serial&lt;/li&gt;
+&lt;li&gt;ParNew&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;空闲列表,基于Mark-Sweep算法的收集器&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CMS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;保证线程安全&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;对分配内存空间的动作进行同步处理---实际上虚拟机采用CAS配上失败重试的方式保证更新操作的原子性&lt;/li&gt;
+&lt;li&gt;把内存分配动作按照线程划分在不同的空间之中进行,即每个线程在Java堆中预先分配一小块内存,称为本地线程分配缓冲(Thread Local Allocation Buffer).虚拟机是否使用TLAB,可以通过-XX:+/-UseTLAB 参数设定
+&lt;h3&gt;2.3.2 对象的内存布局&lt;/h3&gt;
+&lt;p&gt;在HotSpot虚拟机中,对象在内存中存储的布局可以分为3块区域&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;对象头(Header)
+&lt;ol&gt;
+&lt;li&gt;运行时数据,如哈希码,GC分代你年龄,锁状态标识,线程持有的锁,偏向线程Id,偏向时间戳&lt;/li&gt;
+&lt;li&gt;类型指针,虚拟机通过这个指针确定这个对象是哪个类的示例&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;实例数据(Instance Data)
+&lt;ol&gt;
+&lt;li&gt;各种类型的字段内容&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;对齐填充(Padding)
+&lt;ol&gt;
+&lt;li&gt;不是必然存在,由于HotSpot Vm的自动内存管理系统要求对象起始地址必须是8字节的整数倍,当对象实例数据部分没有对齐时,就需要通过对齐填充来补全
+&lt;h3&gt;2.3.3 对象的访问定位&lt;/h3&gt;
+&lt;p&gt;主流方式&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;HotSpot采用直接指针方式&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用句柄
+&lt;ul&gt;
+&lt;li&gt;原理:划分出一块内存作为句柄池.reference中存储的就是对象的句柄地址,句柄中包含了对象实例数据与类型数据各自的具体地址信息&lt;/li&gt;
+&lt;li&gt;优点:reference中存储的是稳定的句柄地址,在对象被移动时,只会改变句柄中的实例数据指针,而reference本身不需要修改&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;直接指针
+&lt;ul&gt;
+&lt;li&gt;原理:Java堆对象的布局中就必须考虑如何放置访问类型数据的相关信息,而reference中存储的直接就是对象地址&lt;/li&gt;
+&lt;li&gt;优点:速度更快,少了一次通过句柄定位指针的开销&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;2.4 实战:OutOfMemoryError异常&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;通过代码验证Java虚拟机规范中描述的各个运行时区域存储的内容&lt;/li&gt;
+&lt;li&gt;根据异常的信息快速判断是哪个区域的内存一处,知道什么的样的代码可能导致这些区域内存溢出,以及出现这些异常后如何处理&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;2.4.1 Java堆溢出&lt;/h2&gt;
+&lt;p&gt;复现过程,设置jvm启动参数来实现,本文使用Idea,在Run/Debug configuration中的VM options选项中填入如下参数&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以上代码限制Java堆的大小为20MB,不可扩展(将堆的最小值 -Xms参数与最大值-Xmx参数设置为一样即可避免堆自动扩展),通过-XX:+HeapDumpOnOutOfMemoryError可以让虚拟机在出现内存溢出异常时Dump出当前的内存对转储快照以便时候进行分析&lt;/p&gt;
+&lt;p&gt;代码清单&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * VM Args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError
+ * @author jimersylee 
+ */
+public class HeapOOM {
+    private static class OOMObject{
+
+    }
+    public static void main(String[] args){
+        List&amp;lt;OOMObject&amp;gt; list=new ArrayList&amp;lt;&amp;gt;();
+        while(true){
+            list.add(new OOMObject());
+        }
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行结果&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;java.lang.OutOfMemoryError: Java heap space
+Dumping heap to java_pid27497.hprof ...
+Exception in thread &quot;main&quot; Heap dump file created [27789642 bytes in 0.164 secs]
+java.lang.OutOfMemoryError: Java heap space&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;2.4.2 虚拟机栈和本地方法栈溢出&lt;/h2&gt;
+&lt;p&gt;对于HotSpot来说,虽然-Xoss参数(设置本地方法栈大小)存在,但实际上是无效的,栈容量实际由-Xss参数设定.关于虚拟机栈和本地方法栈,在Java虚拟机中描述了两种异常:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果线程请求的栈深度大于虚拟机所允许的最大深度,将抛出StackOverflowError异常.&lt;/li&gt;
+&lt;li&gt;如果虚拟机在扩展栈时无法申请到足够的内存空间,则抛出OutOfMemoryError异常.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;将实验范围限制于单线程操作,下面两种方法均无法让虚拟机产生OutOfMemoryError异常,尝试的结果都是StackOverflowError异常,测试代码2-4&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用-Xss参数减少栈内存容量.结果抛出StackOverflowError异常,异常出现时输出的堆栈深度相应缩小&lt;/li&gt;
+&lt;li&gt;定义了大量的本地变量,增大此方法帧中本地变量表的长度.结果:抛出StackOverflowError异常时堆栈深度相应缩小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;代码清单2-4 &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * 虚拟机和本地方法栈OOM测试(仅作为第一点测试程序)
+ * VM Args:-Xss228k
+ * @author Jimersy Lee
+ */
+public class JavaVMStackSOF {
+    private int stackLength=1;
+    public void stackLeak(){
+        stackLength++;
+        stackLeak();
+    }
+    public static void main(String[] args) throws Throwable{
+        JavaVMStackSOF oom=new JavaVMStackSOF();
+        try {
+            oom.stackLeak();
+        }catch (Throwable e){
+            System.out.println(&quot;stack length:&quot;+oom.stackLength);
+            throw e;
+        }
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行结果&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Exception in thread &quot;main&quot; java.lang.StackOverflowError
+   stack length:1517
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:11)
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:12)
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:12)
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:12)
+.....后续异常堆栈信息省略&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;实验结果表明:在单个线程下,无论是由于栈帧太大或是虚拟机栈容量太小,当内存无法分配的时候,虚拟机抛出都是StackOverflowError异常&lt;/p&gt;
+&lt;p&gt;如果测试时不限于单线程,通过不断地建立线程的方式到时可以产生内存溢出异常,如代码清单2-5所示.但是这样的内存溢出异常与栈空间足够大并不存在任何关联,或者准确地说,在这种情况下,为每个线程的栈分配的内存越大,反而越容易产生内存溢出异常.&lt;/p&gt;
+&lt;p&gt;代码清单2-5 创建线程导致内存溢出异常&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * 创建线程导致内存溢出异常
+ * VM Args: -Xss2M
+ * @author Jimersy Lee
+ * todo:没有等到抛出异常
+ */
+public class JavaVMStackOOM {
+    private void dontStop(){
+        while (true){
+
+        }
+    }
+
+    public void stackLeakByThread(){
+        int count=0;
+        while(true){
+            Thread thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    dontStop();
+                }
+            });
+            thread.start();
+            System.out.println(count++);
+        }
+    }
+    public static void main(String[] args){
+        JavaVMStackOOM oom=new JavaVMStackOOM();
+        oom.stackLeakByThread();
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;2.4.3 方法区和运行时常量池溢出&lt;/h2&gt;
+&lt;p&gt;运行时常量池是方法区的一部分,因此这两个区域的溢出测试放在一起进行.&lt;/p&gt;
+&lt;p&gt;jdk1.6之前的版本,常量池分配在永久代中,可以通过-XX:PermSize和-XX:MaxPermSize限制方法区大小,从而间接限制其中常量池的容量&lt;/p&gt;
+&lt;p&gt;代码清单2-6 运行时常量池导致的内存溢出异常&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 运行时常量池导致的内存溢出异常,适用版本jdk1.6,1.8已经去除永久代
+ * @author jimersylee
+ * VM Args: -XX:PermSize=10m -XX:MaxPermSize=10m
+ * String.intern()是一个Native方法,它的作用是:如果字符串常量池中已经包含一个等于此String对象的字符串,则返回代表池中这个字符串的String对象;否则,将此String对象包含的字符串添加到常量池中,并且返回此String对象的引用
+ */
+public class RuntimeConstantPoolOOM {
+    public static void main(String[] args){
+        //使用List保持着常量池引用,避免Full GC回收常量池行为
+        List&amp;lt;String&amp;gt; list=new ArrayList&amp;lt;&amp;gt;();
+        //10MB的PermSize在Integer范围内足够产生OOM了
+        int i=0;
+        while (true){
+            list.add(String.valueOf(i++).intern());
+            System.out.println(list.size());
+        }
+
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;关于字符串常量池的实现问题,引出一个有意思的影响&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * String.intern()返回引用测试
+ */
+public class StringIntern {
+    public static void main(String[] args) {
+        String str1 = new StringBuilder(&quot;计算机&quot;).append(&quot;软件&quot;).toString();
+        System.out.println(str1.intern()==str1);
+
+        String str2=new StringBuilder(&quot;ja&quot;).append(&quot;va&quot;).toString();
+        System.out.println(str2.intern()==str2);
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;jdk1.6中,得到两个false;jdk1.7以后,得到true,和false;&lt;/p&gt;
+&lt;p&gt;jdk1.6中,intern()方法会把首次遇到的字符串实例复制到永久代中,返回的也是永久代中的这个字符串实例的引用,而StringBuilder创建的字符串实例在Java堆上,必然不是同一个引用,将返回false;&lt;/p&gt;
+&lt;p&gt;jdk1.7中,intern()实现不会在复制实例,只是在常量池中记录首次出现的实例引用,因此intern()返回的引用和由StringBuilder创建的那个字符创实例是同一个.&lt;/p&gt;
+&lt;p&gt;方法区用于存放Class的相关信息,如类名,访问修饰符,常量池,字段描述,方法描述&lt;/p&gt;
+&lt;p&gt;对于这些区域的测试,基本思路是运行时产生大量的类去填满方法区,直到溢出&lt;/p&gt;
+&lt;h2&gt;2.2.4 本机直接内存溢出&lt;/h2&gt;
+&lt;p&gt;DirectMemory容量可以通过-XX:MaxDirectMemorySize指定,如果不指定,则默认与Java堆最大值(-Xmx指定)一样&lt;/p&gt;
+&lt;p&gt;由DirectMemory导致的内存溢出,一个明显的特征是在Heap Dump文件中不会看见明显的异常,如果读者发现OOM之后的Dump文件很小,而程序中又直接或间接使用了NIO,那就可以考虑检查一下是不是这方面的原因&lt;/p&gt;
+&lt;h2&gt;本章小结&lt;/h2&gt;
+&lt;p&gt;通过本章的学习,我们明白了虚拟机中的内存是如何划分的,哪部分区域,什么样的代码和操作可能导致内存溢出异常.Java虽然有垃圾收集机制,但是内存溢出离我们并不遥远,本章只是讲解了各个区域出现异常的原因,下一章将详细讲解Java垃圾收集机制为了避免内存溢出异常的出现做出了哪些努力&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/jvm-chapter-2.html</link>
+            <guid isPermaLink="true">//blog/java/jvm-chapter-2.html</guid>
+                                               <category>java</category>
                                     </item>
                 <item>
             <title>为域名配置免费SSL证书</title>
@@ -312,6 +1467,1234 @@ cd nginx
             <link>//blog/devops/my-soft.html</link>
             <guid isPermaLink="true">//blog/devops/my-soft.html</guid>
                                                <category>devops</category>
+                                    </item>
+                <item>
+            <title><机器学习实战>学习笔记之Decision Trees</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-05-30
+title: &lt;机器学习实战&gt;学习笔记之Decision Trees
+tags: PYTHON,MACHINE-LEARNING
+images: 
+category: python
+status: publish
+summary: SVM(支持向量机)
+--&gt;
+&lt;p&gt;项目地址:&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;http://github.com/jimersylee/MachineLearningAction&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;决策树(Decision Trees)&lt;/h3&gt;
+&lt;p&gt;类似20个问题的游戏
+参与游戏的一方在脑海里想某个事物,其他参与者向他提问题,只允许提20个问题,问题的答案只能用对或错回答,问问题的人通过推断分解,逐步缩小带猜测事物的范围.决策树的工作原理与20个问题类似,用户输入一系列数据,然后给出游戏的答案&lt;/p&gt;
+&lt;p&gt;决策树
+优点:计算复杂度不高,输入结果易于理解,对中间值的缺失不敏感,可以处理不相关特征数据
+缺点:可能产生过度匹配问题
+适用数据类型:数值型与标称型&lt;/p&gt;
+&lt;p&gt;决策树的一般流程&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;收集数据:可以适用任何方法&lt;/li&gt;
+&lt;li&gt;准备数据:树构造算法只适用于标称型数据,因此数值型数据必须离散化&lt;/li&gt;
+&lt;li&gt;分析数据:可以适用任何方法,构造书完成之后,我们应该检查图形是否符合预期&lt;/li&gt;
+&lt;li&gt;训练算法:构造树的数据结构&lt;/li&gt;
+&lt;li&gt;测试算法:适用经验树计算错误率&lt;/li&gt;
+&lt;li&gt;适用算法:此步骤可以适用于任何监督学习算法,而适用决策树可以更好地理解数据的内在含义&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;# coding:utf-8
+from math import log
+import operator
+import matplotlib.pyplot as plt
+
+def calcShannonEnt(dataSet):
+    &quot;&quot;&quot;
+    计算给定数据集的香农熵,香农熵代表数据的无序程度,香农熵越大,数据集越无序
+    :param dataSet: 数据集
+    :return:香农熵的值
+    &quot;&quot;&quot;
+    numEntries = len(dataSet)  # 获得数据中实例的总数
+    labelCounts = {}  # 声明一个字典
+    # 为所有可能分类创建字典,它的键值是最后一列的数值
+    for featVec in dataSet:
+        currentLabel = featVec[-1]  # 目前的标签=数据集的每行的最后一个元素
+        if currentLabel not in labelCounts.keys():  # 如果键值不存在,则扩展字典并将当前键值加入字典
+            labelCounts[currentLabel] = 0  # 初始化为0
+
+        labelCounts[currentLabel] = labelCounts[currentLabel] + 1  # 每个键值都记录了当前类别出现的次数,出现一次加1
+
+    shannonEnt = 0.0
+    for key in labelCounts:
+        prob = float(labelCounts[key]) / numEntries  # 使用所有类标签的发生频率计算类别出现的概率
+        shannonEnt = shannonEnt - prob * log(prob, 2)  # 使用这个概率计算香农熵 以2为底求对数
+    return shannonEnt
+
+def createDataSet():
+    &quot;&quot;&quot;
+    创建简单鱼类鉴定数据集
+    :return:dataSet(数据集),labels(标签)
+    &quot;&quot;&quot;
+    _dataSet = [
+        [1, 1, 'yes'],
+        [1, 1, 'yes'],
+        [1, 0, 'no'],
+        [0, 1, 'no'],
+        [0, 1, 'no']
+    ]
+
+    _labels = ['no surfacing', 'flippers']
+    return _dataSet, _labels
+
+myData, labels = createDataSet()
+print myData
+print calcShannonEnt(myData)
+
+&quot;&quot;&quot;
+result
+
+[[1, 1, 'yes'], [1, 1, 'yes'], [1, 0, 'no'], [0, 1, 'no'], [0, 1, 'no']]
+0.970950594455
+&quot;&quot;&quot;
+
+# 熵越高,则混合的数据也越多,我们可以在数据集中添加更多的分类,观察熵是如何变化的,这里我们增加第三个名为maybe的分类,测试熵的变化
+
+myData[0][-1] = 'maybe'  # 第0行的最后一个元素置为maybe
+print myData
+print calcShannonEnt(myData)
+&quot;&quot;&quot;
+[[1, 1, 'maybe'], [1, 1, 'yes'], [1, 0, 'no'], [0, 1, 'no'], [0, 1, 'no']]
+1.37095059445
+&quot;&quot;&quot;
+# 得到熵以后,我们就可以按照获取最大信息增益的方法划分数据集
+
+# 另一个度量集合无需程度的方法是`基尼不纯度`(Gini impurity),简单地说就是从一个数据集中随机选取子项,度量其被错误分类到其他分组里的概率
+
+&quot;&quot;&quot;
+分类算法除了要测量信息熵,还需要划分数据集,度量花费数据集的熵,以便判断当前是否正确划分了数据集,我们将对每个特征划分数据集的结果计算一次信息熵,然后判断按照那个特征划分数据集是最好的划分方式
+&quot;&quot;&quot;
+
+def splitDataSet(dataSet, axis, value):
+    &quot;&quot;&quot;
+    按照给定特征划分数据集
+    :param dataSet: 待划分的数据集
+    :param axis:划分数据集的特征位
+    :param value:预设特征值
+    :return:
+    &quot;&quot;&quot;
+    retDataSet = []  # 创建新的list对象,因为函数中传递的是列表的引用,在函数内部对列表对象的修改,将会影响该列表对象的整个生存周期,因此需要创建一个新的列表
+    for featVec in dataSet:
+        if featVec[axis] == value:  # 如果axis位的值等于预设的特征值
+            reducedFeatVec = featVec[:axis]  # 取行数据的前axis位
+            reducedFeatVec.extend(featVec[axis + 1:])  # 加上axis位后的元素
+            retDataSet.append(reducedFeatVec)  # 就是将除了axis特征位的元素抽取出来
+    return retDataSet
+
+# 测试splitDataSet
+print &quot;测试splitDataSet&quot;
+myData, labels = createDataSet()
+print myData
+
+newData = splitDataSet(myData, 0, 1)  # 将待测试数据的第0位为1的数据的其他特征和标签筛选出来
+print newData
+
+def chooseBestFeatureToSplit(dataSet):
+    &quot;&quot;&quot;
+    选择最好的数据集划分方式
+    :param dataSet: 数据集
+    :return:
+    &quot;&quot;&quot;
+    numFeatures = len(dataSet[0]) - 1
+    # 计算整个数据的原始香农熵
+    baseEntropy = calcShannonEnt(dataSet)
+    bestInfoGain = 0.0
+    bestFeature = -1
+    # 遍历数据集中的所有特征
+    for i in range(numFeatures):
+        # 创建唯一的分类标签列表
+        featList = [example[i] for example in dataSet]
+        uniqueVals = set(featList)  # 将list转换为set,集合类型中每个值不同,从列表中创建集合是Python语言中得到列表中唯一元素值的最快方法
+        newEntropy = 0.0
+        # 计算每种划分方式的信息熵
+        for value in uniqueVals:  # 遍历当前特征中的所以唯一属性值,对每个特征划分一次数据集
+            subDataSet = splitDataSet(dataSet, i, value)
+            prob = len(subDataSet) / float(len(dataSet))
+            newEntropy += prob * calcShannonEnt(subDataSet)  # 并对所有唯一特征值得到的熵求和
+        infoGian = baseEntropy - newEntropy  # 信息增益=熵的减少值或者数据无序度的减少
+        # 计算最好的信息增益
+        if infoGian &amp;gt; bestInfoGain:
+            bestInfoGain = infoGian
+            bestFeature = i
+    return bestFeature  # 返回最好特征划分的索引值
+
+# 获取最好特征划分索引值
+print &quot;获取最好特征划分索引值&quot;
+myData, labels = createDataSet()
+print &quot;dataSet:&quot; + str(myData)
+print &quot;best index:&quot; + str(chooseBestFeatureToSplit(myData))
+
+&quot;&quot;&quot;
+代码表示,第0个特征是最好的用户划分数据集的特征
+&quot;&quot;&quot;
+
+&quot;&quot;&quot;
+递归构建决策树
+
+&quot;&quot;&quot;
+
+def majorityCnt(classList):
+    &quot;&quot;&quot;
+    类似classify0部分的投票表决
+    创建键值为classList中唯一值的数据字典,字典对象存储了classList中每个类标签出现的频率,最后利用operator操作键值排序字典,返回出现次数最多的分类名称
+    :rtype: str
+    :param classList: 分类名称的列表
+    :return: 返回出现次数最多的分类名称
+    &quot;&quot;&quot;
+    classCount = {}
+    for vote in classList:
+        if vote not in classCount.keys():  # 如果投票的类别不在classCount字典的key中,
+            classCount[vote] = 0  # 则新建此key,value设置为0
+        classCount[vote] += 1
+
+    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
+    return sortedClassCount[0][0]
+
+def createTree(dataSet, labels):
+    &quot;&quot;&quot;
+    创建树,使用了递归
+    :param dataSet:数据集
+    :param labels: 分类标签
+    :return: 树结构
+    &quot;&quot;&quot;
+
+    classList = [example[-1] for example in dataSet]  # 将数据集中的每一行的最后一个元素的值取出生成类别列表classList
+    if classList.count(classList[0]) == len(classList):  # 递归停止条件1
+        return classList[0]  # 类别完全相同时停止继续划分
+    if len(dataSet[0]) == 1:  # 递归停止条件2
+        return majorityCnt(classList)  # 遍历完所有特征时返回出现次数最多的
+    bestFeat = chooseBestFeatureToSplit(dataSet)  # 选择最好的划分特征位
+    bestFeatLabel = labels[bestFeat]  # 取出最好的标签
+    myTree = {bestFeatLabel: {}}  # 初始化一个tree字典
+    del (labels[bestFeat])  # 删除最好的标签,防止树的下一个节点还使用此标签
+    featValues = [example[bestFeat] for example in dataSet]  # 创建最好的特征位的值所构建的list
+    uniqueVals = set(featValues)  # 生成唯一的特征位的值构成的集合set
+    for value in uniqueVals:
+        subLabels = labels[:]  # 复制所有标签,且树不会和已经存在的标签搞混
+        myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)  # 递归创建树
+    return myTree
+
+#  构建树测试
+print &quot;构建树测试&quot;
+myData, labels = createDataSet()
+myTree = createTree(myData, labels)
+print myTree
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# coding:utf-8
+import matplotlib.pyplot as plt  # 导入绘制图库
+
+&quot;&quot;&quot;
+绘制树图
+&quot;&quot;&quot;
+decisionNode = dict(boxstyle=&quot;sawtooth&quot;, fc=&quot;0.8&quot;)
+leafNode = dict(boxstyle=&quot;round4&quot;, fc=&quot;0.8&quot;)
+arrow_args = dict(arrowstyle=&quot;&amp;lt;-&quot;)
+
+def getNumLeafs(myTree):
+    &quot;&quot;&quot;
+    获取叶节点的数目
+    :param myTree:树结构
+    :return: 叶节点的数目
+    &quot;&quot;&quot;
+    numLeafs = 0
+    firstStr = myTree.keys()[0]
+    secondDict = myTree[firstStr]
+    for key in secondDict.keys():
+        if type(secondDict[
+                    key]).__name__ == 'dict':  # test to see if the nodes are dictonaires, if not they are leaf nodes
+            numLeafs += getNumLeafs(secondDict[key])
+        else:
+            numLeafs += 1
+    return numLeafs
+
+def getTreeDepth(myTree):
+    &quot;&quot;&quot;
+    获取树的层数(深度)
+    :param myTree:
+    :return: 树的层数(深度)
+    &quot;&quot;&quot;
+    maxDepth = 0
+    firstStr = myTree.keys()[0]
+    secondDict = myTree[firstStr]
+    for key in secondDict.keys():
+        if type(secondDict[
+                    key]).__name__ == 'dict':  # 判断此节点是否是字典,如果不是就是叶节点
+            thisDepth = 1 + getTreeDepth(secondDict[key])  # 是字典,层数+1
+        else:
+            thisDepth = 1  # 叶节点,层数为1
+        if thisDepth &amp;gt; maxDepth:
+            maxDepth = thisDepth
+    return maxDepth
+
+def plotNode(nodeTxt, centerPt, parentPt, nodeType):
+    &quot;&quot;&quot;
+    绘制节点
+    :param nodeTxt:节点名称
+    :param centerPt: 目前的位置
+    :param parentPt: 父节点的位置
+    :param nodeType: 节点类型
+    :return:
+    &quot;&quot;&quot;
+    createPlot.ax1.annotate(nodeTxt, xy=parentPt, xycoords='axes fraction',
+                            xytext=centerPt, textcoords='axes fraction',
+                            va=&quot;center&quot;, ha=&quot;center&quot;, bbox=nodeType, arrowprops=arrow_args)
+
+def plotMidText(currentPt, parentPt, txtString):
+    &quot;&quot;&quot;
+    绘制中间的文本
+    :param currentPt:目前的位置 
+    :param parentPt: 父节点的位置
+    :param txtString: 想绘制的文本
+    :return: 
+    &quot;&quot;&quot;
+    xMid = (parentPt[0] - currentPt[0]) / 2.0 + currentPt[0]
+    yMid = (parentPt[1] - currentPt[1]) / 2.0 + currentPt[1]
+    createPlot.ax1.text(xMid, yMid, txtString, va=&quot;center&quot;, ha=&quot;center&quot;, rotation=30)
+
+def plotTree(myTree, parentPt, nodeTxt):  # if the first key tells you what feat was split on
+    numLeafs = getNumLeafs(myTree)  # this determines the x width of this tree
+    depth = getTreeDepth(myTree)
+    firstStr = myTree.keys()[0]  # the text label for this node should be this
+    cntrPt = (plotTree.xOff + (1.0 + float(numLeafs)) / 2.0 / plotTree.totalW, plotTree.yOff)
+    plotMidText(cntrPt, parentPt, nodeTxt)
+    plotNode(firstStr, cntrPt, parentPt, decisionNode)
+    secondDict = myTree[firstStr]
+    plotTree.yOff = plotTree.yOff - 1.0 / plotTree.totalD
+    for key in secondDict.keys():
+        if type(secondDict[
+                    key]).__name__ == 'dict':  # test to see if the nodes are dictonaires, if not they are leaf nodes
+            plotTree(secondDict[key], cntrPt, str(key))  # recursion
+        else:  # it's a leaf node print the leaf node
+            plotTree.xOff = plotTree.xOff + 1.0 / plotTree.totalW
+            plotNode(secondDict[key], (plotTree.xOff, plotTree.yOff), cntrPt, leafNode)
+            plotMidText((plotTree.xOff, plotTree.yOff), cntrPt, str(key))
+    plotTree.yOff = plotTree.yOff + 1.0 / plotTree.totalD
+
+# if you do get a dictionary you know it's a tree, and the first element will be another dict
+
+def createPlot(inTree):
+    fig = plt.figure(1, facecolor='white')
+    fig.clf()
+    axprops = dict(xticks=[], yticks=[])
+    createPlot.ax1 = plt.subplot(111, frameon=False, **axprops)  # no ticks
+    # createPlot.ax1 = plt.subplot(111, frameon=False) #ticks for demo puropses
+    plotTree.totalW = float(getNumLeafs(inTree))
+    plotTree.totalD = float(getTreeDepth(inTree))
+    plotTree.xOff = -0.5 / plotTree.totalW
+    plotTree.yOff = 1.0
+    plotTree(inTree, (0.5, 1.0), '')
+    plt.show()
+
+# def createPlot():
+#    fig = plt.figure(1, facecolor='white')
+#    fig.clf()
+#    createPlot.ax1 = plt.subplot(111, frameon=False) #ticks for demo puropses 
+#    plotNode('a decision node', (0.5, 0.1), (0.1, 0.5), decisionNode)
+#    plotNode('a leaf node', (0.8, 0.1), (0.3, 0.8), leafNode)
+#    plt.show()
+
+def retrieveTree(i):
+    listOfTrees = [{'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}},
+                   {'no surfacing': {0: 'no', 1: {'flippers': {0: {'head': {0: 'no', 1: 'yes'}}, 1: 'no'}}}}
+                   ]
+    return listOfTrees[i]
+
+    # createPlot(thisTree)
+
+myTree = retrieveTree(0)
+createPlot(myTree)
+&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/python/ml-decision-trees.html</link>
+            <guid isPermaLink="true">//blog/python/ml-decision-trees.html</guid>
+                                               <category>python</category>
+                                    </item>
+                <item>
+            <title><机器学习实战>学习笔记之SVM</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-05-30
+title: &lt;机器学习实战&gt;学习笔记之SVM
+tags: PYTHON,MACHINE-LEARNING
+images: 
+category: python
+status: publish
+summary: SVM(支持向量机)
+--&gt;
+&lt;p&gt;项目地址:&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;http://github.com/jimersylee/MachineLearningAction&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;支持向量机&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;简单介绍支持向量机&lt;/li&gt;
+&lt;li&gt;利用SMO进行优化&lt;/li&gt;
+&lt;li&gt;利用核函数对数据进行空间转换&lt;/li&gt;
+&lt;li&gt;将SVM和其他分类器进行对比&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;什么是支持向量机&lt;/h2&gt;
+&lt;p&gt;支持向量机(Support Vector Machines,SVM),SVM是最好的现成的分类器,&amp;quot;现成&amp;quot;指的是分类器不加修改即可直接使用.SVM能够对训练集之外的数据点做出很好的分类决策.&lt;/p&gt;
+&lt;p&gt;SVM有很多实现,本章值关注其中最流行的一种实现.即序列最小优化(Sequential Minimal Optimization,SMO)算法 .在此之外,将介绍如何使用一种核函数(kernel)的方式将SVM扩展到更多数据集上.最后会回顾第一章手写识别的例子,并考察能否通过SVM提高识别的效果&lt;/p&gt;
+&lt;h2&gt;基于最大间隔分隔数据&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;优点:泛华错误率低,计算开销不大,结果易解释&lt;/li&gt;
+&lt;li&gt;缺点:对参数调节和核函数的选择敏感,原始分类器不加修改仅适用于处理二类问题.&lt;/li&gt;
+&lt;li&gt;使用数据类型:数值型和标称型数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;
+import random
+
+from numpy import *
+
+def loadDataSet(fileName):
+    &quot;&quot;&quot;
+    载入测试数据
+    :param fileName:
+    :return:
+    &quot;&quot;&quot;
+    dataMat = []
+    labelMat = []
+    fr = open(fileName)
+    for line in fr.readlines():
+        lineArr = line.strip().split('\t')
+        dataMat.append([float(lineArr[0]), float(lineArr[1])])
+        labelMat.append(float(lineArr[2]))
+    return dataMat, labelMat
+
+def selectJrand(i, m):
+    &quot;&quot;&quot;
+    取得一个和i不一样的随机值j返回
+    :param i:是第一个alpha的下表
+    :param m: 所有alpha的数目
+    :return:
+    &quot;&quot;&quot;
+    j = i
+    while j == i:
+        j = int(random.uniform(0, m))
+    return j
+
+def clipAlpha(aj, H, L):
+    if aj &amp;gt; H:
+        aj = H
+    if L &amp;gt; aj:
+        aj = L
+    return aj
+
+def smoSimple(dataMatIn, classLabels, C, toler, maxIter):
+    &quot;&quot;&quot;
+    smo简易算法
+    :param dataMatIn:数据集
+    :param classLabels: 类别标签
+    :param C: 常数C
+    :param toler: 容错率
+    :param maxIter: 取消前最大迭代次数
+    :return:
+    &quot;&quot;&quot;
+    dataMatrix = mat(dataMatIn)
+    labelMat = mat(classLabels).transpose()
+    b = 0
+    m, n = shape(dataMatrix)
+    alphas = mat(zeros((m, 1)))
+    iter = 0
+    while iter &amp;lt; maxIter:
+        alphaPairsChanged = 0
+        for i in range(m):
+            fXi = float(multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[i, :].T)) + b
+            Ei = fXi - float(labelMat[i])
+            if ((labelMat[i] * Ei &amp;lt; -toler) and (alphas[i] &amp;lt; C)) or (
+                        (labelMat[i] * Ei &amp;gt; toler) and (alphas[i] &amp;gt; 0)):  # 如果alpha可以更改进入优化过程
+                j = selectJrand(i, m)  # 随机选择第二个alpha
+                fXj = float(multiply(alphas, labelMat).T * (dataMatrix * dataMatrix[j, :].T)) + b
+                Ej = fXj - float(labelMat[j])
+                alphaIold = alphas[i].copy()
+                alphaJold = alphas[j].copy()
+                # 保证alpha在0和C之间开始
+                if labelMat[i] != labelMat[j]:
+                    L = max(0, alphas[j] - alphas[i])
+                    H = min(C, C + alphas[j] - alphas[i])
+                else:
+                    L = max(0, alphas[j] + alphas[i] - C)
+                    H = min(C, alphas[j] + alphas[i])
+                # 保证alpha在0和C之间结束
+                if L == H:
+                    print &quot;L==H&quot;
+                    continue
+                eta = 2.0 * dataMatrix[i, :] * dataMatrix[j, :].T - dataMatrix[i, :] * dataMatrix[i, :].T - dataMatrix[
+                                                                                                            j,
+                                                                                                            :] * dataMatrix[
+                                                                                                                 j, :].T
+                if eta &amp;gt;= 0:
+                    print &quot;eta&amp;gt;=0&quot;
+                    continue
+                alphas[j] -= labelMat[j] * (Ei - Ej) / eta
+                alphas[j] = clipAlpha(alphas[j], H, L)
+                if abs(alphas[j] - alphaIold) &amp;lt; 0.00001:
+                    print &quot;j not moving enough&quot;
+                    continue
+                alphas[i] += labelMat[j] * labelMat[i] * (alphaJold - alphas[j])  # 对i进行修改,修改量和j相同,但是方向相反
+                b1 = b - Ei - labelMat[i] * (alphas[i] - alphaIold) * \
+                              dataMatrix[i, :] * dataMatrix[i, :].T - labelMat[j] * (alphas[j] - alphaJold) * \
+                                                                      dataMatrix[i, :] * dataMatrix[j, :].T
+                b2 = b - Ej - labelMat[i] * (alphas[i] - alphaIold) * \
+                              dataMatrix[i, :] * dataMatrix[j, :].T - \
+                     labelMat[j] * (alphas[j]) - alphaJold * \
+                                                 dataMatrix[j, :] * dataMatrix[j, :].T
+                if 0 &amp;lt; alphas[i] and (C &amp;gt; alphas[i]):
+                    b = b1
+                elif (0 &amp;lt; alphas[j]) and (C &amp;gt; alphas[j]):
+                    b = b2
+                else:
+                    b = (b1 + b2) / 2
+                alphaPairsChanged += 1
+                print &quot;iter: %d i:%d, pairs changed %d&quot; % (iter, i, alphaPairsChanged)
+        if alphaPairsChanged == 0:
+            iter += 1
+        else:
+            iter = 0
+        print &quot;iteration number: %d&quot; % iter
+    return b, alphas
+
+def smoTest():
+    dataMat, labelMat = loadDataSet(&quot;testSet.txt&quot;)
+    b, alphas = smoSimple(dataMat, labelMat, 0.6, 0.001, 40)
+
+smoTest()&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/python/ml-svm.html</link>
+            <guid isPermaLink="true">//blog/python/ml-svm.html</guid>
+                                               <category>python</category>
+                                    </item>
+                <item>
+            <title><机器学习实战>学习笔记之NaiveBayes</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-05-22
+title: &lt;机器学习实战&gt;学习笔记之NaiveBayes
+tags: PYTHON,MACHINE-LEARNING
+images: 
+category: python
+status: publish
+summary: 朴素贝叶斯,使用Python进行恶意留言分类,区域分析,垃圾邮件识别
+--&gt;
+&lt;p&gt;项目地址:&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;http://github.com/jimersylee/MachineLearningAction&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;基于概率论的分类方法&lt;/h3&gt;
+&lt;h4&gt;朴素贝叶斯&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;使用概率分布进行分类&lt;/li&gt;
+&lt;li&gt;学习朴素贝叶斯分类器&lt;/li&gt;
+&lt;li&gt;解析RSS源数据&lt;/li&gt;
+&lt;li&gt;使用朴素贝叶斯来分析不同地区的态度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;朴素贝叶斯&lt;/h4&gt;
+&lt;p&gt;优点:在数据较少的情况下仍然有效,可以处理多类别问题
+缺点:对于输入数据的准备方式较为敏感
+使用数据类型:标称型数据&lt;/p&gt;
+&lt;h4&gt;贝叶斯决策理论的核心思想--即选择具有最高概率的决策&lt;/h4&gt;
+&lt;h2&gt;条件概率&lt;/h2&gt;
+&lt;p&gt;P(A|B)=$$\underline{P(AB)}\P(B)$$&lt;/p&gt;
+&lt;h3&gt;使用贝叶斯准则,进行条件与结果的互换计算&lt;/h3&gt;
+&lt;p&gt;已知P(A|B),求P(B|A)&lt;/p&gt;
+&lt;p&gt;P(B|A)=$$\underline{P(A|B)P(B)}\P(A)$$&lt;/p&gt;
+&lt;p&gt;推导&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;给定某个点(x,y),那么该点来自$$c_i$$的概率为P($$c_i$$|x,y)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;P($$c_i$$|x,y)=$$\underline{P(x,y|c_i)P(c_i)}\P(x,y)$$&lt;/p&gt;
+&lt;p&gt;结论&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果$$P(c_1|x,y)&amp;gt;P(c_2|x,y)$$,那么(x,y)属于$$c_1$$
+如果$$P(c_2|x,y)&amp;gt;P(c_1|x,y)$$,那么(x,y)属于$$c_2$$&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;使用朴素贝叶斯进行文档分类&lt;/h3&gt;
+&lt;p&gt;朴素贝叶斯是贝叶斯分类器的一个扩展,是用于文档分类的常用算法
+朴素贝叶斯的一帮过程&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;收集数据:可以使用任何方法,本章使用RSS源&lt;/li&gt;
+&lt;li&gt;准备数据:需要数值型或者布尔型数据&lt;/li&gt;
+&lt;li&gt;分析数据:有大量特征时,绘制特征作用不大,此时使用直方图效果较好&lt;/li&gt;
+&lt;li&gt;训练算法:计算不同的独立特征的条件概率&lt;/li&gt;
+&lt;li&gt;测试算法:计算错误率&lt;/li&gt;
+&lt;li&gt;使用算法:一个常见的朴素贝叶斯应用是文档分类.可以在任意的分类场景中使用朴素贝叶斯分类器,不一定非要是文本.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;假设词汇表有1000个单词,要得到好的概率分布,需要足够的样本,假设样本数为N&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;由统计学知,如果每个特征需要N个样本,那么对于x个特征,将需要$$N^x$$个样本&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;对于1000个特征的词汇表将需要$$N^{1000}$$个样本,可以看到,所需要的样本数会随着特征数目的增大而迅速增长
+如果特征之间项目独立,那么样本数就能从$$N^{1000}$$减少到N*1000.所谓独立,指的是&lt;strong&gt;统计学上的独立,即一个特征或者单词出现的可能性与它和其他相邻单词没关系&lt;/strong&gt;&lt;/p&gt;
+&lt;h4&gt;示例:使用Python进行恶意留言分类&lt;/h4&gt;
+&lt;p&gt;当论坛中用户发表评论时,总会存在一些恶意言论,如何识别是否为恶意评论,而不让其发送呢?&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;准备数据:从文本中构建词向量,详见bayes.py中的 createVocabList setOfWords2Vec&lt;/li&gt;
+&lt;li&gt;训练算法:从词向量计算概率&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;重写贝叶斯准则,将之前的x,y替换为&lt;em&gt;w&lt;/em&gt;,粗体&lt;em&gt;w&lt;/em&gt;表示一个向量,即它是由多个数值组成.在这个例子中,数值个数与词汇表中的词个数相同
+P($$c_i$$|w)=$$\underline{P(w|c_i)P(c_i)}\P(w)$$
+如何计算?首先通过类别i(侮辱性或者非侮辱性留言)中的文档数除以总的文档数的计算概率p($$c_i$$),接下来计算P($$c_i$$|w),这里就用到了朴素贝叶斯假设&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果将w展开为一个个独立特征,那么可以将上述概率写做P($$w_0$$,$$w_1$$,...,$$w_N$$|$$c_i$$).这里假设所有事件都独立,它意味着可以使用P($$w_0$$|$$c_i$$)P($$w_1$$|$$c_i$$)...P($$w_N$$|$$c_i$$)来计算概率,这极大地简化了计算过程
+该函数的伪代码如下
+计算每个类别中的文档数目
+对每篇训练文档:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;对每个类别:
+如果词条出现文档中-&amp;gt;增加该词条的计数值
+增加所有词条的计数值
+对每个类别:
+对每个词条:
+将该词条的数目除以总词条数目得到条件概率
+返回每个类别的条件概率&lt;/p&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;测试算法:根据现实情况修改分类器
+利用贝叶斯分类器进行分类时,要计算多个概率的乘积,如果其中一个概率值为0,那么最后的乘积也是0.为降低这种影响,可以将所有的词的出现数初始化为1,并将分母初始化为2&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;准备数据:文档词袋模型
+目前为止,我们将每个词的出现与否作为一个特征,这可以被描述为&lt;strong&gt;词集模型(set-of-words-model)&lt;/strong&gt;.如果一个词在文档中出现不止一次,这可能意味着包含该词是否出现在文档中所不能表达的某种信息,这种方法被成为&lt;strong&gt;词袋模型(bag-of-words-model)&lt;/strong&gt;.在词袋中,每个单词可以出现多次,而在词集中,每个词只出现一次.为适应词袋模型,需要对函数setOfWords2Vec()稍作修改,修改后的函数称为bagOfWords2Vec()&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;示例:使用朴素贝叶斯过滤垃圾邮件&lt;/h4&gt;
+&lt;p&gt;邮件经常收到一些广告邮件,如何将广告邮件识别出来呢?&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;收集数据:提供文本文件&lt;/li&gt;
+&lt;li&gt;准备数据:将文本解析成词条向量&lt;/li&gt;
+&lt;li&gt;分析数据:检查词条确保解析的正确性&lt;/li&gt;
+&lt;li&gt;训练算法:使用我们之前建立的trainNormalBayes0()函数&lt;/li&gt;
+&lt;li&gt;测试算法:使用classifyNormal(),并且构建一个新的测试函数来计算文档集的错误率&lt;/li&gt;
+&lt;li&gt;使用算法:构建一个完整的程序对一组文档进行分类,将错误分类的文档输出到屏幕上&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;示例:使用朴素贝叶斯分类器从个人广告中获取区域倾向&lt;/h4&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/python/ml-naive-bayes.html</link>
+            <guid isPermaLink="true">//blog/python/ml-naive-bayes.html</guid>
+                                               <category>python</category>
+                                    </item>
+                <item>
+            <title><机器学习实战>学习笔记之Logistic</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-05-05
+title: &lt;机器学习实战&gt;学习笔记之Logistic
+tags: PYTHON,MACHINE-LEARNING
+images: 
+category: python
+status: publish
+summary: Logistic回归,从疝气病预测兵马的死亡率
+--&gt;
+&lt;p&gt;项目地址:&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;http://github.com/jimersylee/MachineLearningAction&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;Logistic回归&lt;/h1&gt;
+&lt;h2&gt;本章内容&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Sigmoid函数和Logistic回归分类器&lt;/li&gt;
+&lt;li&gt;最优化理论初步&lt;/li&gt;
+&lt;li&gt;梯度下降最优化算法&lt;/li&gt;
+&lt;li&gt;数据中的缺失项处理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;最优化算法&lt;/h2&gt;
+&lt;p&gt;比如如何在最短时间内从A点到B点?如何投入最少的工作量获得最大的收益&lt;/p&gt;
+&lt;h2&gt;Logistic回归的一般过程&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;收集数据:采用任意方法收集数据&lt;/li&gt;
+&lt;li&gt;准备数据:由于需要进行距离计算,因此要求数据类型为数值型.另外,结构化数据格式则最佳&lt;/li&gt;
+&lt;li&gt;分析数据:采用任意方法对数据进行分析&lt;/li&gt;
+&lt;li&gt;训练算法:大部分时间将将用于测试,训练的目的是为了找到最佳的分类回归系数&lt;/li&gt;
+&lt;li&gt;测试算法:一旦训练步骤完成,分类将会很快&lt;/li&gt;
+&lt;li&gt;使用算法:首先,我们需要输入一些数据,并将其转换成对应的结构化数值;接着,基于训练好的回归系数就可以对这些数值进行简单的回归计算,判定他们属于那个类别了;在这之后,我们就可以在输出的类别上做一些其他分析工作&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;基于Logistic回归和Sigmoid函数的分类&lt;/h2&gt;
+&lt;p&gt;优点:计算代价不高,易于理解和实现
+缺点:容易欠拟合,分类精度可能不高
+适用数据类型:数值型和标称型数据&lt;/p&gt;
+&lt;p&gt;我们想要的函数,能够接受所有的输入然后预测出类别.
+使用单位阶跃函数
+Sigmoid函数
+f(z)=1/(1+e^-z)&lt;/p&gt;
+&lt;h2&gt;训练算法:随机梯度上升&lt;/h2&gt;
+&lt;p&gt;梯度上升算法在每次更新回归系数时都需要遍历整个数据集,当数据集增加时,计算复杂度就太高了.
+改进方法是一次禁用一个样本点来更新回归系数,该方法成为随机梯度上升算法.&lt;/p&gt;
+&lt;h2&gt;报错,未解决&lt;/h2&gt;
+&lt;p&gt;weights = weights + alpha &lt;em&gt; error &lt;/em&gt; dataMatIn[i]
+ValueError: operands could not be broadcast together with shapes (3,) (0,) &lt;/p&gt;
+&lt;h1&gt;示例:从疝气病预测兵马的死亡率&lt;/h1&gt;
+&lt;p&gt;本节使用Logistic回归来预测患有疝气病的马的存货问题
+样本数据包含368个样本和28个特征
+&lt;em&gt;有30%的数据的值是缺失的&lt;/em&gt;.下面将介绍如何处理数据集中的数据确实问题,然后再用Logistic回归和随机梯度上升算法来预测病马的生死&lt;/p&gt;
+&lt;h2&gt;准备数据&lt;/h2&gt;
+&lt;p&gt;数据缺失是个麻烦的问题.如何解决&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用可用特征的均值来填补缺失值&lt;/li&gt;
+&lt;li&gt;使用特殊值来填补缺失值,如-1&lt;/li&gt;
+&lt;li&gt;忽略有缺失值的样本&lt;/li&gt;
+&lt;li&gt;使用相似样本的均值填补缺失值&lt;/li&gt;
+&lt;li&gt;使用另外的机器学习算法来预测缺失值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;
+from numpy import *
+import matplotlib.pyplot as plt
+
+def loadDataSet():
+    &quot;&quot;&quot;
+    载入测试数据
+    :return:
+    &quot;&quot;&quot;
+    dataMat = []
+    labelMat = []
+    fr = open('testSet.txt')
+    for line in fr.readlines():
+        lineArr = line.strip().split()
+        dataMat.append([1.0, float(lineArr[0]), float(lineArr[1])])  # 为了计算方便,将X0设置为1.0
+        labelMat.append(int(lineArr[2]))
+    return dataMat, labelMat
+
+def sigmoid(inX):
+    &quot;&quot;&quot;
+    Sigmoid函数,单位阶跃函数
+    :param inX:
+    :return:
+    &quot;&quot;&quot;
+    return 1.0 / (1 + exp(-inX))
+
+def gradAscent(dataMatIn, classLabels):
+    &quot;&quot;&quot;
+    梯度上升算法
+    :param dataMatIn: 输入的数据矩阵,存放的100*3的矩阵
+    :param classLabels: 输入的数据类别矩阵
+    :return:返回训练好的迭代次数
+    &quot;&quot;&quot;
+    # 转换为NumPy矩阵类型
+    dataMatrix = mat(dataMatIn)
+    labelMat = mat(classLabels).transpose()  # 初始为1*100的行向量,为了便于矩阵运算,使用transpose转置为列向量100*1
+
+    m, n = shape(dataMatrix)  # 得到矩阵大小
+    alpha = 0.001  # 目标移动的步长
+    maxCycles = 500  # 最大迭代次数
+    weights = ones((n, 1))
+
+    for k in range(maxCycles):
+        # 矩阵相乘,下面两行,计算真实类别与预测类别的差值,接下来就是按照该差值的方向调整回归系数
+        h = sigmoid(dataMatrix * weights)  # 代表的不是一次乘积计算,事实上该运算包含了300次的乘积,变量h不是一个数,而是一个列向量,100
+        error = (labelMat - h)
+        weights = weights + alpha * dataMatrix.transpose() * error
+    return weights
+
+def stocGradAscent0(dataMatIn, classLabels):
+    m, n = shape(dataMatIn)
+    alpha = 0.01
+    weights = ones(n)
+    for i in range(m):
+        h = sigmoid(sum(dataMatIn[i] * weights))  # h是向量
+        error = classLabels[i] - h  # error是向量
+        weights = weights + alpha * error * dataMatIn[i]
+    return weights
+
+def stocGradAscent1(dataMatIn, classLabels, numIter=150):
+    &quot;&quot;&quot;
+    改进的随机梯度上升算法
+    :param dataMatIn:
+    :param classLabels:
+    :param numIter:
+    :return:
+    &quot;&quot;&quot;
+    m, n = shape(dataMatIn)
+    weights = ones(n)
+    for j in range(numIter):
+        dataIndex = range(m)
+        for i in range(m):
+            alpha = 4 / (1.0 + j + i) + 0.01  # alpha每次迭代时需要调整
+            randIndex = int(random.uniform(0, len(dataIndex)))  # 随机选取更新
+            h = sigmoid(sum(dataMatIn[randIndex] * weights))
+            error = classLabels[randIndex] - h
+            weights = weights + alpha * error * dataMatIn[randIndex]
+            del (dataIndex[randIndex])
+    return weights
+
+def plotBestFit(weights):
+    &quot;&quot;&quot;
+    画出数据集和Logistic回归最佳拟合直线的函数
+    :param weights:系数
+    :return:
+    &quot;&quot;&quot;
+    weights = weights.getA()
+    dataMat, labelMat = loadDataSet()
+    dataArr = array(dataMat)
+    n = shape(dataArr)[0]
+    xcord1 = []
+    ycord1 = []
+    xcord2 = []
+    ycord2 = []
+
+    for i in range(n):
+        if int(labelMat[i]) == 1:
+            xcord1.append(dataArr[i, 1])
+            ycord1.append(dataArr[i, 2])
+        else:
+            xcord2.append(dataArr[i, 1])
+            ycord2.append(dataArr[i, 2])
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(xcord1, ycord1, s=30, c='red', marker='s')
+    ax.scatter(xcord2, ycord2, s=30, c=&quot;green&quot;)
+    x = arange(-3.0, 3.0, 0.1)
+    y = (-weights[0] - weights[1] * x) / weights[2]
+    ax.plot(x, y)
+    plt.xlabel(&quot;X1&quot;)
+    plt.ylabel(&quot;X2&quot;)
+    plt.show()
+
+def classifyVector(inX, weights):
+    prob = sigmoid(sum(inX * weights))
+    if prob &amp;gt; 0.5:
+        return 1.0
+    else:
+        return 0.0
+
+def colicTest():
+    &quot;&quot;&quot;
+    疝气病马死亡分类测试
+    :return:
+    &quot;&quot;&quot;
+    frTrain = open('horseColicTraining.txt')
+    frTest = open('horseColicTest.txt')
+    trainingSet = []
+    trainingLabels = []
+    for line in frTrain.readlines():
+        currLine = line.strip().split('\t')
+        lineArr = []
+        for i in range(21):
+            lineArr.append(float(currLine[i]))
+        trainingSet.append(lineArr)
+        trainingLabels.append(float(currLine[i]))
+    trainWeights = stocGradAscent1(array(trainingSet), trainingLabels, 500)
+    errorCount = 0
+    numTestVec = 0.0
+    for line in frTest.readlines():
+        numTestVec += 1.0
+        currLine = line.strip().split('\t')
+        lineArr = []
+        for i in range(21):
+            lineArr.append(float(currLine[i]))
+        if int(classifyVector(array(lineArr), trainWeights)) != int(currLine[21]):
+            errorCount += 1
+    errorRate = (float(errorCount / numTestVec))
+    print &quot;the error rate of this test is: %f&quot; % errorRate
+    return errorRate
+
+def multiTest():
+    numTests = 10
+    errorSum = 0.0
+    for k in range(numTests):
+        errorSum += colicTest()
+    print &quot;after %d iterations the average error rate is: %f&quot; % (numTests, errorSum / float(numTests))
+
+def testCal():
+    dataArr, labelMat = loadDataSet()
+    weights = gradAscent(dataArr, labelMat)
+    print weights
+    &quot;&quot;&quot;
+    得到一组回归系数,它确定了不同类别数据之间的分割线
+    [[ 4.12414349]
+     [ 0.48007329]
+     [-0.6168482 ]]
+    &quot;&quot;&quot;
+
+def testGradAscent():
+    &quot;&quot;&quot;
+    测试梯度上升算法,画图
+    :return:
+    &quot;&quot;&quot;
+    dataArr, labelMat = loadDataSet()
+    weights = gradAscent(dataArr, labelMat)
+    plotBestFit(weights)
+
+def testStocGradAscent0():
+    &quot;&quot;&quot;
+    测试随机梯度上升算法,画图
+    :return:
+    &quot;&quot;&quot;
+    dataArr, labelMat = loadDataSet()
+    weights = stocGradAscent0(dataArr, labelMat)
+    plotBestFit(weights)
+
+def testStocGradAscent1():
+    &quot;&quot;&quot;
+    测试随机梯度上升算法,画图
+    :return:
+    &quot;&quot;&quot;
+    dataArr, labelMat = loadDataSet()
+    weights = stocGradAscent1(dataArr, labelMat)
+    plotBestFit(weights)
+
+# testCal()
+
+#testGradAscent()
+
+# testStocGradAscent0()
+multiTest()&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/python/ml-logistic.html</link>
+            <guid isPermaLink="true">//blog/python/ml-logistic.html</guid>
+                                               <category>python</category>
+                                    </item>
+                <item>
+            <title><机器学习实战>学习笔记之KNN-手写数据识别</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-05-04
+title: &lt;机器学习实战&gt;学习笔记之KNN-手写数据识别
+tags: PYTHON,MACHINE-LEARNING
+images: 
+category: python
+status: publish
+summary: 手写数据识别
+--&gt;
+&lt;p&gt;项目地址:&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;http://github.com/jimersylee/MachineLearningAction&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# coding:utf8
+from numpy import *  # 引入数学库
+import operator  # 引入操作符库
+from os import listdir  # 引入列出文件夹中的文件库
+
+def createDataSet():
+    &quot;&quot;&quot;
+    创造测试简单的测试数据
+    :return: 返回组数据与标签数据
+    &quot;&quot;&quot;
+    group = array([[1.0, 1.1], [1.0, 1.0], [0, 0], [0, 0.1]])
+    labels = ['A', 'A', 'B', 'B']
+    return group, labels
+
+def img2vector(filename):
+    &quot;&quot;&quot;
+    图像像素数据转为矩阵函数
+    :param filename:文件名 
+    :return: 
+    &quot;&quot;&quot;
+
+    # 创建向量 1行.1024列,因为每个图片的宽度为32像素,高度为32像素,32*32=1024,一共1024个像素,
+    # 所以初始化[1,1024]的向量
+    returnVector = zeros((1, 1024))
+
+    # 打开数据文件,读取每行内容
+    file = open(filename)
+
+    for i in range(32):  # 循环32次,代表32行
+        # 读取每一行
+        lineStr = file.readline()
+        # 将每行前32字符转成int存入向量
+        for j in range(32):
+            returnVector[0, 32 * i + j] = int(lineStr[j])
+
+    return returnVector
+
+def classify0(inX, trainingDataSet, labels, k):
+    &quot;&quot;&quot;
+    分类器实现函数
+    :param inX: 用于分类的输入向量,测试向量
+    :param trainingDataSet: 输入的训练样本集
+    :param labels: 样本数据的类标签向量
+    :param k: 用于选择最近的邻居的数据,如k=3,则选择[距离]最近的3个数,3个中出现最多的则归类到这个最多的数属于的类
+    :return: 
+    &quot;&quot;&quot;
+    # 获取样本数据数量
+    dataSetSize = trainingDataSet.shape[0]
+
+    # 矩阵运算,计算测试数据与每个样本数据对应数据的差值
+    diffMat = tile(inX, (dataSetSize, 1)) - trainingDataSet
+    # sqDistance 上一步骤结果平方和
+    sqDiffMat = diffMat ** 2
+    sqDistance = sqDiffMat.sum(axis=1)
+
+    # 取平方根,得到距离向量
+    distances = sqDistance ** 0.5
+
+    # 按照距离从低到高排序
+    sortedDistanceArr = distances.argsort()
+    # 初始化类别变量,数据类型为dict字典
+    classCount = {}
+
+    # 依次取出最近的样本数据
+    for i in range(k):
+        # 记录该样本数据所属的类别
+        voteLabel = labels[sortedDistanceArr[i]]
+        classCount[voteLabel] = classCount.get(voteLabel, 0) + 1  # 如果出现此类别频次+1
+
+    # 对类别出现的频次进行排序,从高到低
+    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
+
+    # 返回出现频次最高的类别
+    return sortedClassCount[0][0]
+
+def handwritingClassTest():
+    &quot;&quot;&quot;
+    手写图片识别测试
+    :return: 
+    &quot;&quot;&quot;
+    # 手写样本数据的类标签列表
+    handWritingLabels = []
+
+    # 样本数据文件列表 listdir返回字符串列表,此处则是训练文件名的列表
+    trainingFileList = listdir('digits/trainingDigits')
+    m = len(trainingFileList)  # m等于文件数
+
+    # 初始化样本数据矩阵(m*1024)
+    trainingMat = zeros((m, 1024))
+    # 依次读取所有样本数据到数据矩阵
+    for i in range(m):  # 循环文件数次
+        # 提取文件名中的数据  文件名格式 0_0.txt
+        fileNameStr = trainingFileList[i]  # 0_0.txt
+        fileStr = fileNameStr.split('.')[0]  # 0_0 文件名
+        classNumStr = int(fileStr.split('_')[0])  # 0 类别名
+        handWritingLabels.append(classNumStr)  # 将0这个类别加入类标签列表
+
+        # 将样本数据存入矩阵
+        trainingMat[i, :] = img2vector('digits/trainingDigits/%s' % fileNameStr)
+
+    # 循环读取测试数据
+    testFileList = listdir('digits/testDigits')
+
+    # 初始化错误个数
+    errorCount = 0.0
+    mTest = len(testFileList)
+
+    # 循环测试每个测试数据文件
+    for i in range(mTest):
+        # 提取文件中的名字
+        fileNameStr = testFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
+
+        # 提取数据向量
+        vectorUnderTest = img2vector('digits/testDigits/%s' % fileNameStr)
+
+        # 对数据文件进行分类
+        classifierResult = classify0(vectorUnderTest, trainingMat, handWritingLabels, 3)
+
+        # 打印KNN算法分类结果和真实的分类
+        print &quot;the classifier came back with: %d, the real answer is: %d&quot; % (classifierResult, classNumStr)
+
+        # 判断KNN算法结果是否准确
+        if (classifierResult != classNumStr):
+            errorCount += 1.0
+
+    # 打印错误率
+    print &quot;\n the total number of errors is: %d&quot; % errorCount
+    print &quot;\n total error rate is: %f&quot; % (errorCount / float(mTest))
+
+# 执行算法测试
+handwritingClassTest()
+&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/python/ml-knn-hand-writing.html</link>
+            <guid isPermaLink="true">//blog/python/ml-knn-hand-writing.html</guid>
+                                               <category>python</category>
+                                    </item>
+                <item>
+            <title><机器学习实战>学习笔记之KNN-约会数据识别</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2016-05-04
+title: &lt;机器学习实战&gt;学习笔记之KNN-约会数据识别
+tags: PYTHON,MACHINE-LEARNING
+images: 
+category: python
+status: publish
+summary: 约会数据分类识别
+--&gt;
+&lt;p&gt;项目地址:&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;&lt;a href=&quot;http://github.com/jimersylee/MachineLearningAction&quot;&gt;http://github.com/jimersylee/MachineLearningAction&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+约会数据kNN
+&quot;&quot;&quot;
+
+from numpy import *
+import matplotlib.pyplot as plt
+import operator
+
+def classify0(inX, dataSet, labels, k):
+    dataSetSize = dataSet.shape[0]
+    diffMat = tile(inX, (dataSetSize, 1)) - dataSet
+    sqDiffMat = diffMat ** 2
+    sqDistances = sqDiffMat.sum(axis=1)
+    distances = sqDistances ** 0.5
+    sortedDistIndicies = distances.argsort()
+    classCount = {}
+    for i in range(k):
+        voteIlabel = labels[sortedDistIndicies[i]]
+        classCount[voteIlabel] = classCount.get(voteIlabel, 0) + 1
+    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
+    return sortedClassCount[0][0]
+
+def file2matrix(filename):
+    fr = open(filename)
+    numberOfLines = len(fr.readlines())  # get the number of lines in the file
+    returnMat = zeros((numberOfLines, 3))  # prepare matrix to return
+    classLabelVector = []  # prepare labels return
+    fr = open(filename)
+    index = 0
+    for line in fr.readlines():
+        line = line.strip()
+        listFromLine = line.split('\t')
+        returnMat[index, :] = listFromLine[0:3]
+        classLabelVector.append(int(listFromLine[-1]))
+        index += 1
+    return returnMat, classLabelVector
+
+def autoNorm(dataSet):
+    &quot;&quot;&quot;
+    归一化数值
+    因为计算距离的时候,差值最大的属性对计算结果的影响最大,如果对于此数据,我们认为权重一样,则需要将数据进行处理,将数值归一化
+    将属性的取值范围处理为0到1或者-1到1,使用下面的公式
+    newValue=(oldValue-min)/(max-min)
+    :param dataSet:矩阵
+    :return:normDataSet:归一化后的矩阵
+            range:取值范围
+            minVals:最小值
+    &quot;&quot;&quot;
+    minVals = dataSet.min(0)  # 0代表第一列,取得第一列最小值
+    maxVals = dataSet.max(0)  # 取得第一列最大值
+    ranges = maxVals - minVals  # 可能的取值范围
+    normDataSet = zeros(shape(dataSet))  # 创建新的返回矩阵
+    m = dataSet.shape[0]
+    normDataSet = dataSet - tile(minVals, (m, 1))
+    normDataSet = normDataSet / tile(ranges, (m, 1))  # element wise divide
+    return normDataSet, ranges, minVals
+
+def datingClassTest():
+    hoRatio = 0.50  # hold out 10%
+    datingDataMat, datingLabels = file2matrix('datingData/datingTestSet2.txt')  # load data setfrom file
+    normMat, ranges, minVals = autoNorm(datingDataMat)
+    m = normMat.shape[0]
+    numTestVecs = int(m * hoRatio)
+    errorCount = 0.0
+    for i in range(numTestVecs):
+        classifierResult = classify0(normMat[i, :], normMat[numTestVecs:m, :], datingLabels[numTestVecs:m], 3)
+        print &quot;the classifier came back with: %d, the real answer is: %d&quot; % (classifierResult, datingLabels[i])
+        if (classifierResult != datingLabels[i]): errorCount += 1.0
+    print &quot;the total error rate is: %f&quot; % (errorCount / float(numTestVecs))
+    print errorCount
+
+def showNormal():
+    &quot;&quot;&quot;
+    最基本散点图
+    没有样本类别标签的约会数据散点图.难以辨识途中的点究竟属于那个样本分类
+    :return:
+    &quot;&quot;&quot;
+    datingDataMat, datingLables = file2matrix('datingData/datingTestSet2.txt')
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(datingDataMat[:, 1], datingDataMat[:, 2])
+    plt.xlabel(&quot;Percentage of Time Spent Playing Video Games&quot;)
+    plt.ylabel(&quot;Liters of Icc Cream Consumed Per Week&quot;)
+    plt.show()
+
+def showLable():
+    &quot;&quot;&quot;
+    带有样本分类标签的约会数据散点图
+    虽然能够比较容易区分数据点丛书类别,但依然很那根据这张图得出结论性信息
+    :return:
+    &quot;&quot;&quot;
+    datingDataMat, datingLables = file2matrix('datingData/datingTestSet2.txt')
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(datingDataMat[:, 1], datingDataMat[:, 2], 15.0 * array(datingLables), 15.0 * array(datingLables))
+    ax.axis([-2, 25, -0.2, 2.0])
+    plt.xlabel(&quot;Percentage of Time Spent Playing Video Games&quot;)
+    plt.ylabel(&quot;Liters of Icc Cream Consumed Per Week&quot;)
+    plt.show()
+
+def showClass():
+    &quot;&quot;&quot;
+    显示不同的分类
+    标识了三个不同的样本分类区域,具有不同爱好的人其类别区域也不同
+    每年赢得的飞行常客里程数与玩游戏视频游戏所占百分比的约会数据散点图
+    约会数据有三个分类标签,通过途中展示的两个特征更容易区分数据点从属的类别
+    :return:
+    &quot;&quot;&quot;
+
+    n = 1000  # number of points to create
+    xcord1 = [];
+    ycord1 = []
+    xcord2 = [];
+    ycord2 = []
+    xcord3 = [];
+    ycord3 = []
+    markers = []
+    colors = []
+    fw = open('datingData/datingTestSet.txt', 'w')
+    for i in range(n):
+        [r0, r1] = random.standard_normal(2)
+        myClass = random.uniform(0, 1)
+        if (myClass &amp;lt;= 0.16):
+            fFlyer = random.uniform(22000, 60000)
+            tats = 3 + 1.6 * r1
+            markers.append(20)
+            colors.append(2.1)
+            classLabel = 1  # 'didntLike'
+            xcord1.append(fFlyer);
+            ycord1.append(tats)
+        elif ((myClass &amp;gt; 0.16) and (myClass &amp;lt;= 0.33)):
+            fFlyer = 6000 * r0 + 70000
+            tats = 10 + 3 * r1 + 2 * r0
+            markers.append(20)
+            colors.append(1.1)
+            classLabel = 1  # 'didntLike'
+            if (tats &amp;lt; 0): tats = 0
+            if (fFlyer &amp;lt; 0): fFlyer = 0
+            xcord1.append(fFlyer);
+            ycord1.append(tats)
+        elif ((myClass &amp;gt; 0.33) and (myClass &amp;lt;= 0.66)):
+            fFlyer = 5000 * r0 + 10000
+            tats = 3 + 2.8 * r1
+            markers.append(30)
+            colors.append(1.1)
+            classLabel = 2  # 'smallDoses'
+            if (tats &amp;lt; 0): tats = 0
+            if (fFlyer &amp;lt; 0): fFlyer = 0
+            xcord2.append(fFlyer);
+            ycord2.append(tats)
+        else:
+            fFlyer = 10000 * r0 + 35000
+            tats = 10 + 2.0 * r1
+            markers.append(50)
+            colors.append(0.1)
+            classLabel = 3  # 'largeDoses'
+            if (tats &amp;lt; 0): tats = 0
+            if (fFlyer &amp;lt; 0): fFlyer = 0
+            xcord3.append(fFlyer);
+            ycord3.append(tats)
+
+    fw.close()
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    # ax.scatter(xcord,ycord, c=colors, s=markers)
+    type1 = ax.scatter(xcord1, ycord1, s=20, c='red')
+    type2 = ax.scatter(xcord2, ycord2, s=30, c='green')
+    type3 = ax.scatter(xcord3, ycord3, s=50, c='blue')
+    ax.legend([type1, type2, type3], [&quot;Did Not Like&quot;, &quot;Liked in Small Doses&quot;, &quot;Liked in Large Doses&quot;], loc=2)
+    ax.axis([-5000, 100000, -2, 25])
+    plt.xlabel('Frequent Flyier Miles Earned Per Year')
+    plt.ylabel('Percentage of Time Spent Playing Video Games')
+    plt.show()
+
+showNormal()
+showLable()
+showClass()
+datingClassTest()
+&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/python/ml-knn-dating.html</link>
+            <guid isPermaLink="true">//blog/python/ml-knn-dating.html</guid>
+                                               <category>python</category>
                                     </item>
                 <item>
             <title>我的后端开发书架 2015 2.0 版</title>
@@ -739,6 +3122,471 @@ echo '10 array split (string pattern, string string [, int limit]),以正则把�
                                                <category>php</category>
                                     </item>
                 <item>
+            <title>设计模式之模板方法模式</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-05-22
+title: 设计模式之模板方法模式
+tags: JAVA,PATTERN
+images: 
+category: java
+status: publish
+summary: 模板方法模式在一个方法中定义了一个算法的骨架,而将一些步骤延迟到子类中.模板方法使得子类可以在不改变算法结构的情况下,重新定义算法中的某些步骤
+--&gt;
+&lt;h1&gt;模板方法模式&lt;/h1&gt;
+&lt;h2&gt;模板方法模式&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;模板方法模式在一个方法中定义了一个算法的骨架,而将一些步骤延迟到子类中.模板方法使得子类可以在不改变算法结构的情况下,重新定义算法中的某些步骤&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这个模式是用来创建一个算法的模板.什么是模板?模板就是一个方法.更具体地说,这个方法将算法定义为一组步骤,其中的任何步骤都可以是抽象的,由子类负责实现.这可以确保算法的结构保持不变,同时由子类提供部分实现.&lt;/p&gt;
+&lt;h1&gt;快速搞定咖啡和茶的类&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * 这是我们的咖啡类,用来煮咖啡
+ */
+public class Coffee {
+    void prepareRecipe(){
+        boilWater();
+        brewCoffeeGrinds();
+        pourInCup();
+        addSugarAndMilk();
+    }
+
+    private void addSugarAndMilk() {
+        System.out.println(&quot;addSugarAndMilk&quot;);
+    }
+
+    private void pourInCup() {
+        System.out.println(&quot;pourInCup&quot;);
+    }
+
+    private void brewCoffeeGrinds() {
+        System.out.println(&quot;brewCoffeeGrinds&quot;);
+    }
+
+    private void boilWater() {
+        System.out.println(&quot;boilWater&quot;);
+    }
+}
+
+public class Tea {
+    void prepareRecipe(){
+        boilWater();
+        steepTeaBag();
+        pourInCup();
+        addLemon();
+    }
+
+    private void addLemon() {
+        System.out.println(&quot;addLemon&quot;);
+    }
+
+    private void pourInCup() {
+        System.out.println(&quot;pourInCup&quot;);
+    }
+
+    private void steepTeaBag() {
+        System.out.println(&quot;steepTeaBag&quot;);
+    }
+
+    private void boilWater() {
+        System.out.println(&quot;boilWater&quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;请注意,boilWater()和pourCup()这两个方法完全一样,也就是说这里出现了重复的代码&lt;/p&gt;
+&lt;p&gt;在这里,茶和咖啡是如此的相似,可以提取基类&lt;/p&gt;
+&lt;p&gt;注意两份冲泡法都采用了相同的算法&lt;/p&gt;
+&lt;p&gt;抽象prepareRecipe()&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void prepareRecipe(){
+    boilwater();
+    brew();
+    pourInCup();
+    addCondiments();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;prepareRecipe()就是我们的模板方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;它是一个方法&lt;/li&gt;
+&lt;li&gt;它用作一个算法的模板,在这个例子中,算法是用来制作咖啡饮料的&lt;/li&gt;
+&lt;li&gt;在这个模板中,算法内的每一个步骤都被一个方法代表了&lt;/li&gt;
+&lt;li&gt;某些方法是由这个类(也就是超类)处理的&lt;/li&gt;
+&lt;li&gt;某些方法是由子类处理的&lt;/li&gt;
+&lt;li&gt;需要由子类提供的方法,必须在超类中声明为抽象&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;优劣对比&lt;/h2&gt;
+&lt;p&gt;不好的茶和咖啡的实现&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Coffee和Tea主导一切;他们控制了算法&lt;/li&gt;
+&lt;li&gt;Coffee和Tea之间存在重复的代码&lt;/li&gt;
+&lt;li&gt;对于算法所做的代码改变,需要打开子类修改许多地方&lt;/li&gt;
+&lt;li&gt;由于类的组织方式不具有弹性,所以加入新种类的咖啡因饮料需要做许多工作&lt;/li&gt;
+&lt;li&gt;算法的知识和它的实现会分散在很多类中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;模板方法提供的酷炫咖啡因饮料&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由CaffeineBeverage类主导一切,它拥有算法,而且保护这个算法&lt;/li&gt;
+&lt;li&gt;对子类来说,CaffeineBeverage类的存在,可以将代码的复用最大化&lt;/li&gt;
+&lt;li&gt;算法只存在于一个地方,所以容易修改&lt;/li&gt;
+&lt;li&gt;这个模板方法提供了一个框架,可以让其他的咖啡因饮料插进来.新的咖啡因饮料只需要实现自己的方法就可以了&lt;/li&gt;
+&lt;li&gt;CaffeineBeverage类专注于算法本身,而子类提供完整的实现&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;要点&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;quot;模板方法&amp;quot;定义了算法的步骤,把这些步骤的实现延迟到子类&lt;/li&gt;
+&lt;li&gt;模板方法模式为我们提供了一种代码复用的重要技巧&lt;/li&gt;
+&lt;li&gt;模板方法的抽象类可以定义具体方法,抽象方法和钩子&lt;/li&gt;
+&lt;li&gt;抽象方法由子类实现&lt;/li&gt;
+&lt;li&gt;钩子是一种方法,它在抽象类中不做事,或者只做默认的事情,子类可以选择要不要去覆盖它&lt;/li&gt;
+&lt;li&gt;为了防止子类改变模板方法中的算法,可以将模板方法声明为final&lt;/li&gt;
+&lt;li&gt;好莱坞原则告诉我们,将决策权房子高层模块中,以便决定如何以及何时调用底层模块&lt;/li&gt;
+&lt;li&gt;策略模式和模板方法模式都封装算法,一个用组合,一个用继承&lt;/li&gt;
+&lt;li&gt;工厂方法是模板方法的一个特殊版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;项目地址&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
+如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/design-pattern-template-method.html</link>
+            <guid isPermaLink="true">//blog/java/design-pattern-template-method.html</guid>
+                                               <category>java</category>
+                                    </item>
+                <item>
+            <title>设计模式之适配器模式</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-05-22
+title: 设计模式之适配器模式
+tags: JAVA,PATTERN
+images: 
+category: java
+status: publish
+summary: 现在已经存在IDuck接口,Turkey接口,假设你缺鸭子对象,想用一些火鸡对象来冒充.显而易见,因为火鸡的接口不同,所以我们不能公然拿来用,那么写个适配器吧
+--&gt;
+&lt;h1&gt;适配器模式与外观模式&lt;/h1&gt;
+&lt;h2&gt;适配器模式&lt;/h2&gt;
+&lt;h3&gt;需求&lt;/h3&gt;
+&lt;p&gt;现在已经存在IDuck接口,Turkey接口,假设你缺鸭子对象,想用一些火鸡对象来冒充.显而易见,因为火鸡的接口不同,所以我们不能公然拿来用,那么写个适配器吧&lt;/p&gt;
+&lt;h3&gt;FAQ&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;一个适配器需要做多少适配工作?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;实现一个适配器所需要进行的工作,和目标接口的大小成正.如果不用适配器,你就必须改写客户端的代码来调用这个新的接口.相比之下,使用适配器成本更少&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一个适配器只能封装一个类吗?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;虽然大多数的适配器模式所采取的例子都是让一个适配器包装一个被适配者,但还是会有状况需要让一个适配器包装多个被适配者.这设计到另一个模式,被称为外观模式(Facade Pattern),人们常常将外观模式和适配器模式混为一谈,本章稍后对此详细说明&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;万一我的系统中新旧并存,是不是不使用适配器更好
+&lt;blockquote&gt;
+&lt;p&gt;可以创建一个双向的适配器,支持两边的接口.这样,这个适配器可以当做旧的接口,或者当做新的接口使用&lt;/p&gt;
+&lt;/blockquote&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;外观模式&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;外观模式提供了一个统一的接口,用来访问子系统中的一群接口.外观定了一个高层接口,让子系统更容易使用.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;外观模式的意图是提供一个简单的接口,好让一个子系统更易于使用&lt;/p&gt;
+&lt;h2&gt;要点&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;当需要使用一个现有的类而其接口并不符合你的需求时,就使用适配器&lt;/li&gt;
+&lt;li&gt;当需要简化并统一一个很大的接口或者一群复杂的接口时,使用外观&lt;/li&gt;
+&lt;li&gt;适配器改变接口以符合客户的期望&lt;/li&gt;
+&lt;li&gt;外观将客户从一个复杂的子系统中解耦&lt;/li&gt;
+&lt;li&gt;实现一个适配器可能需要一番功夫,也可能不费功夫,视目标接口的大小与复杂度而定&lt;/li&gt;
+&lt;li&gt;实现一个外观,需要将子系统组合进外观中,然后将工作委托给给子系统执行&lt;/li&gt;
+&lt;li&gt;适配器模式有两种形式:对象适配器和类适配器.类适配器需要用到多重继承&lt;/li&gt;
+&lt;li&gt;你可以为一个子系统实现一个以上的外观&lt;/li&gt;
+&lt;li&gt;适配器将一个对象包装起来以改变其接口;装饰着将一个对象包装起来以增加新的行为和责任;而外观将一群对象&amp;quot;包装&amp;quot;起来以简化其接口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;项目地址&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
+如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/design-pattern-adapter.html</link>
+            <guid isPermaLink="true">//blog/java/design-pattern-adapter.html</guid>
+                                               <category>java</category>
+                                    </item>
+                <item>
+            <title>设计模式之命令模式</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-05-11
+title: 设计模式之命令模式
+tags: JAVA,PATTERN
+images: 
+category: java
+status: publish
+summary: 命令模式,命令模式将发出请求的对象和执行请求的对象解耦,在被解耦的两者之间是通过命令对象进行沟通的.命令对象封装了接收者和一个或者一组动作,调用者通过调用命令封装execute()发出请求,这会使得接收者的动作被调用,调用者可以接受命令当做参数,甚至在运行时动态地进行,命令可以支持撤销,做法是实现一个undo()方法来回到execute()被执行前的状态,宏命令是命令的一种简单的延伸,允许调用多个命令.宏方法也可以支持注销,实际操作时,很常见使用&quot;聪明&quot;命令对象,也就是直接实现了请求,而不是将工作委托给接收者,命令也可以用来实现日志和事务系统
+--&gt;
+&lt;h1&gt;命令模式&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;命令模式将发出请求的对象和执行请求的对象解耦&lt;/li&gt;
+&lt;li&gt;在被解耦的两者之间是通过命令对象进行沟通的.命令对象封装了接收者和一个或者一组动作&lt;/li&gt;
+&lt;li&gt;调用者通过调用命令封装execute()发出请求,这会使得接收者的动作被调用&lt;/li&gt;
+&lt;li&gt;调用者可以接受命令当做参数,甚至在运行时动态地进行&lt;/li&gt;
+&lt;li&gt;命令可以支持撤销,做法是实现一个undo()方法来回到execute()被执行前的状态&lt;/li&gt;
+&lt;li&gt;宏命令是命令的一种简单的延伸,允许调用多个命令.宏方法也可以支持注销&lt;/li&gt;
+&lt;li&gt;实际操作时,很常见使用&amp;quot;聪明&amp;quot;命令对象,也就是直接实现了请求,而不是将工作委托给接收者&lt;/li&gt;
+&lt;li&gt;命令也可以用来实现日志和事务系统&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;项目地址&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
+如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/design-pattern-command.html</link>
+            <guid isPermaLink="true">//blog/java/design-pattern-command.html</guid>
+                                               <category>java</category>
+                                    </item>
+                <item>
+            <title>设计模式之单例模式</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-05-10
+title: 设计模式之单例模式
+tags: JAVA,PATTERN
+images: 
+category: java
+status: publish
+summary: 单例模式有什么用处?有些对象其实我们只需要一个,比方说:线程池,缓存,对话框,注册表,日志对象...如果制造出多个实例,就会导致许多问题产生,例如程序的行为异常,资源使用过量,数据不一致
+--&gt;
+&lt;h1&gt;单例模式&lt;/h1&gt;
+&lt;h2&gt;有什么用处&lt;/h2&gt;
+&lt;p&gt;有些对象其实我们只需要一个,比方说:线程池,缓存,对话框,注册表,日志对象...如果制造出多个实例,就会导致许多问题产生,例如程序的行为异常,资源使用过量,数据不一致&lt;/p&gt;
+&lt;h2&gt;如何做&lt;/h2&gt;
+&lt;p&gt;利用静态类变量,静态方法和适当的访问修饰符&lt;/p&gt;
+&lt;h2&gt;定义&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;单例模式,确保一个类只有一个实例,并提供一个全局访问点&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;注意点,多线程中使用单例&lt;/h2&gt;
+&lt;p&gt;如果有多个线程同时调用getInstance(),可能会产生多个实例,那就用synchronized(同步)关键字修饰
+但是同步会降低性能,实际上也就第一次getInstance()时需要考虑同步问题,之后就没有同步问题.&lt;/p&gt;
+&lt;h2&gt;1.如果getInstance()的性能对应用程序不是很关键,就加上synchronized关键字&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * 单例模式之懒汉模式
+ * 优点:在需要实例的时候才进行第一次实例化,在资源紧缺的时候,可以减少不必要的资源消耗
+ * 缺点:同步了getInstance(),会造成性能浪费
+ */
+public class SingletonLazy {
+    /**
+     * 利用一个静态变量来记录Singleton类的唯一实例
+     */
+    private static SingletonLazy instance;
+
+    /**
+     * 构造器声明为私有的,只有自己Singleton类才可以调用构造器
+     */
+    private SingletonLazy() {
+
+    }
+
+    /**
+     * 用getInstance()实例化对象,并返回这个实例
+     * 在多线程中必须使用synchronized关键字修饰
+     * @return
+     */
+    public static synchronized SingletonLazy getInstance() {
+
+        //懒汉模式
+        //如果未被实例化,则new
+        if (instance == null) {
+            instance = new SingletonLazy();
+        }
+        //如果已经实例化,则返回实例
+        return instance;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;2.如果getInstance()的性能对应用程序很关键,那就使用饿汉模式&lt;/h2&gt;
+&lt;p&gt;使用饿汉模式&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public class SingletonLazy{
+    //在静态初始化器(static initialize)中创建单例.这段代码保证了线程安全(Thread Safe)
+    private static SingletonLazy instance=new SingletonLazy();
+
+    private SingletonLazy(){
+    }
+
+    public static SingletonLazy getInstance(){
+        //到这里,一定存在实例了,直接使用它
+        return instance;
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;3.使用&amp;quot;双重检查锁&amp;quot;(double-checked locking),在getInstance()中减少使用同步&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * 单例模式之使用&quot;双重检查加锁&quot;
+ * 过程:在getInstance()中进行双重检查,确保一个实例
+ * 优点:在getInstance()中减少同步,增强性能,可以在多线程中使用
+ * 缺点:暂无
+ */
+public class SingletonDoubleCheckedLocking {
+    /**
+     * 利用一个静态变量来记录Singleton类的唯一实例
+     * volatile关键字确保:当instance变量被初始化为Singleton实例时,多个线程正确地处理instance变量
+     */
+    private static volatile SingletonDoubleCheckedLocking instance;
+
+    /**
+     * 构造器声明为私有的,只有自己Singleton类才可以调用构造器
+     */
+    private SingletonDoubleCheckedLocking() {
+    }
+
+    /**
+     * 用getInstance()实例化对象,并返回这个实例
+     * 方法不必用synchronized关键字修饰
+     * @return
+     */
+    public static SingletonDoubleCheckedLocking getInstance() {
+        if(instance==null){//检查实例,如果不存在,则进入同步区块
+            //注意:只有第一次调用getInstance()方法才彻底执行这里的代码
+            synchronized (SingletonDoubleCheckedLocking.class){
+                if(instance==null){//进入区块后,再检查一次,如果是null,才创建实例
+                    instance=new SingletonDoubleCheckedLocking();
+                }
+            }
+        }
+
+        return instance;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;项目地址&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
+如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/design-pattern-singleton.html</link>
+            <guid isPermaLink="true">//blog/java/design-pattern-singleton.html</guid>
+                                               <category>java</category>
+                                    </item>
+                <item>
+            <title>设计模式之工厂模式</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-04-20
+title: 设计模式之工厂模式
+tags: JAVA,PATTERN
+images: 
+category: java
+status: publish
+summary: 针对接口编程,可以隔离掉以后系统可能发生的一大堆改变
+         为了让系统有弹性,我们希望一个类是抽象类或接口.但如果这样,这些类或接口就无法直接实例化
+         根据类的类型,我们实例化正确的具体类,然后返回具体类的对象,这些具体类必须实现抽象类接口
+         但是压力来自于增加更多的具体类类型
+         把创建对象的代码从具体方法中抽离,把创建的过程搬到另一个对象中,这个对象只管如何创建对象.
+         我们称这个对象为*工厂*,现在我们就来实现一个披萨工厂
+--&gt;
+&lt;h1&gt;工厂模式&lt;/h1&gt;
+&lt;p&gt;针对接口编程,可以隔离掉以后系统可能发生的一大堆改变
+为了让系统有弹性,我们希望一个类是抽象类或接口.但如果这样,这些类或接口就无法直接实例化
+根据类的类型,我们实例化正确的具体类,然后返回具体类的对象,这些具体类必须实现抽象类接口
+但是压力来自于增加更多的具体类类型
+把创建对象的代码从具体方法中抽离,把创建的过程搬到另一个对象中,这个对象只管如何创建对象.
+我们称这个对象为&lt;em&gt;工厂&lt;/em&gt;,现在我们就来实现一个披萨工厂&lt;/p&gt;
+&lt;h2&gt;简单工厂模式&lt;/h2&gt;
+&lt;p&gt;创建对象的过程在工厂类中&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/**
+ * 简单工厂
+ * 披萨工厂类
+ */
+public class SimplePizzaFactory {
+    /**
+     * 首先,在这个工厂类定义一个createPizza()方法,所有客户使用这个方法来实例化对象
+     * @param type:披萨类型
+     * @return Pizza
+     */
+    public Pizza createPizza(String type){
+        Pizza pizza=null;
+        if(type.equals(&quot;cheese&quot;)){
+            pizza=new CheesePizza();
+        }else if(type.equals(&quot;pepperoni&quot;)){
+            pizza=new Pepperoni();
+        }
+
+        return pizza;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;工厂方法模式&lt;/h2&gt;
+&lt;p&gt;工厂方法用来处理对象的创建,并将这样的行为封装在子类中.这样,客户程序中关于超类的代码就和子类对象创建代码解耦了.工厂方法可能需要参数,也可能不需要.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;abstract Product factoryMethod(String type)
+abstract:工厂方法是抽象的
+Product:工厂方法必须返回一个产品.超类中定义的方法,通常使用工厂方法的返回值
+factoryMethod:工厂方法将客户(也就是超类中的代码,列入orderPizza())和实际创建具体产品的代码分割开来
+type:工厂方法可能需要/不需要参数来制定所要的产品&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;项目地址&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
+如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/design-pattern-factory.html</link>
+            <guid isPermaLink="true">//blog/java/design-pattern-factory.html</guid>
+                                               <category>java</category>
+                                    </item>
+                <item>
+            <title>设计模式之装饰者模式</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2015-04-15
+title: 设计模式之装饰者模式
+tags: JAVA,PATTERN
+images: 
+category: java
+status: publish
+summary: 本章可以称为&quot;给爱用继承的人一个全新的设计眼界&quot;
+--&gt;
+&lt;h1&gt;装饰者模式&lt;/h1&gt;
+&lt;p&gt;本章可以称为&amp;quot;给爱用继承的人一个全新的设计眼界&amp;quot;&lt;/p&gt;
+&lt;p&gt;装饰者和呗装饰对象有相同的超类型.
+可以用一个或者多个装饰者包装一个对象.
+既然装饰者和被装饰对象具有相同的超类型,所以在任何需要原始对象(被包装的)的场合,可以用装饰过的对象代替它&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;装饰者可以在所委托被装饰者的行为之前或之后,加上自己的行为,以达到特定的目的&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对象可以在任何时候被装饰,所以在运行时动态地,不限量地用你喜欢的装饰者来装饰对象&lt;/p&gt;
+&lt;h2&gt;定义装饰者模式&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;装饰者模式动态地将责任附加到对象上.若要扩展功能,装饰者提供了比继承更有弹性的替代方案&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Beverge 星巴兹咖啡装饰者实现
+IO  Java的装饰者模式实现&lt;/p&gt;
+&lt;h2&gt;要点&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;继承属于扩展形式之一,但不见得事达到弹性设计的最佳方式&lt;/li&gt;
+&lt;li&gt;在设计中,应该允许行为被扩展,二不许修改现有的代码&lt;/li&gt;
+&lt;li&gt;组合和委托可用于在运行时动态的加上新的行为&lt;/li&gt;
+&lt;li&gt;除了继承,装饰者模式也可以让我们扩展行为&lt;/li&gt;
+&lt;li&gt;装饰者模式意味着一群装饰者类,这些类用来包装具体组件&lt;/li&gt;
+&lt;li&gt;装饰这类反映出被装饰的组件类型,(事实上,他们具有相同的类型,都经过接口或者继承实现)&lt;/li&gt;
+&lt;li&gt;装饰者可以在被装饰者的行为前面或者侯建加上自己的行为,甚至将被装饰者的行为整个取代掉,从而达到特定的目的&lt;/li&gt;
+&lt;li&gt;你可以用无数个装饰者包装一个组件&lt;/li&gt;
+&lt;li&gt;装饰者一般对组件的客户事透明的,除非客户程序依赖于组件的具体类型&lt;/li&gt;
+&lt;li&gt;装饰者会导致设计中出现许多的小对象,如果过度使用,会让程序变得很复杂&lt;/li&gt;
+&lt;li&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;项目地址&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
+如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/java/design-pattern-decorator.html</link>
+            <guid isPermaLink="true">//blog/java/design-pattern-decorator.html</guid>
+                                               <category>java</category>
+                                    </item>
+                <item>
             <title>设计模式之观察者模式</title>
             <description>
             &lt;!--
@@ -748,7 +3596,7 @@ date: 2015-04-08
 title: 设计模式之观察者模式
 tags: JAVA,PATTERN
 images: 
-category: 
+category: java
 status: publish
 summary: 观察者模式(Observer),让你的对象知悉现况
 --&gt;
@@ -1006,10 +3854,11 @@ Current conditions:80.0F degrees and 30.0% humidity
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-09-28 05:33:43</pubDate>
             <link>//blog/java/design-pattern-observer.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-observer.html</guid>
-                    </item>
+                                               <category>java</category>
+                                    </item>
                 <item>
             <title>设计模式之面向接口</title>
             <description>
@@ -1581,6 +4430,65 @@ summary: 游泳杂感
             <link>//blog/thoughts/20140723.html</link>
             <guid isPermaLink="true">//blog/thoughts/20140723.html</guid>
                                                <category>thoughts</category>
+                                    </item>
+                <item>
+            <title>理解Linux系统负荷load average</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-01-01
+title: 理解Linux系统负荷load average
+tags: LINUX
+images: 
+category: linux
+status: publish
+summary: 你会不会想要知道服务器的负载,但是不知道查看什么,看了这篇文章就懂了
+--&gt;
+&lt;h2&gt;一、查看系统负荷&lt;/h2&gt;
+&lt;p&gt;如果你的电脑很慢，你或许想查看一下，它的工作量是否太大了。
+在Linux系统中，我们一般使用uptime命令查看（w命令和top命令也行）。（另外，它们在苹果公司的Mac电脑上也适用。）
+你在终端窗口键入uptime，系统会返回一行信息。&lt;/p&gt;
+&lt;p&gt;这行信息的后半部分，显示&amp;quot;load average&amp;quot;，它的意思是&amp;quot;系统的平均负荷&amp;quot;，里面有三个数字，我们可以从中判断系统负荷是大还是小。&lt;/p&gt;
+&lt;p&gt;为什么会有三个数字呢？你从手册中查到，它们的意思分别是1分钟、5分钟、15分钟内系统的平均负荷。
+如果你继续看手册，它还会告诉你，当CPU完全空闲的时候，平均负荷为0；当CPU工作量饱和的时候，平均负荷为1。
+那么很显然，&amp;quot;load average&amp;quot;的值越低，比如等于0.2或0.3，就说明电脑的工作量越小，系统负荷比较轻。
+但是，什么时候能看出系统负荷比较重呢？等于1的时候，还是等于0.5或等于1.5的时候？如果1分钟、5分钟、15分钟三个值不一样，怎么办？&lt;/p&gt;
+&lt;h2&gt;二、一个类比&lt;/h2&gt;
+&lt;p&gt;判断系统负荷是否过重，必须理解load average的真正含义。下面，我根据&amp;quot;Understanding Linux CPU Load&amp;quot;这篇文章，尝试用最通俗的语言，解释这个问题。
+首先，假设最简单的情况，你的电脑只有一个CPU，所有的运算都必须由这个CPU来完成。
+那么，我们不妨把这个CPU想象成一座大桥，桥上只有一根车道，所有车辆都必须从这根车道上通过。（很显然，这座桥只能单向通行。）
+系统负荷为0，意味着大桥上一辆车也没有。&lt;/p&gt;
+&lt;p&gt;系统负荷为0.5，意味着大桥一半的路段有车。&lt;/p&gt;
+&lt;p&gt;系统负荷为1.0，意味着大桥的所有路段都有车，也就是说大桥已经&amp;quot;满&amp;quot;了。但是必须注意的是，直到此时大桥还是能顺畅通行的。&lt;/p&gt;
+&lt;p&gt;系统负荷为1.7，意味着车辆太多了，大桥已经被占满了（100%），后面等着上桥的车辆为桥面车辆的70%。以此类推，系统负荷2.0，意味着等待上桥的车辆与桥面的车辆一样多；系统负荷3.0，意味着等待上桥的车辆是桥面车辆的2倍。总之，当系统负荷大于1，后面的车辆就必须等待了；系统负荷越大，过桥就必须等得越久。&lt;/p&gt;
+&lt;p&gt;CPU的系统负荷，基本上等同于上面的类比。大桥的通行能力，就是CPU的最大工作量；桥梁上的车辆，就是一个个等待CPU处理的进程（process）。
+如果CPU每分钟最多处理100个进程，那么系统负荷0.2，意味着CPU在这1分钟里只处理20个进程；系统负荷1.0，意味着CPU在这1分钟里正好处理100个进程；系统负荷1.7，意味着除了CPU正在处理的100个进程以外，还有70个进程正排队等着CPU处理。
+为了电脑顺畅运行，系统负荷最好不要超过1.0，这样就没有进程需要等待了，所有进程都能第一时间得到处理。很显然，1.0是一个关键值，超过这个值，系统就不在最佳状态了，你要动手干预了。&lt;/p&gt;
+&lt;h2&gt;三、系统负荷的经验法则&lt;/h2&gt;
+&lt;p&gt;1.0是系统负荷的理想值吗？
+不一定，系统管理员往往会留一点余地，当这个值达到0.7，就应当引起注意了。经验法则是这样的：
+当系统负荷持续大于0.7，你必须开始调查了，问题出在哪里，防止情况恶化。
+当系统负荷持续大于1.0，你必须动手寻找解决办法，把这个值降下来。
+当系统负荷达到5.0，就表明你的系统有很严重的问题，长时间没有响应，或者接近死机了。你不应该让系统达到这个值。&lt;/p&gt;
+&lt;h2&gt;四、多处理器&lt;/h2&gt;
+&lt;p&gt;上面，我们假设你的电脑只有1个CPU。如果你的电脑装了2个CPU，会发生什么情况呢？
+2个CPU，意味着电脑的处理能力翻了一倍，能够同时处理的进程数量也翻了一倍。
+还是用大桥来类比，两个CPU就意味着大桥有两根车道了，通车能力翻倍了。&lt;/p&gt;
+&lt;p&gt;所以，2个CPU表明系统负荷可以达到2.0，此时每个CPU都达到100%的工作量。推广开来，n个CPU的电脑，可接受的系统负荷最大为n.0。&lt;/p&gt;
+&lt;h2&gt;五、多核处理器&lt;/h2&gt;
+&lt;p&gt;芯片厂商往往在一个CPU内部，包含多个CPU核心，这被称为多核CPU。
+在系统负荷方面，多核CPU与多CPU效果类似，所以考虑系统负荷的时候，必须考虑这台电脑有几个CPU、每个CPU有几个核心。然后，把系统负荷除以总的核心数，只要每个核心的负荷不超过1.0，就表明电脑正常运行。
+怎么知道电脑有多少个CPU核心呢？
+&amp;quot;cat /proc/cpuinfo&amp;quot;命令，可以查看CPU信息。&amp;quot;grep -c 'model name' /proc/cpuinfo&amp;quot;命令，直接返回CPU的总核心数。&lt;/p&gt;
+&lt;h2&gt;六、最佳观察时长&lt;/h2&gt;
+&lt;p&gt;最后一个问题，&amp;quot;load average&amp;quot;一共返回三个平均值----1分钟系统负荷、5分钟系统负荷，15分钟系统负荷，----应该参考哪个值？
+如果只有1分钟的系统负荷大于1.0，其他两个时间段都小于1.0，这表明只是暂时现象，问题不大。
+如果15分钟内，平均系统负荷大于1.0（调整CPU核心数之后），表明问题持续存在，不是暂时现象。所以，你应该主要观察&amp;quot;15分钟系统负荷&amp;quot;，将它作为电脑正常运行的指标。&lt;/p&gt;            </description>
+            <pubDate>2017-09-28 05:33:43</pubDate>
+            <link>//blog/linux/load-average.html</link>
+            <guid isPermaLink="true">//blog/linux/load-average.html</guid>
+                                               <category>linux</category>
                                     </item>
                 <item>
             <title>CentOS7安装Jenkins</title>

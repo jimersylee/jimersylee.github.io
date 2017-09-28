@@ -59,8 +59,10 @@
     <ul>
                 <li class="cat-item"><a href="/category/php.html" >php</a></li>
                 <li class="cat-item"><a href="/category/linux.html" >linux</a></li>
+                <li class="cat-item"><a href="/category/spring.html" >spring</a></li>
                 <li class="cat-item"><a href="/category/java.html" >java</a></li>
                 <li class="cat-item"><a href="/category/books.html" >books</a></li>
+                <li class="cat-item"><a href="/category/go.html" >go</a></li>
                 <li class="cat-item"><a href="/category/js.html" >js</a></li>
                 <li class="cat-item"><a href="/category/thoughts.html" >thoughts</a></li>
                 <li class="cat-item"><a href="/category/python.html" >python</a></li>
@@ -72,11 +74,14 @@
     <ul>
         <li><a href="/archive/201709.html">2017-09</a></li>
         <li><a href="/archive/201707.html">2017-07</a></li>
+        <li><a href="/archive/201704.html">2017-04</a></li>
         <li><a href="/archive/201608.html">2016-08</a></li>
         <li><a href="/archive/201607.html">2016-07</a></li>
+        <li><a href="/archive/201605.html">2016-05</a></li>
         <li><a href="/archive/201510.html">2015-10</a></li>
         <li><a href="/archive/201508.html">2015-08</a></li>
         <li><a href="/archive/201507.html">2015-07</a></li>
+        <li><a href="/archive/201505.html">2015-05</a></li>
         <li><a href="/archive/201504.html">2015-04</a></li>
         <li><a href="/archive/201503.html">2015-03</a></li>
         <li><a href="/archive/201411.html">2014-11</a></li>
@@ -88,11 +93,11 @@
 		    <aside id="recent-posts" class="widget widget_recent_entries">
     <h2 class="widget-title">近期文章</h2>
     <ul>
+        <li><a href="/blog/go/go-build-web-app-chapter-3.html">&lt;Go:build web application&gt;的中文翻译版-第三章-连接数据</a></li>
+        <li><a href="/blog/go/go-build-web-app-catalog.html">&lt;Go:build web application&gt;的中文翻译版本目录</a></li>
         <li><a href="/blog/php/swoole.html">PHP的Swoole扩展安装与学习</a></li>
         <li><a href="/blog/thoughts/dev-rule.html">我眼中规范的开发流程</a></li>
-        <li><a href="/blog/devops/ssl.html">为域名配置免费SSL证书</a></li>
-        <li><a href="/blog/devops/my-soft.html">我的Linux桌面环境配置与必备软件</a></li>
-        <li><a href="/blog/books/back-end-books-2015.html">我的后端开发书架 2015 2.0 版</a></li>
+        <li><a href="/blog/spring/spring-boot-starter-actuator.html">actuator模块简介</a></li>
         </ul>
 </aside>
 		    <aside id="tag_cloud" class="widget widget_tag_cloud">
@@ -104,11 +109,17 @@
         <a href="/tags/LINUX.html" title="LINUX" >LINUX</a>
         <a href="/tags/SHORTCUT-KEY.html" title="SHORTCUT-KEY" >SHORTCUT-KEY</a>
         <a href="/tags/CENTOS.html" title="CENTOS" >CENTOS</a>
+        <a href="/tags/Spring.html" title="Spring" >Spring</a>
+        <a href="/tags/Cloud.html" title="Cloud" >Cloud</a>
+        <a href="/tags/%E7%AE%80%E4%BB%8B.html" title="简介" >简介</a>
+        <a href="/tags/SPRING-CLOUD.html" title="SPRING-CLOUD" >SPRING-CLOUD</a>
         <a href="/tags/JAVA.html" title="JAVA" >JAVA</a>
         <a href="/tags/PATTERN.html" title="PATTERN" >PATTERN</a>
+        <a href="/tags/JVM.html" title="JVM" >JVM</a>
         <a href="/tags/BACK-END.html" title="BACK-END" >BACK-END</a>
         <a href="/tags/BOOKS.html" title="BOOKS" >BOOKS</a>
         <a href="/tags/ML.html" title="ML" >ML</a>
+        <a href="/tags/GO.html" title="GO" >GO</a>
         <a href="/tags/JS.html" title="JS" >JS</a>
         <a href="/tags/JAVASCRIPT.html" title="JAVASCRIPT" >JAVASCRIPT</a>
         <a href="/tags/DEV.html" title="DEV" >DEV</a>
@@ -118,6 +129,7 @@
         <a href="/tags/VIM.html" title="VIM" >VIM</a>
         <a href="/tags/SPACEVIM.html" title="SPACEVIM" >SPACEVIM</a>
         <a href="/tags/PYTHON.html" title="PYTHON" >PYTHON</a>
+        <a href="/tags/MACHINE-LEARNING.html" title="MACHINE-LEARNING" >MACHINE-LEARNING</a>
         <a href="/tags/SCRAPY.html" title="SCRAPY" >SCRAPY</a>
         <a href="/tags/CRAWLER.html" title="CRAWLER" >CRAWLER</a>
         <a href="/tags/JENKINS.html" title="JENKINS" >JENKINS</a>
@@ -139,6 +151,70 @@
         <div id="main" class="site-main" role="main">
     	    	
                 	        	<article class="post hentry">
+<header class="entry-header">
+	<h2 class="entry-title"><a href="/blog/go/go-build-web-app-chapter-3.html" rel="bookmark">&lt;Go:build web application&gt;的中文翻译版-第三章-连接数据</a></h2>
+</header><!-- .entry-header -->
+<div class="entry-content">
+在上一章中,我们探索了在web应用中如何处理URLS和指引他们转到不同的页面.同时,我们通过net/http中的handle创建了动态的链接和动态的结果.
+</div><!-- .entry-content --><footer class="entry-footer">
+	    <span class="posted-on">
+        <span class="screen-reader-text">Posted on </span>
+        <time class="entry-date published">2017-09-22</time>
+    </span>
+		
+	    <span class="byline">
+        <span class="author vcard">
+            <span class="screen-reader-text">Author </span>
+            Jimersy Lee
+        </span>
+    </span>
+        
+        <span class="cat-links">
+        <span class="screen-reader-text">Categories </span>
+          
+           <a href="/category/go.html" rel="category">go</a>
+            </span>
+        
+    
+        <span class="tags-links">
+    	
+        <span class="screen-reader-text">Tags </span>
+          
+           <a href="/tags/GO.html" rel="tag">GO</a>
+            </span>
+    </footer><!-- .entry-footer --></article><!-- #post-## -->        	                	        	<article class="post hentry">
+<header class="entry-header">
+	<h2 class="entry-title"><a href="/blog/go/go-build-web-app-catalog.html" rel="bookmark">&lt;Go:build web application&gt;的中文翻译版本目录</a></h2>
+</header><!-- .entry-header -->
+<div class="entry-content">
+<build web application>的中文翻译版本</build>
+</div><!-- .entry-content --><footer class="entry-footer">
+	    <span class="posted-on">
+        <span class="screen-reader-text">Posted on </span>
+        <time class="entry-date published">2017-09-20</time>
+    </span>
+		
+	    <span class="byline">
+        <span class="author vcard">
+            <span class="screen-reader-text">Author </span>
+            Jimersy Lee
+        </span>
+    </span>
+        
+        <span class="cat-links">
+        <span class="screen-reader-text">Categories </span>
+          
+           <a href="/category/go.html" rel="category">go</a>
+            </span>
+        
+    
+        <span class="tags-links">
+    	
+        <span class="screen-reader-text">Tags </span>
+          
+           <a href="/tags/GO.html" rel="tag">GO</a>
+            </span>
+    </footer><!-- .entry-footer --></article><!-- #post-## -->        	                	        	<article class="post hentry">
 <header class="entry-header">
 	<h2 class="entry-title"><a href="/blog/php/swoole.html" rel="bookmark">PHP的Swoole扩展安装与学习</a></h2>
 </header><!-- .entry-header -->
@@ -208,14 +284,14 @@
             </span>
     </footer><!-- .entry-footer --></article><!-- #post-## -->        	                	        	<article class="post hentry">
 <header class="entry-header">
-	<h2 class="entry-title"><a href="/blog/devops/ssl.html" rel="bookmark">为域名配置免费SSL证书</a></h2>
+	<h2 class="entry-title"><a href="/blog/spring/spring-boot-starter-actuator.html" rel="bookmark">actuator模块简介</a></h2>
 </header><!-- .entry-header -->
 <div class="entry-content">
-<p>本文在CenOS主机上,使用腾讯云主机,以及阿里云域名服务,完成Nginx上指定的域名的ssl配置</p>
+<p>spring-boot-starter-actuator模块简介,此模块提供监控与采集功能,通过在pom中引用此依赖,可以方便地使用其功能</p>
 </div><!-- .entry-content --><footer class="entry-footer">
 	    <span class="posted-on">
         <span class="screen-reader-text">Posted on </span>
-        <time class="entry-date published">2016-08-05</time>
+        <time class="entry-date published">2017-04-29</time>
     </span>
 		
 	    <span class="byline">
@@ -228,7 +304,7 @@
         <span class="cat-links">
         <span class="screen-reader-text">Categories </span>
           
-           <a href="/category/devops.html" rel="category">devops</a>
+           <a href="/category/spring.html" rel="category">spring</a>
             </span>
         
     
@@ -236,20 +312,18 @@
     	
         <span class="screen-reader-text">Tags </span>
           
-           <a href="/tags/NGINX.html" rel="tag">NGINX</a>
-          
-           <a href="/tags/SSL.html" rel="tag">SSL</a>
+           <a href="/tags/SPRING-CLOUD.html" rel="tag">SPRING-CLOUD</a>
             </span>
     </footer><!-- .entry-footer --></article><!-- #post-## -->        	                	        	<article class="post hentry">
 <header class="entry-header">
-	<h2 class="entry-title"><a href="/blog/devops/my-soft.html" rel="bookmark">我的Linux桌面环境配置与必备软件</a></h2>
+	<h2 class="entry-title"><a href="/blog/spring/spring-cloud-summury.html" rel="bookmark">Hello World</a></h2>
 </header><!-- .entry-header -->
 <div class="entry-content">
-<p>每次装系统,都需要必备的软件,记录下来防止不时之需.</p>
+Spring Cloud Cluster:针对Zookeeper,Redis,Hazelcast,Consul的选举算法和通用状态模式的实现
 </div><!-- .entry-content --><footer class="entry-footer">
 	    <span class="posted-on">
         <span class="screen-reader-text">Posted on </span>
-        <time class="entry-date published">2016-07-05</time>
+        <time class="entry-date published">2017-04-28</time>
     </span>
 		
 	    <span class="byline">
@@ -262,7 +336,7 @@
         <span class="cat-links">
         <span class="screen-reader-text">Categories </span>
           
-           <a href="/category/devops.html" rel="category">devops</a>
+           <a href="/category/spring.html" rel="category">spring</a>
             </span>
         
     
@@ -270,75 +344,11 @@
     	
         <span class="screen-reader-text">Tags </span>
           
-           <a href="/tags/LINUX.html" rel="tag">LINUX</a>
-            </span>
-    </footer><!-- .entry-footer --></article><!-- #post-## -->        	                	        	<article class="post hentry">
-<header class="entry-header">
-	<h2 class="entry-title"><a href="/blog/books/back-end-books-2015.html" rel="bookmark">我的后端开发书架 2015 2.0 版</a></h2>
-</header><!-- .entry-header -->
-<div class="entry-content">
-<p>小学生作文的开头：光阴似箭，日月如梭…..半年过去了，床底下又多了不少书，更新一个2.0版。</p>
-</div><!-- .entry-content --><footer class="entry-footer">
-	    <span class="posted-on">
-        <span class="screen-reader-text">Posted on </span>
-        <time class="entry-date published">2015-10-29</time>
-    </span>
-		
-	    <span class="byline">
-        <span class="author vcard">
-            <span class="screen-reader-text">Author </span>
-            Jimersy Lee
-        </span>
-    </span>
-        
-        <span class="cat-links">
-        <span class="screen-reader-text">Categories </span>
+           <a href="/tags/Spring.html" rel="tag">Spring</a>
           
-           <a href="/category/books.html" rel="category">books</a>
-            </span>
-        
-    
-        <span class="tags-links">
-    	
-        <span class="screen-reader-text">Tags </span>
+           <a href="/tags/Cloud.html" rel="tag">Cloud</a>
           
-           <a href="/tags/BACK-END.html" rel="tag">BACK-END</a>
-          
-           <a href="/tags/BOOKS.html" rel="tag">BOOKS</a>
-            </span>
-    </footer><!-- .entry-footer --></article><!-- #post-## -->        	                	        	<article class="post hentry">
-<header class="entry-header">
-	<h2 class="entry-title"><a href="/blog/books/ML-books.html" rel="bookmark">机器学习和数据挖掘的推荐书单</a></h2>
-</header><!-- .entry-header -->
-<div class="entry-content">
-<p>有了这些书，再也不愁下了班没妹纸该咋办了。慢慢来，认真学，揭开机器学习和数据挖掘这一神秘的面纱吧！</p>
-</div><!-- .entry-content --><footer class="entry-footer">
-	    <span class="posted-on">
-        <span class="screen-reader-text">Posted on </span>
-        <time class="entry-date published">2015-10-26</time>
-    </span>
-		
-	    <span class="byline">
-        <span class="author vcard">
-            <span class="screen-reader-text">Author </span>
-            Jimersy Lee
-        </span>
-    </span>
-        
-        <span class="cat-links">
-        <span class="screen-reader-text">Categories </span>
-          
-           <a href="/category/books.html" rel="category">books</a>
-            </span>
-        
-    
-        <span class="tags-links">
-    	
-        <span class="screen-reader-text">Tags </span>
-          
-           <a href="/tags/ML.html" rel="tag">ML</a>
-          
-           <a href="/tags/BOOKS.html" rel="tag">BOOKS</a>
+           <a href="/tags/%E7%AE%80%E4%BB%8B.html" rel="tag">简介</a>
             </span>
     </footer><!-- .entry-footer --></article><!-- #post-## -->        	                
         <nav class="navigation pagination" role="navigation">
@@ -348,6 +358,9 @@
 								<span class="page-numbers current"><span class="meta-nav screen-reader-text">Page </span>1</span>
 			        			        	<a class="page-numbers" href="/page/2.html"><span class="meta-nav screen-reader-text">Page </span>2</a>
         	        			        	<a class="page-numbers" href="/page/3.html"><span class="meta-nav screen-reader-text">Page </span>3</a>
+        	        			        	<a class="page-numbers" href="/page/4.html"><span class="meta-nav screen-reader-text">Page </span>4</a>
+        	        			        	<a class="page-numbers" href="/page/5.html"><span class="meta-nav screen-reader-text">Page </span>5</a>
+        	        			        	<a class="page-numbers" href="/page/6.html"><span class="meta-nav screen-reader-text">Page </span>6</a>
         	        		
 				<a class="next page-numbers" href="/page/2.html">Next page</a>
 			</div>
