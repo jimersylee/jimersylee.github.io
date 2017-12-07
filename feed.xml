@@ -4,8 +4,8 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-12-07 16:12:37</pubDate>
-        <lastBuildDate>2017-12-07 16:12:37</lastBuildDate>
+        <pubDate>2017-12-07 16:12:54</pubDate>
+        <lastBuildDate>2017-12-07 16:12:54</lastBuildDate>
         <generator>Gitblog v1.0</generator>
                 <item>
             <title><Go:build web application>的中文翻译版-第三章-连接数据</title>
