@@ -4,8 +4,8 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-09-28 05:09:47</pubDate>
-        <lastBuildDate>2017-09-28 05:09:47</lastBuildDate>
+        <pubDate>2017-12-07 16:12:37</pubDate>
+        <lastBuildDate>2017-12-07 16:12:37</lastBuildDate>
         <generator>Gitblog v1.0</generator>
                 <item>
             <title><Go:build web application>的中文翻译版-第三章-连接数据</title>
@@ -223,7 +223,7 @@ pageGUID).Scan(&amp;amp;thisPage.Title, &amp;amp;thisPage.Content, &amp;amp;this
 &lt;pre&gt;&lt;code&gt;http://127.0.0.1:8080/page/hello-world22
 
 Not Found&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/go/go-build-web-app-chapter-3.html</link>
             <guid isPermaLink="true">//blog/go/go-build-web-app-chapter-3.html</guid>
                                                <category>go</category>
@@ -515,7 +515,7 @@ summary: &lt;Go:build web application&gt;的中文翻译版本
 &lt;li&gt;使用最佳实践&lt;/li&gt;
 &lt;li&gt;本章总结&lt;/li&gt;
 &lt;/ul&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/go/go-build-web-app-catalog.html</link>
             <guid isPermaLink="true">//blog/go/go-build-web-app-catalog.html</guid>
                                                <category>go</category>
@@ -570,7 +570,7 @@ curl http://127.0.0.1:9501
 
 #如果正确输出,那就启动成功啦
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-08 07:21:52</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/php/swoole.html</link>
             <guid isPermaLink="true">//blog/php/swoole.html</guid>
                                                <category>php</category>
@@ -631,7 +631,7 @@ summary: 所谓没有规矩,不成方圆,就算是再小的团队,工作也需�
 &lt;li&gt;代码管理使用git&lt;/li&gt;
 &lt;li&gt;统一使用邮件沟通&lt;/li&gt;
 &lt;/ul&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/thoughts/dev-rule.html</link>
             <guid isPermaLink="true">//blog/thoughts/dev-rule.html</guid>
                                                <category>thoughts</category>
@@ -834,7 +834,7 @@ public class RocketMQHealthIndicator implements HealthIndicator {
 &lt;p&gt;可以进行关键操作,需要通过属性来配置开启操作.在原生端点中,只提供了一个用来关闭应用的端点:/shutdown(后续引入Eureka之后,会引入更多控制端点).我们可以通过配置开启它&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;endpoint.shutdown.enable=true&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;由于开放关闭应用本身是一件非常危险的事,需要对其加入一定的保护机制,比如定制actuator的端口路径,整合Spring Security进行安全校验.&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/spring/spring-boot-starter-actuator.html</link>
             <guid isPermaLink="true">//blog/spring/spring-boot-starter-actuator.html</guid>
                                                <category>spring</category>
@@ -875,7 +875,7 @@ summary:
 &lt;p&gt;Spring Cloud Zookeeper:基于Zookeeper的服务发现与配置管理组件&lt;/p&gt;
 &lt;p&gt;Spring Cloud Starters:Spring Cloud的基础组件,它是基于Spring Boot风格项目的基础依赖模块&lt;/p&gt;
 &lt;p&gt;Spring Cloud CLI:用于在Groovy中快速创建Spring Cloud应用的Spring Boot CLI的插件&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/spring/spring-cloud-summury.html</link>
             <guid isPermaLink="true">//blog/spring/spring-cloud-summury.html</guid>
                                                <category>spring</category>
@@ -990,7 +990,7 @@ public class FinalizeEscapeGC {
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;3.2.5 回收方法区&lt;/h2&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/jvm-chapter-3.html</link>
             <guid isPermaLink="true">//blog/java/jvm-chapter-3.html</guid>
                                                <category>java</category>
@@ -1261,7 +1261,7 @@ public class StringIntern {
 &lt;p&gt;由DirectMemory导致的内存溢出,一个明显的特征是在Heap Dump文件中不会看见明显的异常,如果读者发现OOM之后的Dump文件很小,而程序中又直接或间接使用了NIO,那就可以考虑检查一下是不是这方面的原因&lt;/p&gt;
 &lt;h2&gt;本章小结&lt;/h2&gt;
 &lt;p&gt;通过本章的学习,我们明白了虚拟机中的内存是如何划分的,哪部分区域,什么样的代码和操作可能导致内存溢出异常.Java虽然有垃圾收集机制,但是内存溢出离我们并不遥远,本章只是讲解了各个区域出现异常的原因,下一章将详细讲解Java垃圾收集机制为了避免内存溢出异常的出现做出了哪些努力&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/jvm-chapter-2.html</link>
             <guid isPermaLink="true">//blog/java/jvm-chapter-2.html</guid>
                                                <category>java</category>
@@ -1375,7 +1375,7 @@ rewrite ^ &lt;a href=&quot;https://$server_name$request_uri&quot;&gt;https://$se
 nginx -t  #测试Nginx配置是否正确
 nginx  #启动Nginx
 ```&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-04 23:02:45</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/devops/ssl.html</link>
             <guid isPermaLink="true">//blog/devops/ssl.html</guid>
                                                <category>devops</category>
@@ -1463,7 +1463,7 @@ cd nginx
 --http-proxy-temp-path=/var/tmp/nginx/proxy \
 --http-fastcgi-temp-path=/var/tmp/nginx/fcgi \
 --with-http_stub_status_module&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/devops/my-soft.html</link>
             <guid isPermaLink="true">//blog/devops/my-soft.html</guid>
                                                <category>devops</category>
@@ -1809,7 +1809,7 @@ def retrieveTree(i):
 myTree = retrieveTree(0)
 createPlot(myTree)
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/python/ml-decision-trees.html</link>
             <guid isPermaLink="true">//blog/python/ml-decision-trees.html</guid>
                                                <category>python</category>
@@ -1963,7 +1963,7 @@ def smoTest():
     b, alphas = smoSimple(dataMat, labelMat, 0.6, 0.001, 40)
 
 smoTest()&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/python/ml-svm.html</link>
             <guid isPermaLink="true">//blog/python/ml-svm.html</guid>
                                                <category>python</category>
@@ -2069,7 +2069,7 @@ P($$c_i$$|w)=$$\underline{P(w|c_i)P(c_i)}\P(w)$$
 &lt;li&gt;使用算法:构建一个完整的程序对一组文档进行分类,将错误分类的文档输出到屏幕上&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h4&gt;示例:使用朴素贝叶斯分类器从个人广告中获取区域倾向&lt;/h4&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/python/ml-naive-bayes.html</link>
             <guid isPermaLink="true">//blog/python/ml-naive-bayes.html</guid>
                                                <category>python</category>
@@ -2337,7 +2337,7 @@ def testStocGradAscent1():
 
 # testStocGradAscent0()
 multiTest()&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/python/ml-logistic.html</link>
             <guid isPermaLink="true">//blog/python/ml-logistic.html</guid>
                                                <category>python</category>
@@ -2491,7 +2491,7 @@ def handwritingClassTest():
 # 执行算法测试
 handwritingClassTest()
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/python/ml-knn-hand-writing.html</link>
             <guid isPermaLink="true">//blog/python/ml-knn-hand-writing.html</guid>
                                                <category>python</category>
@@ -2691,7 +2691,7 @@ showLable()
 showClass()
 datingClassTest()
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/python/ml-knn-dating.html</link>
             <guid isPermaLink="true">//blog/python/ml-knn-dating.html</guid>
                                                <category>python</category>
@@ -2809,7 +2809,7 @@ Zookeeper的书，淘宝出品。&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;数据库如MySQL，我们DBA太专业，自己没机会搞。&lt;/p&gt;
 &lt;p&gt;欢迎大家在评论里补充。&lt;/p&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/books/back-end-books-2015.html</link>
             <guid isPermaLink="true">//blog/books/back-end-books-2015.html</guid>
                                                <category>books</category>
@@ -2849,7 +2849,7 @@ summary: 有了这些书，再也不愁下了班没妹纸该咋办了。慢慢�
 &lt;p&gt;《数据之巅》：对大数据追根溯源，提出当前信息技术的发展，已经让中国获得了后发优势，中国要在大数据时代的全球竞争中胜出，必须把大数据从科技符号提升成为文化符号，在全社会倡导数据文化。&lt;/p&gt;
 &lt;p&gt;《深入浅出统计学》：本书涵盖的知识点包括：信息可视化、概率计算、几何分布、二项分布及泊松分布、正态分布、统计抽样、置信区间的构建、假设检验、卡方分布、相关与回归等等，完整涵盖AP考试范围。&lt;/p&gt;
 &lt;p&gt;《矩阵分析》： 本书从数学分析的角度论述矩阵分析的经典方法和现代方法，取材新，有一定的深度，并给出在多元微积分、复分析、微分方程、量优化、逼近理论中的许多重要应 用。主要内容包括：特征值、特征向量和相似性，酉等价和正规矩阵，标准形，Hermite矩阵和对称矩阵，向量范数和矩阵范数，特征值和估计和扰动，正定 矩阵，非负矩阵。&lt;/p&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/books/ML-books.html</link>
             <guid isPermaLink="true">//blog/books/ML-books.html</guid>
                                                <category>books</category>
@@ -2914,7 +2914,7 @@ import React from 'React'&lt;/p&gt;
 &lt;p&gt;把 JS代码放到一个文件中的习惯很容易养成，或者盲目跟从你的框架的意见。当你移动到客户端的时候，不要忘记你在服务器端学到的经验教训。&lt;/p&gt;
 &lt;p&gt;这里并不仅仅意味着就像你在Angular 和 Knockout等 MVC 框架中那样分离模型、视图、控制器。编写JavaScript的时候应该像服务器端开发者那样思考问题。把你的业务逻辑和数据访问分离出来。&lt;/p&gt;
 &lt;p&gt;这意味着AJAX调用都应该在一个地方。创建一个集中的客户端“数据访问层”。业务逻辑模块应包含纯JavaScript的。这使得逻辑易于重用，易于测试，升级也不受影响。&lt;/p&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/js/JS-rule.html</link>
             <guid isPermaLink="true">//blog/js/JS-rule.html</guid>
                                                <category>js</category>
@@ -2945,7 +2945,7 @@ summary: 学习使用python的scrapy写爬虫
 &lt;p&gt;安装成功&lt;/p&gt;
 &lt;p&gt;然后安装mongodb&lt;/p&gt;
 &lt;p&gt;sudo easy_instal pymongo&lt;/p&gt;            </description>
-            <pubDate>2017-09-08 04:02:34</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/python/scrapy.html</link>
             <guid isPermaLink="true">//blog/python/scrapy.html</guid>
                                                <category>python</category>
@@ -2995,7 +2995,7 @@ vim path
 #删除文件
 在工程区移动到文件夹下,按&amp;lt;dd&amp;gt;,下方提示栏就会出现提示,是否要删除,输入yes删除
 ```&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/vim/spacevim.html</link>
             <guid isPermaLink="true">//blog/vim/spacevim.html</guid>
                     </item>
@@ -3116,7 +3116,7 @@ echo '&amp;lt;br/&amp;gt;';
 echo '10 array split (string pattern, string string [, int limit]),以正则把字符串切开 '
 
 ?&amp;gt;&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-08 04:02:34</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/php/php-string.html</link>
             <guid isPermaLink="true">//blog/php/php-string.html</guid>
                                                <category>php</category>
@@ -3247,7 +3247,7 @@ public class Tea {
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-template-method.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-template-method.html</guid>
                                                <category>java</category>
@@ -3309,7 +3309,7 @@ summary: 现在已经存在IDuck接口,Turkey接口,假设你缺鸭子对象,想
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-adapter.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-adapter.html</guid>
                                                <category>java</category>
@@ -3342,7 +3342,7 @@ summary: 命令模式,命令模式将发出请求的对象和执行请求的对�
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-command.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-command.html</guid>
                                                <category>java</category>
@@ -3467,7 +3467,7 @@ public class SingletonDoubleCheckedLocking {
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-singleton.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-singleton.html</guid>
                                                <category>java</category>
@@ -3531,7 +3531,7 @@ type:工厂方法可能需要/不需要参数来制定所要的产品&lt;/code&g
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-factory.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-factory.html</guid>
                                                <category>java</category>
@@ -3581,7 +3581,7 @@ IO  Java的装饰者模式实现&lt;/p&gt;
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-decorator.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-decorator.html</guid>
                                                <category>java</category>
@@ -3854,7 +3854,7 @@ Current conditions:80.0F degrees and 30.0% humidity
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-observer.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-observer.html</guid>
                                                <category>java</category>
@@ -4081,7 +4081,7 @@ I'm flying a short distance
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/java/design-pattern-interface.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-interface.html</guid>
                                                <category>java</category>
@@ -4119,7 +4119,7 @@ echo ‘extension=mbstring.so' &amp;gt;&amp;gt;/usr/local/php/lib/php.ini
 
 #重启web服务器
 /usr/local/apache2/bin/apachectl restart&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-12 10:01:04</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/php/php-install-ex-by-source-code.html</link>
             <guid isPermaLink="true">//blog/php/php-install-ex-by-source-code.html</guid>
                                                <category>php</category>
@@ -4374,7 +4374,7 @@ Alt +按住左键  移动窗口（或在最下面的任务栏滚动鼠标滑轮�
 直接将文件管理器中的文件拖到终端中就可以在终端中得到完整的路径名。
 
 在滚动条的空白处点击鼠标中键，屏幕即滚动到那个地方。&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-08 04:02:34</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/linux/centos-shortcut-key.html</link>
             <guid isPermaLink="true">//blog/linux/centos-shortcut-key.html</guid>
                                                <category>linux</category>
@@ -4401,7 +4401,7 @@ summary: &gt;安装了一个新的app 叫微习惯 督促自己每天都做一�
 但是 我希望可以改变 可以从一个个的小习惯开始 改变自己
 加油
 明天早点起床&lt;/p&gt;            </description>
-            <pubDate>2017-09-08 04:02:34</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/thoughts/20140820-good-habbit.html</link>
             <guid isPermaLink="true">//blog/thoughts/20140820-good-habbit.html</guid>
                     </item>
@@ -4426,11 +4426,41 @@ summary: 游泳杂感
 在靠近岸边的地方下水，岸边还是很浅的，踩着圆润的水底砂石，仿佛有种回到童年的感觉。那个瘦瘦小小的小孩，双手撑在河底，双脚扑腾着学习游泳的小孩。嘴巴进水，鼻子进水，咳嗽，鼻酸，长时间潜水后强烈想要呼吸的感觉，潜到深处胸腔感受到的压力，以及水中唯一听得到的隆隆声，虽历历在目，声声在耳，却是多久没感受过了。&lt;/p&gt;
 &lt;p&gt;自由泳，蛙泳，仰泳，潜泳，狗刨式，全部来一套。原来游泳这个技能，一旦学会，就完全不会忘呢。什么学会呢，先天技能，幼时就在子宫里游来游去。
 水底的世界就像是近视眼看到的世界一样，模糊，但是色彩斑斓。尤其对白色的物体尤为敏感。白色的石头，闪着光。随意潜入水中，就可以捞起一些石头，这是幼时最喜爱的游泳游戏。可是现在，却没有幼时的欣喜。&lt;/p&gt;            </description>
-            <pubDate>2017-09-08 04:02:34</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/thoughts/20140723.html</link>
             <guid isPermaLink="true">//blog/thoughts/20140723.html</guid>
                                                <category>thoughts</category>
                                     </item>
+                <item>
+            <title>Hello World</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2014-01-01
+title: Hello World
+tags: Blog
+images: 
+category: 
+status: publish
+summary: 本人精通各种编程语言              的hello world!
+--&gt;
+&lt;h1&gt;Hello World&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本人精通各种语言              的hello world!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;echo &quot;hello world&quot;;
+printf &quot;hello world&quot;;
+System.out.println(&quot;hello world&quot;);
+print(&quot;hello world&quot;)
+alert(&quot;hello world&quot;);
+std::cout &amp;lt;&amp;lt; &quot;hello world&quot; &amp;lt;&amp;lt; std::endl;
+Console.WriteLine(&quot;hello world&quot;); 
+&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2017-12-07 16:17:57</pubDate>
+            <link>//blog/HelloWorld.html</link>
+            <guid isPermaLink="true">//blog/HelloWorld.html</guid>
+                    </item>
                 <item>
             <title>理解Linux系统负荷load average</title>
             <description>
@@ -4485,7 +4515,7 @@ summary: 你会不会想要知道服务器的负载,但是不知道查看什么,
 &lt;p&gt;最后一个问题，&amp;quot;load average&amp;quot;一共返回三个平均值----1分钟系统负荷、5分钟系统负荷，15分钟系统负荷，----应该参考哪个值？
 如果只有1分钟的系统负荷大于1.0，其他两个时间段都小于1.0，这表明只是暂时现象，问题不大。
 如果15分钟内，平均系统负荷大于1.0（调整CPU核心数之后），表明问题持续存在，不是暂时现象。所以，你应该主要观察&amp;quot;15分钟系统负荷&amp;quot;，将它作为电脑正常运行的指标。&lt;/p&gt;            </description>
-            <pubDate>2017-09-28 05:33:43</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/linux/load-average.html</link>
             <guid isPermaLink="true">//blog/linux/load-average.html</guid>
                                                <category>linux</category>
@@ -4601,40 +4631,10 @@ cat /home/username/.jenkins/secrets/initialAdminPassword&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;然后配置插件什么的&lt;/li&gt;
 &lt;/ol&gt;            </description>
-            <pubDate>2017-09-04 23:02:45</pubDate>
+            <pubDate>2017-12-07 16:17:57</pubDate>
             <link>//blog/devops/InstallJenkinsOnCentOS7.html</link>
             <guid isPermaLink="true">//blog/devops/InstallJenkinsOnCentOS7.html</guid>
                                                <category>devops</category>
                                     </item>
-                <item>
-            <title>Hello World</title>
-            <description>
-            &lt;!--
-author: Jimersy Lee
-head: 
-date: 2014-01-01
-title: Hello World
-tags: Blog
-images: 
-category: 
-status: publish
-summary: 本人精通各种编程语言              的hello world!
---&gt;
-&lt;h1&gt;Hello World&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;本人精通各种语言              的hello world!&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;echo &quot;hello world&quot;;
-printf &quot;hello world&quot;;
-System.out.println(&quot;hello world&quot;);
-print(&quot;hello world&quot;)
-alert(&quot;hello world&quot;);
-std::cout &amp;lt;&amp;lt; &quot;hello world&quot; &amp;lt;&amp;lt; std::endl;
-Console.WriteLine(&quot;hello world&quot;); 
-&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-09-03 08:34:23</pubDate>
-            <link>//blog/HelloWorld.html</link>
-            <guid isPermaLink="true">//blog/HelloWorld.html</guid>
-                    </item>
             </channel>
 </rss>
