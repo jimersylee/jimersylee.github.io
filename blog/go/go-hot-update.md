@@ -10,7 +10,7 @@ status: publish
 summary: 一直编译累死人啊，该偷懒就得偷懒
 -->
 
-##  go-web程序的热更新
+
 当使用go开发web程序时，修改点代码就得编译，虽然编译速度很快，但是也累啊，想起java的spring-boot有热更新插件，
 php根本都不需要重启，go怎么可以落后。
 
