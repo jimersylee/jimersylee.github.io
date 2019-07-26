@@ -4,9 +4,139 @@
         <description>这是Jimersy Lee的个人博客</description>
         <link>/</link>
         <atom:link href="//feed.xml" rel="self" type="application/rss+xml" />
-        <pubDate>2017-12-07 16:12:54</pubDate>
-        <lastBuildDate>2017-12-07 16:12:54</lastBuildDate>
+        <pubDate>2019-07-26 15:07:50</pubDate>
+        <lastBuildDate>2019-07-26 15:07:50</lastBuildDate>
         <generator>Gitblog v1.0</generator>
+                <item>
+            <title>go-web程序的热更新</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2018-09-30
+title: go-web程序的热更新
+tags: GO
+images: 
+category: go
+status: publish
+summary: 一直编译累死人啊，该偷懒就得偷懒
+--&gt;
+&lt;p&gt;当使用go开发web程序时，修改点代码就得编译，虽然编译速度很快，但是也累啊，想起java的spring-boot有热更新插件，
+php根本都不需要重启，go怎么可以落后。&lt;/p&gt;
+&lt;p&gt;一顿搜索后，找到了&lt;a href=&quot;https://github.com/codegangsta/gin&quot;&gt;gin&lt;/a&gt;和&lt;a href=&quot;https://github.com/pilu/fresh&quot;&gt;fresh&lt;/a&gt;,都挺好用的&lt;/p&gt;
+&lt;h2&gt;gin&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;cd path/to/app
+gin run main.go
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;fresh&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;cd path/to/app
+fresh&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;懒人有懒福～&lt;/p&gt;            </description>
+            <pubDate>2019-07-26 14:45:14</pubDate>
+            <link>//blog/go/go-hot-update.html</link>
+            <guid isPermaLink="true">//blog/go/go-hot-update.html</guid>
+                                               <category>go</category>
+                                    </item>
+                <item>
+            <title>Manjaro安装fusuma</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2018-09-12
+title: Manjaro安装fusuma
+tags: MANJARO，fusuma
+images: 
+category: linux
+status: publish
+summary: 让gnome桌面环境的笔记本支持多指触控手势
+--&gt;
+&lt;p&gt;环境:Manjaro&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; ██████████████████  ████████     jimersylee@jimersylee-laptop
+ ██████████████████  ████████     OS: Manjaro 17.1.12 Hakoila
+ ██████████████████  ████████     Kernel: x86_64 Linux 4.14.67-1-MANJARO
+ ██████████████████  ████████     Uptime: 3h 12m
+ ████████            ████████     Packages: 1184
+ ████████  ████████  ████████     Shell: zsh 5.5.1
+ ████████  ████████  ████████     Resolution: 1920x1080
+ ████████  ████████  ████████     DE: GNOME 
+ ████████  ████████  ████████     WM: GNOME Shell
+ ████████  ████████  ████████     WM Theme: Adapta-Nokto-Maia
+ ████████  ████████  ████████     GTK Theme: Adapta-Nokto-Maia [GTK2/3]
+ ████████  ████████  ████████     Icon Theme: Papirus-Adapta-Maia
+ ████████  ████████  ████████     Font: Noto Sans 11
+ ████████  ████████  ████████     CPU: Intel Core i7-8550U @ 8x 4GHz [47.0°C]
+                                  GPU: Mesa DRI Intel(R) UHD Graphics 620 (Kabylake GT2) 
+                                  RAM: 6157MiB / 15928MiB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;将用户加入输入组&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo gpasswd -a $USER input
+sudo reboot&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;安装ruby环境，安装fusuma包&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;#安装ruby
+sudo pacman -S ruby
+sudo gem install fusuma
+#&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;配置&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;#将ruby程序目录加入路径
+echo &quot;export PATH=$PATH:/home/jimersylee/.gem/ruby/2.5.0/bin&quot; &amp;gt;&amp;gt; ~/.profile
+source ~/.profile
+#人工启动
+fusuma -d
+#加入开机启动
+/usr/share/applications 新建一个.desktop快捷方式，配置好
+使用tweaks 添加 startup application &lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2019-07-26 14:45:18</pubDate>
+            <link>//blog/linux/installFusumaOnManjaro.html</link>
+            <guid isPermaLink="true">//blog/linux/installFusumaOnManjaro.html</guid>
+                                               <category>linux</category>
+                                    </item>
+                <item>
+            <title>Manjaro安装Mariadb</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2018-09-09
+title: Manjaro安装Mariadb
+tags: MANJARO,MARIADB
+images: 
+category: devops
+status: publish
+summary: 在manjaro系统上安装mysql与其他系统稍有不同
+--&gt;
+&lt;p&gt;环境:Manjaro&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; ██████████████████  ████████     jimersylee@jimersylee-laptop
+ ██████████████████  ████████     OS: Manjaro 17.1.12 Hakoila
+ ██████████████████  ████████     Kernel: x86_64 Linux 4.14.67-1-MANJARO
+ ██████████████████  ████████     Uptime: 3h 12m
+ ████████            ████████     Packages: 1184
+ ████████  ████████  ████████     Shell: zsh 5.5.1
+ ████████  ████████  ████████     Resolution: 1920x1080
+ ████████  ████████  ████████     DE: GNOME 
+ ████████  ████████  ████████     WM: GNOME Shell
+ ████████  ████████  ████████     WM Theme: Adapta-Nokto-Maia
+ ████████  ████████  ████████     GTK Theme: Adapta-Nokto-Maia [GTK2/3]
+ ████████  ████████  ████████     Icon Theme: Papirus-Adapta-Maia
+ ████████  ████████  ████████     Font: Noto Sans 11
+ ████████  ████████  ████████     CPU: Intel Core i7-8550U @ 8x 4GHz [47.0°C]
+                                  GPU: Mesa DRI Intel(R) UHD Graphics 620 (Kabylake GT2) 
+                                  RAM: 6157MiB / 15928MiB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;安装&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;sudo pacman -S mariadb&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;配置&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;#初始化
+sudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+#启动
+sudo systemctl start mariadb
+#设置密码
+mysql_secure_installation&lt;/code&gt;&lt;/pre&gt;            </description>
+            <pubDate>2019-07-26 14:45:18</pubDate>
+            <link>//blog/devops/installMariadbOnManjaro.html</link>
+            <guid isPermaLink="true">//blog/devops/installMariadbOnManjaro.html</guid>
+                                               <category>devops</category>
+                                    </item>
                 <item>
             <title><Go:build web application>的中文翻译版-第三章-连接数据</title>
             <description>
@@ -223,7 +353,7 @@ pageGUID).Scan(&amp;amp;thisPage.Title, &amp;amp;thisPage.Content, &amp;amp;this
 &lt;pre&gt;&lt;code&gt;http://127.0.0.1:8080/page/hello-world22
 
 Not Found&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:14</pubDate>
             <link>//blog/go/go-build-web-app-chapter-3.html</link>
             <guid isPermaLink="true">//blog/go/go-build-web-app-chapter-3.html</guid>
                                                <category>go</category>
@@ -515,7 +645,7 @@ summary: &lt;Go:build web application&gt;的中文翻译版本
 &lt;li&gt;使用最佳实践&lt;/li&gt;
 &lt;li&gt;本章总结&lt;/li&gt;
 &lt;/ul&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:14</pubDate>
             <link>//blog/go/go-build-web-app-catalog.html</link>
             <guid isPermaLink="true">//blog/go/go-build-web-app-catalog.html</guid>
                                                <category>go</category>
@@ -570,10 +700,506 @@ curl http://127.0.0.1:9501
 
 #如果正确输出,那就启动成功啦
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/php/swoole.html</link>
             <guid isPermaLink="true">//blog/php/swoole.html</guid>
                                                <category>php</category>
+                                    </item>
+                <item>
+            <title>Redis高可用架构</title>
+            <description>
+            &lt;!--
+author: Jimersy Lee
+head: 
+date: 2017-09-05
+title: Redis高可用架构
+tags: LINUX
+images: 
+category: devops
+status: publish
+summary: Redis是一个高性能的key-value数据库，现时越来越多企业与应用使用Redis作为缓存服务器。下面楼主就带着大家从0开始，依次搭建：Redis单机服务器 -&gt; Redis主从复制 -&gt;Redis-Sentinel高可用-&gt;VIP漂移更换主机不换IP。逐步搭建出高可用的Redis缓存服务器。
+--&gt;
+&lt;h1&gt;前言&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;Redis&lt;/code&gt;是一个高性能的&lt;code&gt;key-value&lt;/code&gt;数据库，现时越来越多企业与应用使用&lt;code&gt;Redis&lt;/code&gt;作为缓存服务器。楼主是一枚&lt;code&gt;JAVA&lt;/code&gt;后端程序员，也算是半个运维工程师了。在&lt;code&gt;Linux&lt;/code&gt;服务器上搭建&lt;code&gt;Redis&lt;/code&gt;，怎么可以不会呢？下面楼主就带着大家从0开始，依次搭建：&lt;code&gt;Redis&lt;/code&gt;单机服务器 -&amp;gt; &lt;code&gt;Redis&lt;/code&gt;主从复制 -&amp;gt;&lt;code&gt;Redis-Sentinel高可用&lt;/code&gt;。逐步搭建出高可用的Redis缓存服务器。&lt;/p&gt;
+&lt;h1&gt;搭建Redis&lt;/h1&gt;
+&lt;h3&gt;1. 下载并解压&lt;/h3&gt;
+&lt;p&gt;首先从&lt;code&gt;Redis&lt;/code&gt;官网下载&lt;code&gt;Redis&lt;/code&gt;并解压，楼主使用的版本是4.0.2。依次执行如下命令：    &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd /opt
+wget http://download.redis.io/releases/redis-4.0.2.tar.gz
+tar -zcvf redis-4.0.2.tar.gz&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果没有安装&lt;code&gt;gcc&lt;/code&gt;依赖包，则安装对应依赖包&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yum install -y gcc-c++ tcl&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;2. 编译并安装&lt;/h3&gt;
+&lt;p&gt;下载并解压完毕后，则对源码包进行编译安装，楼主的&lt;code&gt;Redis&lt;/code&gt;安装路径为&lt;code&gt;/usr/local/redis&lt;/code&gt;，同学们可以自行修改语句：&lt;code&gt;make install PREFIX=你想要安装的路径&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd /opt/redis-4.0.2
+make install PREFIX=/usr/local&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;复制&lt;code&gt;Redis&lt;/code&gt;相关命令到&lt;code&gt;/usr/sbin&lt;/code&gt;目录下，这样就可以直接执行这些命令，不用写全路径&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd /usr/local/redis/bin
+sudo cp redis-* /usr/sbin&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;3. 建立Redis配置文件&lt;/h3&gt;
+&lt;p&gt;安装完成之后将 &lt;code&gt;Redis&lt;/code&gt; 配置文件拷贝到系统配置目录&lt;code&gt;/etc/&lt;/code&gt;下，&lt;code&gt;redis.conf&lt;/code&gt; 是 &lt;code&gt;Redis&lt;/code&gt; 的配置文件，&lt;code&gt;redis.conf&lt;/code&gt; 在 &lt;code&gt;Redis&lt;/code&gt; 源码目录，&lt;code&gt;port&lt;/code&gt;默认 6379。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cp /usr/local/redis-4.0.2/redis.conf  /etc/&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;Redis&lt;/code&gt;配置文件主要参数解析参考&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    daemonize  no               #redis进程是否以守护进程的方式运行,yes为是,no为否(不以守护进程的方式运行会占用一个终端)
+    pidfile /var/run/redis.pid  #指定redis进程的PID文件存放位置
+    port 6379                   #redis进程的端口号
+    bind 127.0.0.1              #绑定的主机地址
+    timeout  300                #客户端闲置多长时间后关闭连接,默认此参数为0即关闭此功能
+    loglevel verbose            #redis日志级别,可用的级别有debug.verbose.notice.warning
+    logfile stdout              #log文件输出位置,如果进程以守护进程的方式运行,此处又将输出文件设置为stdout的话,就会将日志信息输出到/dev/null里面去了
+    databases 16                #设置数据库的数量,默认为0可以使用select &amp;lt;dbid&amp;gt;命令在连接上指定数据库id
+    save &amp;lt;seconds&amp;gt;&amp;lt;changes&amp;gt;   #指定在多少时间内刷新次数达到多少的时候会将数据同步到数据文件;
+    rdbcompression yes          #指定存储至本地数据库时是否压缩文件,默认为yes即启用存储;
+    dbfilename dump.db          #指定本地数据库文件名
+    dir ./                      #指定本地数据问就按存放位置;
+    slaveof &amp;lt;masterip&amp;gt;&amp;lt;masterport&amp;gt;    #指定当本机为slave服务时,设置master服务的IP地址及端口,在redis启动的时候他会自动跟master进行数据同步
+    masterauth &amp;lt;master-password&amp;gt;       #当master设置了密码保护时,slave服务连接master的密码;
+    requirepass footbared       #设置redis连接密码,如果配置了连接密码,客户端在连接redis是需要通过AUTH&amp;lt;password&amp;gt;命令提供密码,默认关闭
+    maxclients 128              #设置同一时间最大客户连接数,默认无限制;redis可以同时连接的客户端数为redis程序可以打开的最大文件描述符,如果设置 maxclients 0，表示不作限制。当客户端连接数到达限制时，Redis会关闭新的连接并向客户端返回max number of clients reached错误信息
+    maxmemory&amp;lt;bytes&amp;gt;           #指定Redis最大内存限制，Redis在启动时会把数据加载到内存中，达到最大内存后，Redis会先尝试清除已到期或即将到期的Key，当此方法处理 后，仍然到达最大内存设置，将无法再进行写入操作，但仍然可以进行读取操作。Redis新的vm机制，会把Key存放内存，Value会存放在swap区
+    appendonly no               #指定是否在每次更新操作后进行日志记录，Redis在默认情况下是异步的把数据写入磁盘，如果不开启，可能会在断电时导致一段时间内的数据丢失。因为 redis本身同步数据文件是按上面save条件来同步的，所以有的数据会在一段时间内只存在于内存中。默认为no
+    appendfilename appendonly.aof       #指定跟新日志文件名默认为appendonly.aof
+    appendfsync everysec         #指定更新日志的条件,有三个可选参数no：表示等操作系统进行数据缓存同步到磁盘(快),always：表示每次更新操作后手动调用fsync()将数据写到磁盘(慢，安全), everysec：表示每秒同步一次(折衷，默认值);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;3.1 设置后端启动：&lt;/h6&gt;
+&lt;p&gt;由于&lt;code&gt;Redis&lt;/code&gt;默认是前端启动，必须保持在当前的窗口中，如果使用&lt;code&gt;ctrl + c&lt;/code&gt;退出，那么&lt;code&gt;Redis&lt;/code&gt;也就退出，不建议使用。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    vi /etc/redis.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;修改&lt;code&gt;Redis&lt;/code&gt;配置文件把旧值&lt;code&gt;daemonize no&lt;/code&gt; 改为 新值&lt;code&gt;daemonize yes&lt;/code&gt;&lt;/p&gt;
+&lt;h6&gt;3.2 设置访问：&lt;/h6&gt;
+&lt;p&gt;&lt;code&gt;Redis&lt;/code&gt;默认只允许本机访问，可是有时候我们也需要 Redis 被远程访问。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vi /etc/redis.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;找到 bind 那行配置，默认是： &lt;code&gt;# bind 127.0.0.1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;去掉&lt;code&gt;#&lt;/code&gt;注释并改为： &lt;code&gt;bind 0.0.0.0&lt;/code&gt; 此设置会变成允许所有远程访问。如果想指定限制访问，可设置对应的IP。&lt;/p&gt;
+&lt;h6&gt;3.3 配置Redis日志记录：&lt;/h6&gt;
+&lt;p&gt;找到&lt;code&gt;logfile&lt;/code&gt;那行配置，默认是：&lt;code&gt;logfile &quot;&quot;&lt;/code&gt;，改为&lt;code&gt;logfile /var/log/redis_6379.log&lt;/code&gt;&lt;/p&gt;
+&lt;h6&gt;3.4 设置 Redis 请求密码：&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;vi /etc/redis.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;找到默认是被注释的这一行：&lt;code&gt;# requirepass foobared&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;去掉注释，把 &lt;code&gt;foobared&lt;/code&gt; 改为你想要设置的密码，比如我打算设置为：&lt;code&gt;123456&lt;/code&gt;，所以我改为：&lt;code&gt;requirepass &quot;123456&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;修改之后重启下服务&lt;/p&gt;
+&lt;p&gt;有了密码之后，进入客户端，就得这样访问：&lt;code&gt;redis-cli -h 127.0.0.1 -p 6379 -a 123456&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;4. Redis常用操作&lt;/h3&gt;
+&lt;h6&gt;4.1 启动&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;/usr/local/redis/bin/redis-server /etc/redis.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;4.2 关闭&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;/usr/local/redis/bin/redis-cli -h 127.0.0.1 -p 6379 shutdown&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;4.3 查看是否启动&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;    ps -ef | grep redis&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;4.4 进入客户端&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;    redis-cli
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;4.5 关闭客户端&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli shutdown&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;4.6 设置开机自动启动配置&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;echo &quot;/usr/local/redis/bin/redis-server /etc/redis.conf&quot; &amp;gt;/etc/rc.local&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;4.7 开放防火墙端口&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;添加规则：iptables -I INPUT -p tcp -m tcp --dport 6379 -j ACCEPT
+保存规则：service iptables save
+重启 iptables：service iptables restart&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;5. 将Redis注册为系统服务&lt;/h3&gt;
+&lt;p&gt;在/etc/init.d目录下添加Redis服务的启动，暂停和重启脚本：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```
+vi /etc/init.d/redis
+```
+
+脚本内容如下：
+
+```#!/bin/sh  
+#  
+# redis - this script starts and stops the redis-server daemon  
+#  
+# chkconfig:   - 85 15  
+# description:  Redis is a persistent key-value database  
+# processname: redis-server  
+# config:      /usr/local/redis/bin/redis-server
+# config:      /etc/redis.conf  
+# Source function library.  
+. /etc/rc.d/init.d/functions  
+# Source networking configuration.  
+. /etc/sysconfig/network  
+# Check that networking is up.  
+[ &quot;$NETWORKING&quot; = &quot;no&quot; ] &amp;amp;amp;&amp;amp;amp; exit 0  
+redis=&quot;/usr/local/redis/bin/redis-server&quot; 
+prog=$(basename $redis)  
+REDIS_CONF_FILE=&quot;/etc/redis.conf&quot; 
+[ -f /etc/sysconfig/redis ] &amp;amp;amp;&amp;amp;amp; . /etc/sysconfig/redis  
+lockfile=/var/lock/subsys/redis  
+&amp;lt;span class=&quot;hljs-function&quot;&amp;gt;&amp;lt;span class=&quot;hljs-title&quot;&amp;gt;start() {  
+    [ -x $redis ] || exit 5  
+    [ -f $REDIS_CONF_FILE ] || exit 6  
+    echo -n $&quot;Starting $prog: &quot;  
+    daemon $redis $REDIS_CONF_FILE  
+    retval=$?  
+    echo  
+    [ $retval -eq 0 ] &amp;amp;amp;&amp;amp;amp; touch $lockfile  
+    return $retval  
+}  
+&amp;lt;span class=&quot;hljs-function&quot;&amp;gt;&amp;lt;span class=&quot;hljs-title&quot;&amp;gt;stop() {  
+    echo -n $&quot;Stopping $prog: &quot;  
+    killproc $prog -QUIT  
+    retval=$?  
+    echo  
+    [ $retval -eq 0 ] &amp;amp;amp;&amp;amp;amp; rm -f $lockfile  
+    return $retval  
+}  
+&amp;lt;span class=&quot;hljs-function&quot;&amp;gt;&amp;lt;span class=&quot;hljs-title&quot;&amp;gt;restart() {  
+    stop  
+    start  
+}  
+&amp;lt;span class=&quot;hljs-function&quot;&amp;gt;&amp;lt;span class=&quot;hljs-title&quot;&amp;gt;reload() {  
+    echo -n $&quot;Reloading $prog: &quot;  
+    killproc $redis -HUP  
+    RETVAL=$?  
+    echo  
+}  
+&amp;lt;span class=&quot;hljs-function&quot;&amp;gt;&amp;lt;span class=&quot;hljs-title&quot;&amp;gt;force_reload() {  
+    restart  
+}  
+&amp;lt;span class=&quot;hljs-function&quot;&amp;gt;&amp;lt;span class=&quot;hljs-title&quot;&amp;gt;rh_status() {  
+    status $prog  
+}  
+&amp;lt;span class=&quot;hljs-function&quot;&amp;gt;&amp;lt;span class=&quot;hljs-title&quot;&amp;gt;rh_status_q() {  
+    rh_status &amp;gt;/dev/null 2&amp;gt;&amp;amp;amp;1  
+}  
+case &quot;$1&quot; in  
+    start)  
+        rh_status_q &amp;amp;amp;&amp;amp;amp; exit 0  
+        $1  
+        ;;  
+    stop)  
+        rh_status_q || exit 0  
+        $1  
+        ;;  
+    restart|configtest)  
+        $1  
+        ;;  
+    reload)  
+        rh_status_q || exit 7  
+        $1  
+        ;;  
+    force-reload)  
+        force_reload  
+        ;;  
+    status)  
+        rh_status  
+        ;;  
+    condrestart|try-restart)  
+        rh_status_q || exit 0  
+    ;;  
+    *)  
+        echo $&quot;Usage: $0 {start|stop|status|restart|condrestart|try-restart| reload|orce-reload}&quot;  
+        exit 2  
+esac
+```
+
+赋予脚本权限
+
+```chmod 755 /etc/init.d/redis
+```
+
+启动、停止和重启：
+
+```service redis start
+service redis stop
+service redis restart
+```
+
+至此，`Redis`单机服务器已搭建完毕，下面我们看看主从架构如何搭建。
+
+# 搭建Redis主从架构
+
+### 1. redis-server说明
+
+```172.16.2.185:6379 主
+
+172.16.2.181:6379 从
+```&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;2. Redis主从架构配置&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;编辑从机的 &lt;code&gt;Redis&lt;/code&gt; 配置文件，找到 210 行（大概），默认这一行应该是注释的： &lt;code&gt;# slaveof &amp;lt;masterip&amp;gt; &amp;lt;masterport&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;我们需要去掉该注释，并且填写我们自己的主机的 IP 和 端口，比如：&lt;code&gt;slaveof 172.16.2.185 6379&lt;/code&gt;，如果主机设置了密码，还需要找到&lt;code&gt;masterauth &amp;lt;master-password&amp;gt;&lt;/code&gt;这一行，去掉注释，改为&lt;code&gt;masterauth 主机密码&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;配置完成后重启从机&lt;code&gt;Redis&lt;/code&gt; 服务&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;重启完之后，进入主机的 &lt;code&gt;redis-cli&lt;/code&gt; 状态下&lt;code&gt;redis-cli -h 127.0.0.1 -p 6379 -a 123456&lt;/code&gt;，输入：&lt;code&gt;INFO replication&lt;/code&gt;
+可以查询到当前主机的 &lt;code&gt;Redis&lt;/code&gt;处于什么角色，有哪些从机已经连上主机。&lt;/p&gt;
+&lt;p&gt;主机信息&lt;code&gt;172.16.2.185&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Replication
+role:master
+connected_slaves:1
+slave0:ip=172.16.2.181,port=6379,state=online,offset=28,lag=1
+master_replid:625ae9f362643da5337835beaeabfdca426198c7
+master_replid2:0000000000000000000000000000000000000000
+master_repl_offset:28
+second_repl_offset:-1
+repl_backlog_active:1
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:1
+repl_backlog_histlen:28&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;从机信息&lt;code&gt;172.16.2.181&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Replication
+role:slave
+master_host:172.16.2.185
+master_port:6379
+master_link_status:up
+master_last_io_seconds_ago:3
+master_sync_in_progress:0
+slave_repl_offset:210
+slave_priority:100
+slave_read_only:1
+connected_slaves:0
+master_replid:625ae9f362643da5337835beaeabfdca426198c7
+master_replid2:0000000000000000000000000000000000000000
+master_repl_offset:210
+second_repl_offset:-1
+repl_backlog_active:1
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:1
+repl_backlog_histlen:210&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;此时已经完成了主从配置，我们可以测试下：
+我们进入主机的 &lt;code&gt;redis-cli&lt;/code&gt; 状态，然后 &lt;code&gt;set&lt;/code&gt; 某个值，比如：&lt;code&gt;set myblog YouMeek.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们切换进入从机的 &lt;code&gt;redis-cli&lt;/code&gt; 的状态下，获取刚刚设置的值看是否存在：&lt;code&gt;get myblog&lt;/code&gt;，此时，我们可以发现是可以获取到值的。&lt;/p&gt;
+&lt;h3&gt;3. Redis主从架构总结&lt;/h3&gt;
+&lt;/li&gt;
+&lt;li&gt;需要注意的是：从库不具备写入数据能力，不然会报错。 从库只有只读能力。&lt;/li&gt;
+&lt;li&gt;主从架构的优点：除了减少主库连接的压力，还有可以关掉主库的持久化功能，把持久化的功能交给从库进行处理。&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;第一个从库配置的信息是连上主库，后面的第二个从库配置的连接信息是连上第一个从库， 假如还有第三个从库的话，我们可以把第三个从库的配置信息连上第二个从库上，以此类推。&lt;/p&gt;
+&lt;h1&gt;Redis Sentinel高可用架构搭建&lt;/h1&gt;
+&lt;h3&gt;1. 自动故障转移&lt;/h3&gt;
+&lt;/li&gt;
+&lt;li&gt;虽然使用主从架构配置&lt;code&gt;Redis&lt;/code&gt;做了备份，看上去很完美。但由于&lt;code&gt;Redis&lt;/code&gt;目前只支持主从复制备份（不支持主主复制），当主&lt;code&gt;Redis&lt;/code&gt;挂了，从&lt;code&gt;Redis&lt;/code&gt;只能提供读服务，无法提供写服务。所以，还得想办法，当主&lt;code&gt;Redis&lt;/code&gt;挂了，让从&lt;code&gt;Redis&lt;/code&gt;升级成为主&lt;code&gt;Redis&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;这就需要自动故障转移，&lt;code&gt;Redis Sentinel&lt;/code&gt;带有这个功能，当一个主&lt;code&gt;Redis&lt;/code&gt;不能提供服务时，&lt;code&gt;Redis Sentinel&lt;/code&gt;可以将一个从&lt;code&gt;Redis&lt;/code&gt;升级为主&lt;code&gt;Redis&lt;/code&gt;，并对其他从&lt;code&gt;Redis&lt;/code&gt;进行配置，让它们使用新的主&lt;code&gt;Redis&lt;/code&gt;进行复制备份。&lt;/p&gt;
+&lt;figure&gt;![Redis Sentinel架构图- 图片来自于CSDN 在Redis Sentinel环境下，jedis该如何配置](https://user-gold-cdn.xitu.io/2017/12/7/160305c2382f7401?imageView2/0/w/1280/h/960/ignore-error/1)&lt;svg xmlns='&quot;http://www.w3.org/2000/svg&quot;' version='&quot;1.1&quot;' width='&quot;865&quot;' height='&quot;469&quot;'&gt;&lt;/svg&gt;&quot; class=&quot;inited&quot;&amp;gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;p&gt;注意：搭建&lt;code&gt;Redis Sentinel&lt;/code&gt;推荐至少3台服务器，但由于楼主偷懒，下面用例只用了2台服务器。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Redis Sentinel&lt;/code&gt;的主要功能如下：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;监控：哨兵不断的检查&lt;code&gt;master&lt;/code&gt;和&lt;code&gt;slave&lt;/code&gt;是否正常的运行。&lt;/li&gt;
+&lt;li&gt;通知：当监控的某台&lt;code&gt;Redis&lt;/code&gt;实例发生问题时，可以通过&lt;code&gt;API&lt;/code&gt;通知系统管理员和其他的应用程序。&lt;/li&gt;
+&lt;li&gt;自动故障转移：如果一个&lt;code&gt;master&lt;/code&gt;不正常运行了，哨兵可以启动一个故障转移进程，将一个&lt;code&gt;slave&lt;/code&gt;升级成为&lt;code&gt;master&lt;/code&gt;，其他的&lt;code&gt;slave&lt;/code&gt;被重新配置使用新的&lt;code&gt;master&lt;/code&gt;，并且应用程序使用&lt;code&gt;Redis&lt;/code&gt;服务端通知的新地址。&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;配置提供者：哨兵作为&lt;code&gt;Redis&lt;/code&gt;客户端发现的权威来源：客户端连接到哨兵请求当前可靠的&lt;code&gt;master&lt;/code&gt;的地址。如果发生故障，哨兵将报告新地址。&lt;/p&gt;
+&lt;p&gt;默认情况下，每个&lt;code&gt;Sentinel&lt;/code&gt;节点会以每秒一次的频率对&lt;code&gt;Redis&lt;/code&gt;节点和其它的&lt;code&gt;Sentinel&lt;/code&gt;节点发送&lt;code&gt;PING&lt;/code&gt;命令，并通过节点的回复来判断节点是否在线。&lt;/p&gt;
+&lt;p&gt;如果在&lt;code&gt;down-after-millisecondes&lt;/code&gt;毫秒内，没有收到有效的回复，则会判定该节点为主观下线。&lt;/p&gt;
+&lt;p&gt;如果该节点为&lt;code&gt;master&lt;/code&gt;，则该&lt;code&gt;Sentinel&lt;/code&gt;节点会通过&lt;code&gt;sentinel is-master-down-by-addr&lt;/code&gt;命令向其它&lt;code&gt;sentinel&lt;/code&gt;节点询问对该节点的判断，如果超过&lt;code&gt;&amp;lt;quorum&amp;gt;&lt;/code&gt;个数的节点判定&lt;code&gt;master&lt;/code&gt;不可达，则该&lt;code&gt;sentinel&lt;/code&gt;节点会将&lt;code&gt;master&lt;/code&gt;判断为客观下线。&lt;/p&gt;
+&lt;p&gt;这个时候，各个&lt;code&gt;Sentinel&lt;/code&gt;会进行协商，选举出一个领头&lt;code&gt;Sentinel&lt;/code&gt;，由该领头&lt;code&gt;Sentinel&lt;/code&gt;对&lt;code&gt;master&lt;/code&gt;节点进行故障转移操作。&lt;/p&gt;
+&lt;p&gt;故障转移包含如下三个操作：&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;在所有的&lt;code&gt;slave&lt;/code&gt;服务器中，挑选出一个&lt;code&gt;slave&lt;/code&gt;，并将其转换为&lt;code&gt;master&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;让其它&lt;code&gt;slave&lt;/code&gt;服务器，改为复制新的&lt;code&gt;master&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将旧&lt;code&gt;master&lt;/code&gt;设置为新&lt;code&gt;master&lt;/code&gt;的&lt;code&gt;slave&lt;/code&gt;，这样，当旧的&lt;code&gt;master&lt;/code&gt;重新上线时，它会成为新&lt;code&gt;master&lt;/code&gt;的&lt;code&gt;slave&lt;/code&gt;。&lt;/p&gt;
+&lt;h3&gt;2. 搭建Redis Sentinel高可用架构&lt;/h3&gt;
+&lt;p&gt;这里使用两台服务器，每台服务器上开启一个&lt;code&gt;redis-server&lt;/code&gt;和&lt;code&gt;redis-sentinel&lt;/code&gt;服务。&lt;/p&gt;
+&lt;p&gt;redis-server说明&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;172.16.2.185:6379 主
+
+172.16.2.181:6379 从&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;redis-sentinel说明&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;172.16.2.185:26379
+
+172.16.2.181:26379&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;2.1 建立Redis配置文件&lt;/h6&gt;
+&lt;p&gt;如果要做自动故障转移，则建议所有的&lt;code&gt;redis.conf&lt;/code&gt;都设置&lt;code&gt;masterauth&lt;/code&gt;，因为自动故障只会重写主从关系，即&lt;code&gt;slaveof&lt;/code&gt;，不会自动写入&lt;code&gt;masterauth&lt;/code&gt;。如果&lt;code&gt;Redis&lt;/code&gt;原本没有设置密码，则可以忽略。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Redis&lt;/code&gt;程序上面已经安装过了，我们只需增加&lt;code&gt;redis-sentinel&lt;/code&gt;的相关配置即可，将 &lt;code&gt;redis-sentinel&lt;/code&gt;的配置文件拷贝到系统配置目录&lt;code&gt;/etc/&lt;/code&gt;下，&lt;code&gt;sentinel.conf&lt;/code&gt; 是 &lt;code&gt;redis-sentinel&lt;/code&gt;的配置文件，&lt;code&gt;sentinel.conf&lt;/code&gt; 在 &lt;code&gt;Redis&lt;/code&gt; 源码目录。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cp /usr/local/redis-4.0.2/sentinel.conf  /etc/&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;修改&lt;code&gt;sentinel.conf&lt;/code&gt;配置文件内容如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vi /etc/sentinel.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;protected-mode no
+sentinel monitor mymaster 172.16.2.185 6379 2
+# redis在搭建时设置了密码，所以要进行密码配置
+sentinel auth-pass mymaster “123456“
+#5秒内mymaster没有响应，就认为SDOWN
+sentinel down-after-milliseconds mymaster 5000  
+sentinel failover-timeout  mymaster 15000&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在配置最后加上&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;logfile /var/log/sentinel.log
+pidfile  /var/run/sentinel.pid
+daemonize yes&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;配置文件说明：&lt;/p&gt;
+&lt;p&gt;1.port :当前Sentinel服务运行的端口&lt;/p&gt;
+&lt;p&gt;2.dir : Sentinel服务运行时使用的临时文件夹&lt;/p&gt;
+&lt;p&gt;3.sentinel monitor master001 192.168.110.10163792:Sentinel去监视一个名为master001的主redis实例，这个主实例的IP地址为本机地址192.168.110.101，端口号为6379，而将这个主实例判断为失效至少需要2个 Sentinel进程的同意，只要同意Sentinel的数量不达标，自动failover就不会执行&lt;/p&gt;
+&lt;p&gt;4.sentinel down-after-milliseconds master001 30000:指定了Sentinel认为Redis实例已经失效所需的毫秒数。当实例超过该时间没有返回PING，或者直接返回错误，那么Sentinel将这个实例标记为主观下线。只有一个 Sentinel进程将实例标记为主观下线并不一定会引起实例的自动故障迁移：只有在足够数量的Sentinel都将一个实例标记为主观下线之后，实例才会被标记为客观下线，这时自动故障迁移才会执行&lt;/p&gt;
+&lt;p&gt;5.sentinel parallel-syncs master001 1：指定了在执行故障转移时，最多可以有多少个从Redis实例在同步新的主实例，在从Redis实例较多的情况下这个数字越小，同步的时间越长，完成故障转移所需的时间就越长&lt;/p&gt;
+&lt;p&gt;6.sentinel failover-timeout master001 180000：如果在该时间（ms）内未能完成failover操作，则认为该failover失败&lt;/p&gt;
+&lt;p&gt;7.sentinel notification-script  ：指定sentinel检测到该监控的redis实例指向的实例异常时，调用的报警脚本。该配置项可选，但是很常用&lt;/p&gt;
+&lt;h6&gt;2.2 开放防火墙端口&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;添加规则：iptables -I INPUT -p tcp -m tcp --dport 26379 -j ACCEPT
+保存规则：service iptables save
+重启iptables：service iptables restart&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;2.3 启动redis-sentinel&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;redis-sentinel  /etc/sentinel.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在任意一台机子均可查看到相关服务信息&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli -h 127.0.0.1 -p 26379
+
+INFO sentinel&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=mymaster,status=ok,address=172.16.2.185:6379,slaves=1,sentinels=2&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;3. 自动故障转移测试&lt;/h3&gt;
+&lt;h6&gt;3.1 停止主Redis&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli -h 172.16.2.185 -p 6379 -a 123456 shutdown&lt;/code&gt;&lt;/pre&gt;
+&lt;h6&gt;3.2 查看redis-sentinel的监控状态&lt;/h6&gt;
+&lt;pre&gt;&lt;code&gt;# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=mymaster,status=ok,address=172.16.2.181:6379,slaves=1,sentinels=2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;发现从库提升为主库。&lt;/p&gt;
+&lt;h6&gt;3.3 注意事项&lt;/h6&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;如果停掉&lt;code&gt;master&lt;/code&gt;后，&lt;code&gt;Sentinel&lt;/code&gt;显示足够数量的&lt;code&gt;sdown&lt;/code&gt;后，没有出现&lt;code&gt;odown&lt;/code&gt;或&lt;code&gt;try-failover&lt;/code&gt;，则检查密码等配置是否正确&lt;/li&gt;
+&lt;li&gt;如果停掉&lt;code&gt;master&lt;/code&gt;后，试图切换的时候，发现日志出现 &lt;code&gt;failover-abort-not-elected&lt;/code&gt;，则分2种情况分别解决：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;如果&lt;code&gt;Redis&lt;/code&gt;实例没有配置&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;protected-mode yes
+bind 172.16.2.185&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;则在&lt;code&gt;Sentinel&lt;/code&gt; 配置文件加上&lt;code&gt;protected-mode no&lt;/code&gt;即可&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果&lt;code&gt;Redis&lt;/code&gt;实例有配置&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;protected-mode yes
+bind 172.16.2.185&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;则在&lt;code&gt;Sentinel&lt;/code&gt;配置文件加上&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;protected-mode yes
+bind 172.16.2.185&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;至此，redis的高可用方案已经搭建完成。&lt;/p&gt;
+&lt;h1&gt;VIP对外提供虚拟IP实现高可用&lt;/h1&gt;
+&lt;h3&gt;1. 现有情况概述&lt;/h3&gt;
+&lt;p&gt;客户端程序（如JAVA程序）连接&lt;code&gt;Redis&lt;/code&gt;时需要&lt;code&gt;ip&lt;/code&gt;和&lt;code&gt;port&lt;/code&gt;，但&lt;code&gt;redis-server&lt;/code&gt;进行故障转移时，主&lt;code&gt;Redis&lt;/code&gt;是变化的，所以&lt;code&gt;ip&lt;/code&gt;地址也是变化的。客户端程序如何感知当前主&lt;code&gt;Redis&lt;/code&gt;的&lt;code&gt;ip&lt;/code&gt;地址和端口呢？&lt;code&gt;redis-sentinel&lt;/code&gt;提供了接口，请求任何一个&lt;code&gt;Sentinel&lt;/code&gt;，发送&lt;code&gt;SENTINEL get-master-addr-by-name &amp;lt;master name&amp;gt;&lt;/code&gt;就能得到当前主&lt;code&gt;Redis&lt;/code&gt;的&lt;code&gt;ip&lt;/code&gt;和&lt;code&gt;port&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;客户端每次连接&lt;code&gt;Redis&lt;/code&gt;前，先向&lt;code&gt;sentinel&lt;/code&gt;发送请求，获得主&lt;code&gt;Redis&lt;/code&gt;的&lt;code&gt;ip&lt;/code&gt;和&lt;code&gt;port&lt;/code&gt;，然后用返回的&lt;code&gt;ip&lt;/code&gt;和&lt;code&gt;port&lt;/code&gt;连接&lt;code&gt;Redis&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;这种方法的缺点是显而易见的，每次操作&lt;code&gt;Redis&lt;/code&gt;至少需要发送两次连接请求，第一次请求&lt;code&gt;Sentinel&lt;/code&gt;，第二次请求&lt;code&gt;Redis&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;更好的办法是使用&lt;code&gt;VIP&lt;/code&gt;，当然这对配置的环境有一定的要求，比如&lt;code&gt;Redis&lt;/code&gt;搭建在阿里云服务器上，可能不支持&lt;code&gt;VIP&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;VIP&lt;/code&gt;方案是，&lt;code&gt;Redis&lt;/code&gt;系统对外始终是同一ip地址，当&lt;code&gt;Redis&lt;/code&gt;进行故障转移时，需要做的是将&lt;code&gt;VIP&lt;/code&gt;从之前的&lt;code&gt;Redis&lt;/code&gt;服务器漂移到现在新的主&lt;code&gt;Redis&lt;/code&gt;服务器上。&lt;/p&gt;
+&lt;p&gt;比如：当前&lt;code&gt;Redis&lt;/code&gt;系统中主&lt;code&gt;Redis&lt;/code&gt;的&lt;code&gt;ip&lt;/code&gt;地址是&lt;code&gt;172.16.2.185&lt;/code&gt;，那么&lt;code&gt;VIP(172.16.2.250)&lt;/code&gt;指向&lt;code&gt;172.16.2.185&lt;/code&gt;，客户端程序用&lt;code&gt;VIP(172.16.2.250)&lt;/code&gt;地址连接&lt;code&gt;Redis&lt;/code&gt;，实际上连接的就是当前主&lt;code&gt;Redis&lt;/code&gt;，这样就避免了向&lt;code&gt;Sentinel&lt;/code&gt;发送请求。&lt;/p&gt;
+&lt;p&gt;当主&lt;code&gt;Redis&lt;/code&gt;宕机，进行故障转移时，&lt;code&gt;172.16.2.181&lt;/code&gt;这台服务器上的&lt;code&gt;Redis&lt;/code&gt;提升为主，这时&lt;code&gt;VIP（172.16.2.250）&lt;/code&gt;指向&lt;code&gt;172.16.2.181&lt;/code&gt;，这样客户端程序不需要修改任何代码，连接的是&lt;code&gt;172.16.2.181&lt;/code&gt;这台主&lt;code&gt;Redis&lt;/code&gt;。&lt;/p&gt;
+&lt;h3&gt;2.漂移VIP实现Redis故障转移&lt;/h3&gt;
+&lt;p&gt;那么现在的问题是，如何在进行&lt;code&gt;Redis&lt;/code&gt;故障转移时，将&lt;code&gt;VIP&lt;/code&gt;漂移到新的主&lt;code&gt;Redis&lt;/code&gt;服务器上。&lt;/p&gt;
+&lt;p&gt;这里可以使用&lt;code&gt;Redis Sentinel&lt;/code&gt;的一个参数&lt;code&gt;client-reconfig-script&lt;/code&gt;，这个参数配置执行脚本，&lt;code&gt;Sentinel&lt;/code&gt;在做&lt;code&gt;failover&lt;/code&gt;的时候会执行这个脚本，并且传递6个参数&lt;code&gt;&amp;lt;master-name&amp;gt;、 &amp;lt;role&amp;gt;、 &amp;lt;state&amp;gt;、 &amp;lt;from-ip&amp;gt;、 &amp;lt;from-port&amp;gt;、 &amp;lt;to-ip&amp;gt;、&amp;lt;to-port&amp;gt;&lt;/code&gt;，其中&lt;code&gt;&amp;lt;to-ip&amp;gt;&lt;/code&gt;是新主&lt;code&gt;Redis&lt;/code&gt;的&lt;code&gt;IP&lt;/code&gt;地址，可以在这个脚本里做&lt;code&gt;VIP&lt;/code&gt;漂移操作。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sentinel client-reconfig-script mymaster /opt/notify_mymaster.sh&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;修改两个服务器的&lt;code&gt;redis-sentinel&lt;/code&gt;配置文件&lt;code&gt;/etc/sentinel.conf&lt;/code&gt;，增加上面一行。然后在&lt;code&gt;/opt/&lt;/code&gt;目录下创建&lt;code&gt;notify_mymaster.sh&lt;/code&gt;脚本文件，这个脚本做&lt;code&gt;VIP&lt;/code&gt;漂移操作，内容如下:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vi /opt/notify_mymaster.sh&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+echo &quot;File Name: $0&quot;
+echo &quot;Quoted Values: $@&quot;
+echo &quot;Quoted Values: $*&quot;
+echo &quot;Total Number of Parameters : $#&quot;
+
+MASTER_IP=${6}  #第六个参数是新主redis的ip地址
+LOCAL_IP='172.16.2.185'  #当前服务器IP，主机172.16.2.185，从机172.16.2.181
+VIP='172.16.2.250'
+NETMASK='24'
+INTERFACE='eth1'
+if [ ${MASTER_IP} = ${LOCAL_IP} ]; then
+     sudo /sbin/ip addr add ${VIP}/${NETMASK} dev ${INTERFACE}  #将VIP绑定到该服务器上
+     sudo /sbin/arping -q -c 3 -A ${VIP} -I ${INTERFACE}
+    exit 0
+else
+     sudo /sbin/ip addr del ${VIP}/${NETMASK} dev ${INTERFACE}   #将VIP从该服务器上删除
+   exit 0
+fi
+exit 1  #如果返回1，sentinel会一直执行这个脚本&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;赋予脚本权限&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;chmod 755 /opt/notify_mymaster.sh&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;现在当前主&lt;code&gt;Redis&lt;/code&gt;是&lt;code&gt;172.16.2.185&lt;/code&gt;，需要手动绑定&lt;code&gt;VIP&lt;/code&gt;到该服务器上。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/sbin/ip  addr add 172.16.2.250/24 dev eth1
+/sbin/arping -q   -c 3 -A 172.16.2.250 -I eth1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;由于VIP只能绑定只有一台机子，所以建议将改为&lt;code&gt;bind 0.0.0.0&lt;/code&gt;添加至&lt;code&gt;redis.conf&lt;/code&gt; 中&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vi /etc/redis.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;设置&lt;code&gt;bind 0.0.0.0&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;由于VIP只能绑定只有一台机子，所以建议将改为&lt;code&gt;bind 0.0.0.0&lt;/code&gt;添加至&lt;code&gt;sentinel.conf&lt;/code&gt;中&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;vi /etc/sentinel.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;设置&lt;code&gt;bind 0.0.0.0&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;重启&lt;code&gt;Redis&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;service redis restart`&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;重启&lt;code&gt;Sentinel&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;redis-sentinel /etc/sentinel.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;随后我们在另一台机器&lt;code&gt;172.16.2.181&lt;/code&gt;上，通过&lt;code&gt;VIP&lt;/code&gt;访问主机&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli -h 172.16.2.250 -p 6379 -a 123456 INFO replication&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可正常通讯，信息如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Replication
+role:master
+connected_slaves:1
+slave0:ip=172.16.2.181,port=6379,state=online,offset=0,lag=0
+master_replid:325b0bccab611d329d9c2cd2c35a1fe3c01ae196
+master_replid2:c1f7a7d17d2c35575a34b00eb10c8abf32df2243
+master_repl_offset:22246293
+second_repl_offset:22241024
+repl_backlog_active:1
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:22237293
+repl_backlog_histlen:9001&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;访问主机的&lt;code&gt;Sentinel&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli -h 172.16.2.250 -p 26379 INFO sentinel&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可正常通讯，信息如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=mymaster,status=ok,address=172.16.2.185:6379,slaves=1,sentinels=3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;下面关闭主机的&lt;code&gt;Redis&lt;/code&gt;服务，看看VIP是否漂移到另一台服务器上。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli -h 172.16.2.185 -p 6379 -a 123456 shutdown&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;查看是否已进行切换&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli -h 172.16.2.250 -p 26379 INFO sentinel&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# Sentinel
+sentinel_masters:1
+sentinel_tilt:0
+sentinel_running_scripts:0
+sentinel_scripts_queue_length:0
+sentinel_simulate_failure_flags:0
+master0:name=mymaster,status=ok,address=172.16.2.181:6379,slaves=1,sentinels=3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通过查询&lt;code&gt;Sentinel&lt;/code&gt;发现从机&lt;code&gt;172.16.2.181&lt;/code&gt;提升为主。&lt;/p&gt;
+&lt;p&gt;通过访问&lt;code&gt;VIP&lt;/code&gt;的方式连接&lt;code&gt;Redis&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;redis-cli -h 172.16.2.250 -p 6379 -a 123456 INFO replication&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;
+# Replication
+role:master
+connected_slaves:0
+master_replid:cab30a4083f35652053ffcd099d70b9aaf7a80f3
+master_replid2:3da856dd33cce4bedd54926df6797b410f1ab9e8
+master_repl_offset:74657
+second_repl_offset:36065
+repl_backlog_active:1
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:1
+repl_backlog_histlen:74657&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;从上面信息可知，&lt;code&gt;VIP&lt;/code&gt;已经飘移成功。可喜可贺，大吉大利，晚上吃鸡。&lt;/p&gt;
+&lt;h1&gt;总结&lt;/h1&gt;
+&lt;p&gt;至此，高可用&lt;code&gt;Redis&lt;/code&gt;缓存服务已搭建完毕，迟点会再出一篇文章教大家如何通过&lt;code&gt;JAVA&lt;/code&gt;连接&lt;code&gt;Redis&lt;/code&gt;进行相关操作。至于&lt;code&gt;Redis Cluster&lt;/code&gt;集群方案，等有空再搭建然后再和大家一同分享。&lt;/p&gt;
+&lt;h1&gt;参考文章&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=http%3A%2F%2Fwww.jianshu.com%2Fp%2Fc2ab606b00b7&quot;&gt;搭建一个redis高可用系统&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=https%3A%2F%2Fgithub.com%2Fjudasn%2FLinux-Tutorial%2Fblob%2Fmaster%2FRedis-Install-And-Settings.md&quot;&gt;Redis 安装和配置&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=http%3A%2F%2Fwww.cnblogs.com%2Fzhoujinyi%2Fp%2F5570024.html&quot;&gt;Redis 复制、Sentinel的搭建和原理说明&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=http%3A%2F%2Fwww.jianshu.com%2Fp%2F237b628beaae&quot;&gt;Redis 快速入门(官网翻译)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=https%3A%2F%2Fsegmentfault.com%2Fa%2F1190000002680804&quot;&gt;Redis Sentinel机制与用法（一）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=http%3A%2F%2Fredis.majunwei.com%2Ftopics%2Fsentinel.html&quot;&gt;Redis哨兵-实现Redis高可用&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzIxNTYzOTQ0Ng%3D%3D%26amp%3Bmid%3D2247483668%26amp%3Bidx%3D1%26amp%3Bsn%3Dcd31574877d38cf7ff9c047b86c9bf23%26amp%3Bchksm%3D979475eda0e3fcfb6b5006bcd19c5a838eca9e369252847dbdf97820bf418201dd75c1dadda3%26amp%3Bmpshare%3D1%26amp%3Bscene%3D23%26amp%3Bsrcid%3D0117KUiiITwi2ETRan16xRVg%23rd&quot;&gt;读懂Redis并配置主从集群及高可用部署&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=http%3A%2F%2Fwww.cnblogs.com%2Fivictor%2Fp%2F6720481.html&quot;&gt;在Redis Sentinel环境下，jedis该如何配置&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=http%3A%2F%2Fblog.csdn.net%2Fpi9nc%2Farticle%2Fdetails%2F17735653&quot;&gt;redis sentinel 主从切换(failover)解决方案，详细配置&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://link.juejin.im?target=http%3A%2F%2Fblog.csdn.net%2Fyypzye%2Farticle%2Fdetails%2F52281282&quot;&gt;Redis-3.2.1主从故障测试实例&lt;/a&gt;&lt;/p&gt;            </description>
+            <pubDate>2019-07-26 14:45:18</pubDate>
+            <link>//blog/devops/redis-cluster.html</link>
+            <guid isPermaLink="true">//blog/devops/redis-cluster.html</guid>
+                                               <category>devops</category>
                                     </item>
                 <item>
             <title>我眼中规范的开发流程</title>
@@ -631,7 +1257,7 @@ summary: 所谓没有规矩,不成方圆,就算是再小的团队,工作也需�
 &lt;li&gt;代码管理使用git&lt;/li&gt;
 &lt;li&gt;统一使用邮件沟通&lt;/li&gt;
 &lt;/ul&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/thoughts/dev-rule.html</link>
             <guid isPermaLink="true">//blog/thoughts/dev-rule.html</guid>
                                                <category>thoughts</category>
@@ -834,7 +1460,7 @@ public class RocketMQHealthIndicator implements HealthIndicator {
 &lt;p&gt;可以进行关键操作,需要通过属性来配置开启操作.在原生端点中,只提供了一个用来关闭应用的端点:/shutdown(后续引入Eureka之后,会引入更多控制端点).我们可以通过配置开启它&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;endpoint.shutdown.enable=true&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;由于开放关闭应用本身是一件非常危险的事,需要对其加入一定的保护机制,比如定制actuator的端口路径,整合Spring Security进行安全校验.&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/spring/spring-boot-starter-actuator.html</link>
             <guid isPermaLink="true">//blog/spring/spring-boot-starter-actuator.html</guid>
                                                <category>spring</category>
@@ -875,7 +1501,7 @@ summary:
 &lt;p&gt;Spring Cloud Zookeeper:基于Zookeeper的服务发现与配置管理组件&lt;/p&gt;
 &lt;p&gt;Spring Cloud Starters:Spring Cloud的基础组件,它是基于Spring Boot风格项目的基础依赖模块&lt;/p&gt;
 &lt;p&gt;Spring Cloud CLI:用于在Groovy中快速创建Spring Cloud应用的Spring Boot CLI的插件&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/spring/spring-cloud-summury.html</link>
             <guid isPermaLink="true">//blog/spring/spring-cloud-summury.html</guid>
                                                <category>spring</category>
@@ -990,7 +1616,7 @@ public class FinalizeEscapeGC {
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;3.2.5 回收方法区&lt;/h2&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/jvm-chapter-3.html</link>
             <guid isPermaLink="true">//blog/java/jvm-chapter-3.html</guid>
                                                <category>java</category>
@@ -1261,7 +1887,7 @@ public class StringIntern {
 &lt;p&gt;由DirectMemory导致的内存溢出,一个明显的特征是在Heap Dump文件中不会看见明显的异常,如果读者发现OOM之后的Dump文件很小,而程序中又直接或间接使用了NIO,那就可以考虑检查一下是不是这方面的原因&lt;/p&gt;
 &lt;h2&gt;本章小结&lt;/h2&gt;
 &lt;p&gt;通过本章的学习,我们明白了虚拟机中的内存是如何划分的,哪部分区域,什么样的代码和操作可能导致内存溢出异常.Java虽然有垃圾收集机制,但是内存溢出离我们并不遥远,本章只是讲解了各个区域出现异常的原因,下一章将详细讲解Java垃圾收集机制为了避免内存溢出异常的出现做出了哪些努力&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/jvm-chapter-2.html</link>
             <guid isPermaLink="true">//blog/java/jvm-chapter-2.html</guid>
                                                <category>java</category>
@@ -1375,7 +2001,7 @@ rewrite ^ &lt;a href=&quot;https://$server_name$request_uri&quot;&gt;https://$se
 nginx -t  #测试Nginx配置是否正确
 nginx  #启动Nginx
 ```&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/devops/ssl.html</link>
             <guid isPermaLink="true">//blog/devops/ssl.html</guid>
                                                <category>devops</category>
@@ -1463,7 +2089,7 @@ cd nginx
 --http-proxy-temp-path=/var/tmp/nginx/proxy \
 --http-fastcgi-temp-path=/var/tmp/nginx/fcgi \
 --with-http_stub_status_module&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/devops/my-soft.html</link>
             <guid isPermaLink="true">//blog/devops/my-soft.html</guid>
                                                <category>devops</category>
@@ -1809,7 +2435,7 @@ def retrieveTree(i):
 myTree = retrieveTree(0)
 createPlot(myTree)
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/python/ml-decision-trees.html</link>
             <guid isPermaLink="true">//blog/python/ml-decision-trees.html</guid>
                                                <category>python</category>
@@ -1963,7 +2589,7 @@ def smoTest():
     b, alphas = smoSimple(dataMat, labelMat, 0.6, 0.001, 40)
 
 smoTest()&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/python/ml-svm.html</link>
             <guid isPermaLink="true">//blog/python/ml-svm.html</guid>
                                                <category>python</category>
@@ -2069,7 +2695,7 @@ P($$c_i$$|w)=$$\underline{P(w|c_i)P(c_i)}\P(w)$$
 &lt;li&gt;使用算法:构建一个完整的程序对一组文档进行分类,将错误分类的文档输出到屏幕上&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h4&gt;示例:使用朴素贝叶斯分类器从个人广告中获取区域倾向&lt;/h4&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/python/ml-naive-bayes.html</link>
             <guid isPermaLink="true">//blog/python/ml-naive-bayes.html</guid>
                                                <category>python</category>
@@ -2337,7 +2963,7 @@ def testStocGradAscent1():
 
 # testStocGradAscent0()
 multiTest()&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/python/ml-logistic.html</link>
             <guid isPermaLink="true">//blog/python/ml-logistic.html</guid>
                                                <category>python</category>
@@ -2491,7 +3117,7 @@ def handwritingClassTest():
 # 执行算法测试
 handwritingClassTest()
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/python/ml-knn-hand-writing.html</link>
             <guid isPermaLink="true">//blog/python/ml-knn-hand-writing.html</guid>
                                                <category>python</category>
@@ -2691,7 +3317,7 @@ showLable()
 showClass()
 datingClassTest()
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/python/ml-knn-dating.html</link>
             <guid isPermaLink="true">//blog/python/ml-knn-dating.html</guid>
                                                <category>python</category>
@@ -2809,7 +3435,7 @@ Zookeeper的书，淘宝出品。&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;数据库如MySQL，我们DBA太专业，自己没机会搞。&lt;/p&gt;
 &lt;p&gt;欢迎大家在评论里补充。&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/books/back-end-books-2015.html</link>
             <guid isPermaLink="true">//blog/books/back-end-books-2015.html</guid>
                                                <category>books</category>
@@ -2849,7 +3475,7 @@ summary: 有了这些书，再也不愁下了班没妹纸该咋办了。慢慢�
 &lt;p&gt;《数据之巅》：对大数据追根溯源，提出当前信息技术的发展，已经让中国获得了后发优势，中国要在大数据时代的全球竞争中胜出，必须把大数据从科技符号提升成为文化符号，在全社会倡导数据文化。&lt;/p&gt;
 &lt;p&gt;《深入浅出统计学》：本书涵盖的知识点包括：信息可视化、概率计算、几何分布、二项分布及泊松分布、正态分布、统计抽样、置信区间的构建、假设检验、卡方分布、相关与回归等等，完整涵盖AP考试范围。&lt;/p&gt;
 &lt;p&gt;《矩阵分析》： 本书从数学分析的角度论述矩阵分析的经典方法和现代方法，取材新，有一定的深度，并给出在多元微积分、复分析、微分方程、量优化、逼近理论中的许多重要应 用。主要内容包括：特征值、特征向量和相似性，酉等价和正规矩阵，标准形，Hermite矩阵和对称矩阵，向量范数和矩阵范数，特征值和估计和扰动，正定 矩阵，非负矩阵。&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/books/ML-books.html</link>
             <guid isPermaLink="true">//blog/books/ML-books.html</guid>
                                                <category>books</category>
@@ -2914,7 +3540,7 @@ import React from 'React'&lt;/p&gt;
 &lt;p&gt;把 JS代码放到一个文件中的习惯很容易养成，或者盲目跟从你的框架的意见。当你移动到客户端的时候，不要忘记你在服务器端学到的经验教训。&lt;/p&gt;
 &lt;p&gt;这里并不仅仅意味着就像你在Angular 和 Knockout等 MVC 框架中那样分离模型、视图、控制器。编写JavaScript的时候应该像服务器端开发者那样思考问题。把你的业务逻辑和数据访问分离出来。&lt;/p&gt;
 &lt;p&gt;这意味着AJAX调用都应该在一个地方。创建一个集中的客户端“数据访问层”。业务逻辑模块应包含纯JavaScript的。这使得逻辑易于重用，易于测试，升级也不受影响。&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:14</pubDate>
             <link>//blog/js/JS-rule.html</link>
             <guid isPermaLink="true">//blog/js/JS-rule.html</guid>
                                                <category>js</category>
@@ -2945,7 +3571,7 @@ summary: 学习使用python的scrapy写爬虫
 &lt;p&gt;安装成功&lt;/p&gt;
 &lt;p&gt;然后安装mongodb&lt;/p&gt;
 &lt;p&gt;sudo easy_instal pymongo&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/python/scrapy.html</link>
             <guid isPermaLink="true">//blog/python/scrapy.html</guid>
                                                <category>python</category>
@@ -2995,10 +3621,90 @@ vim path
 #删除文件
 在工程区移动到文件夹下,按&amp;lt;dd&amp;gt;,下方提示栏就会出现提示,是否要删除,输入yes删除
 ```&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/vim/spacevim.html</link>
             <guid isPermaLink="true">//blog/vim/spacevim.html</guid>
                     </item>
+                <item>
+            <title>欢迎使用GitBlog</title>
+            <description>
+            &lt;!--
+author: jockchou
+head: http://pingodata.qiniudn.com/jockchou-avatar.jpg
+date: 2015-07-31
+title: 欢迎使用GitBlog
+tags: GitBlog
+images: http://pingodata.qiniudn.com/cube2.jpg
+category: GitBlog
+status: publish
+summary: GitBlog是一个简单易用的Markdown博客系统，它不需要数据库，没有管理后台功能，更新博客只需要添加你写好的Markdown文件即可。
+--&gt;
+&lt;h2&gt;一. 简介&lt;/h2&gt;
+&lt;p&gt;GitBlog是一个简单易用的Markdown博客系统，它不需要数据库，没有管理后台功能，更新博客只需要添加你写好的Markdown文件即可。它摆脱了在线编辑器排版困难，无法实时预览的缺点，一切都交给Markdown来完成，一篇博客就是一个Markdown文件。同时也支持评论，代码高亮，数学公式，页面PV统计等常用功能。GitBlog提供了不同的主题样式，你可以根据自己的喜好配置，如果你想自己制作博客主题，也是非常容易的。GitBlog还支持整站静态导出，你完全可以导出整站静态网页部署到Github Pages。&lt;/p&gt;
+&lt;h2&gt;二. 功能特点&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;使用Markdown  &lt;/li&gt;
+&lt;li&gt;评论框  &lt;/li&gt;
+&lt;li&gt;代码高亮  &lt;/li&gt;
+&lt;li&gt;PV统计  &lt;/li&gt;
+&lt;li&gt;Latex数学公式  &lt;/li&gt;
+&lt;li&gt;自制主题  &lt;/li&gt;
+&lt;li&gt;响应式  &lt;/li&gt;
+&lt;li&gt;全站静态导出  &lt;/li&gt;
+&lt;li&gt;良好的SEO  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;三. GitBlog优势&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;无需数据库，系统更轻量，移植更方便  &lt;/li&gt;
+&lt;li&gt;使用Markdown编写，摆脱后台编辑排版困难，无法实时预览的缺点  &lt;/li&gt;
+&lt;li&gt;可全站静态导出  &lt;/li&gt;
+&lt;li&gt;配置灵活，可自由开关某些功能  &lt;/li&gt;
+&lt;li&gt;多主题支持，可自制主题  &lt;/li&gt;
+&lt;li&gt;博客，分类，标签，归档  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;四. 环境要求&lt;/h2&gt;
+&lt;p&gt;PHP 5.2.4+&lt;/p&gt;
+&lt;h2&gt;五. 安装步骤&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;下载GitBlog源代码  &lt;/li&gt;
+&lt;li&gt;解压上传到你的PHP网站根目录  &lt;/li&gt;
+&lt;li&gt;打开浏览器，访问网站首页  &lt;/li&gt;
+&lt;li&gt;上传Markdown文件到&lt;code&gt;posts&lt;/code&gt;文件夹  &lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;六. 详细说明&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/install.md&quot;&gt;1. 安装&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/struct.md&quot;&gt;2. 目录结构&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/config.md&quot;&gt;3. 配置说明&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/edit.md&quot;&gt;4. 编写博客&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/other-func.md&quot;&gt;5. 评论，订阅，统计等&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/cache.md&quot;&gt;6. 缓存机制&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/export.md&quot;&gt;7. 全站静态导出&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/theme.md&quot;&gt;8. 主题制作&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/nginx.md&quot;&gt;9. 在Nginx上运行GitBlog&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/apache.md&quot;&gt;10. 在Apache上运行GitBlog&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/sae.md&quot;&gt;11. 在SAE上运行GitBlog&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/github-pages.md&quot;&gt;12. 使用GitBlog和Github Pages搭建博客&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/update.md&quot;&gt;13. Gitblog升级&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/wordpress.md&quot;&gt;14. 从wordpress导入&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;七. 问题及bug反馈&lt;/h2&gt;
+&lt;p&gt;如果在实际使用过程中对GitBlog有新的功能需求，或者在使用GitBlog的过程中发现了Bug，欢迎反馈给我。可以直接在Github上提交，也可以发邮件至&lt;code&gt;164068300[AT]qq.com&lt;/code&gt;与我取得联系，我将及时回复。如果你自己制作了漂亮好用的主题，也非常欢迎你提交给我，我会在这里展示你的主题链接。如果你正在使用GitBlog，也可以告诉我，我将也会在这里列出使用者名单。如果你想和其他GitBlog使用者讨论交流，欢迎加入QQ群&lt;code&gt;84692078&lt;/code&gt;。&lt;/p&gt;
+&lt;h2&gt;八. 使用者列表&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.hiweeds.net&quot;&gt;Weeds&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://xiaochengzi.sinaapp.com&quot;&gt;橙子&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://jockchou.com&quot;&gt;jockchou&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://github.com/jockchou/gitblogdoc&quot;&gt;GitBlog Doc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://zxy.link&quot;&gt;zxy&lt;/a&gt;  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;九. 感谢&lt;/h2&gt;
+&lt;p&gt;GitBlog的成长需要喜欢Markdown，喜欢写博客的各位亲们支持！感谢你们使用GitBlog，感激你们对Gitblog的良好建议与Bug反馈。&lt;/p&gt;
+&lt;p&gt;QQ群：&lt;code&gt;84692078&lt;/code&gt;&lt;br /&gt;
+作者邮箱：&lt;code&gt;164068300[AT]qq.com&lt;/code&gt;    &lt;/p&gt;            </description>
+            <pubDate>2019-07-26 14:43:24</pubDate>
+            <link>//blog/welcome.html</link>
+            <guid isPermaLink="true">//blog/welcome.html</guid>
+                                               <category>GitBlog</category>
+                                    </item>
                 <item>
             <title>PHP字符串常用函数学习</title>
             <description>
@@ -3116,7 +3822,7 @@ echo '&amp;lt;br/&amp;gt;';
 echo '10 array split (string pattern, string string [, int limit]),以正则把字符串切开 '
 
 ?&amp;gt;&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/php/php-string.html</link>
             <guid isPermaLink="true">//blog/php/php-string.html</guid>
                                                <category>php</category>
@@ -3247,7 +3953,7 @@ public class Tea {
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-template-method.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-template-method.html</guid>
                                                <category>java</category>
@@ -3309,7 +4015,7 @@ summary: 现在已经存在IDuck接口,Turkey接口,假设你缺鸭子对象,想
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-adapter.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-adapter.html</guid>
                                                <category>java</category>
@@ -3342,7 +4048,7 @@ summary: 命令模式,命令模式将发出请求的对象和执行请求的对�
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-command.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-command.html</guid>
                                                <category>java</category>
@@ -3467,7 +4173,7 @@ public class SingletonDoubleCheckedLocking {
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-singleton.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-singleton.html</guid>
                                                <category>java</category>
@@ -3531,7 +4237,7 @@ type:工厂方法可能需要/不需要参数来制定所要的产品&lt;/code&g
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-factory.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-factory.html</guid>
                                                <category>java</category>
@@ -3581,7 +4287,7 @@ IO  Java的装饰者模式实现&lt;/p&gt;
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-decorator.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-decorator.html</guid>
                                                <category>java</category>
@@ -3854,7 +4560,7 @@ Current conditions:80.0F degrees and 30.0% humidity
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-observer.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-observer.html</guid>
                                                <category>java</category>
@@ -4081,7 +4787,7 @@ I'm flying a short distance
 &lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/jimersylee/DesignPattern&quot;&gt;java设计模式实现&lt;/a&gt;
 如果觉得有点收获,记得在项目上点star哦!&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/java/design-pattern-interface.html</link>
             <guid isPermaLink="true">//blog/java/design-pattern-interface.html</guid>
                                                <category>java</category>
@@ -4119,7 +4825,7 @@ echo ‘extension=mbstring.so' &amp;gt;&amp;gt;/usr/local/php/lib/php.ini
 
 #重启web服务器
 /usr/local/apache2/bin/apachectl restart&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/php/php-install-ex-by-source-code.html</link>
             <guid isPermaLink="true">//blog/php/php-install-ex-by-source-code.html</guid>
                                                <category>php</category>
@@ -4374,7 +5080,7 @@ Alt +按住左键  移动窗口（或在最下面的任务栏滚动鼠标滑轮�
 直接将文件管理器中的文件拖到终端中就可以在终端中得到完整的路径名。
 
 在滚动条的空白处点击鼠标中键，屏幕即滚动到那个地方。&lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/linux/centos-shortcut-key.html</link>
             <guid isPermaLink="true">//blog/linux/centos-shortcut-key.html</guid>
                                                <category>linux</category>
@@ -4401,7 +5107,7 @@ summary: &gt;安装了一个新的app 叫微习惯 督促自己每天都做一�
 但是 我希望可以改变 可以从一个个的小习惯开始 改变自己
 加油
 明天早点起床&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/thoughts/20140820-good-habbit.html</link>
             <guid isPermaLink="true">//blog/thoughts/20140820-good-habbit.html</guid>
                     </item>
@@ -4419,14 +5125,14 @@ category: thoughts
 status: publish
 summary: 游泳杂感
 --&gt;
-&lt;p&gt;七月二十三日， 晴，热。&lt;/p&gt;
+&lt;p&gt;七月二十三日， 晴，好热&lt;/p&gt;
 &lt;p&gt;于是去游泳。&lt;/p&gt;
 &lt;p&gt;一个人，一条裤衩，不戴泳镜，更不需要救生圈。
 地点是泄洪坝底下下冲刷而成的水潭，虽没有桃花潭水深千尺，但是十尺还是有的。前几日连绵大雨，所以泄洪了，于是水潭中都是新鲜的水库水，经过水的冲刷，现在水底很清澈，可以直接看到水底。也没有水藻。非常适合游泳呐。
 在靠近岸边的地方下水，岸边还是很浅的，踩着圆润的水底砂石，仿佛有种回到童年的感觉。那个瘦瘦小小的小孩，双手撑在河底，双脚扑腾着学习游泳的小孩。嘴巴进水，鼻子进水，咳嗽，鼻酸，长时间潜水后强烈想要呼吸的感觉，潜到深处胸腔感受到的压力，以及水中唯一听得到的隆隆声，虽历历在目，声声在耳，却是多久没感受过了。&lt;/p&gt;
 &lt;p&gt;自由泳，蛙泳，仰泳，潜泳，狗刨式，全部来一套。原来游泳这个技能，一旦学会，就完全不会忘呢。什么学会呢，先天技能，幼时就在子宫里游来游去。
 水底的世界就像是近视眼看到的世界一样，模糊，但是色彩斑斓。尤其对白色的物体尤为敏感。白色的石头，闪着光。随意潜入水中，就可以捞起一些石头，这是幼时最喜爱的游泳游戏。可是现在，却没有幼时的欣喜。&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/thoughts/20140723.html</link>
             <guid isPermaLink="true">//blog/thoughts/20140723.html</guid>
                                                <category>thoughts</category>
@@ -4457,7 +5163,7 @@ alert(&quot;hello world&quot;);
 std::cout &amp;lt;&amp;lt; &quot;hello world&quot; &amp;lt;&amp;lt; std::endl;
 Console.WriteLine(&quot;hello world&quot;); 
 &lt;/code&gt;&lt;/pre&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/HelloWorld.html</link>
             <guid isPermaLink="true">//blog/HelloWorld.html</guid>
                     </item>
@@ -4515,7 +5221,7 @@ summary: 你会不会想要知道服务器的负载,但是不知道查看什么,
 &lt;p&gt;最后一个问题，&amp;quot;load average&amp;quot;一共返回三个平均值----1分钟系统负荷、5分钟系统负荷，15分钟系统负荷，----应该参考哪个值？
 如果只有1分钟的系统负荷大于1.0，其他两个时间段都小于1.0，这表明只是暂时现象，问题不大。
 如果15分钟内，平均系统负荷大于1.0（调整CPU核心数之后），表明问题持续存在，不是暂时现象。所以，你应该主要观察&amp;quot;15分钟系统负荷&amp;quot;，将它作为电脑正常运行的指标。&lt;/p&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/linux/load-average.html</link>
             <guid isPermaLink="true">//blog/linux/load-average.html</guid>
                                                <category>linux</category>
@@ -4631,7 +5337,7 @@ cat /home/username/.jenkins/secrets/initialAdminPassword&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;然后配置插件什么的&lt;/li&gt;
 &lt;/ol&gt;            </description>
-            <pubDate>2017-12-07 16:17:57</pubDate>
+            <pubDate>2019-07-26 14:45:18</pubDate>
             <link>//blog/devops/InstallJenkinsOnCentOS7.html</link>
             <guid isPermaLink="true">//blog/devops/InstallJenkinsOnCentOS7.html</guid>
                                                <category>devops</category>

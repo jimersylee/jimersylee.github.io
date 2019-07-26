@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="keywords" content="JAVA,JVM,java,Jimersy Lee&#039;s Blog">
+	<meta name="description" content="项目地址: http://github.com/jimersylee/javaStudy">
+
+	<!--[if lt IE 9]>
+	<script src="/theme/default/js/html5.js"></script>
+	<![endif]-->
+	<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+	
+	<title>&lt;深入理解Java虚拟机&gt;学习笔记-第二章|Jimersy Lee&#039;s Blog</title>
+	
+	<link rel="stylesheet" href="/theme/default/css/genericons.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/style.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/markdown.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="alternate" type="application/rss+xml" title="Jimersy Lee&#039;s Blog" href="/feed.xml" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="/theme/default/css/ie.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" href="/theme/default/css/ie7.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery.js?ver=2.3.2"></script>
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery-migrate.min.js?ver=2.3.2"></script>
+	
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?ad6130507d4c044cd731ac40594106a0";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	
+</head>
+
+<body>
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	
+	    <div id="sidebar" class="sidebar">
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-branding">
+			<h1 class="site-title"><a href="/" rel="home">Jimersy Lee&#039;s Blog</a></h1>
+				<p class="site-description">Just for fun</p>
+				<button class="secondary-toggle">菜单和挂件</button>
+		</div><!-- .site-branding -->
+	</header><!-- .site-header -->
+	<div id="secondary" class="secondary">
+		<div id="widget-area" class="widget-area" role="complementary">
+		
+			<aside id="categories" class="widget widget_categories">
+    <h2 class="widget-title">分类目录</h2>
+    <ul>
+                <li class="cat-item"><a href="/category/books.html" >books</a></li>
+                <li class="cat-item"><a href="/category/devops.html" >devops</a></li>
+                <li class="cat-item"><a href="/category/go.html" >go</a></li>
+                <li class="cat-item"><a href="/category/java.html" >java</a></li>
+                <li class="cat-item"><a href="/category/js.html" >js</a></li>
+                <li class="cat-item"><a href="/category/linux.html" >linux</a></li>
+                <li class="cat-item"><a href="/category/php.html" >php</a></li>
+                <li class="cat-item"><a href="/category/python.html" >python</a></li>
+                <li class="cat-item"><a href="/category/spring.html" >spring</a></li>
+                <li class="cat-item"><a href="/category/thoughts.html" >thoughts</a></li>
+                <li class="cat-item"><a href="/category/GitBlog.html" >GitBlog</a></li>
+            </ul>
+</aside>
+		    <aside class="widget widget_archive">
+    <h2 class="widget-title">文章归档</h2>
+    <ul>
+        <li><a href="/archive/201809.html">2018-09</a></li>
+        <li><a href="/archive/201709.html">2017-09</a></li>
+        <li><a href="/archive/201707.html">2017-07</a></li>
+        <li><a href="/archive/201704.html">2017-04</a></li>
+        <li><a href="/archive/201608.html">2016-08</a></li>
+        <li><a href="/archive/201607.html">2016-07</a></li>
+        <li><a href="/archive/201605.html">2016-05</a></li>
+        <li><a href="/archive/201510.html">2015-10</a></li>
+        <li><a href="/archive/201508.html">2015-08</a></li>
+        <li><a href="/archive/201507.html">2015-07</a></li>
+        <li><a href="/archive/201505.html">2015-05</a></li>
+        <li><a href="/archive/201504.html">2015-04</a></li>
+        <li><a href="/archive/201503.html">2015-03</a></li>
+        <li><a href="/archive/201411.html">2014-11</a></li>
+        <li><a href="/archive/201408.html">2014-08</a></li>
+        <li><a href="/archive/201407.html">2014-07</a></li>
+        <li><a href="/archive/201401.html">2014-01</a></li>
+        </ul>
+</aside>
+		    <aside id="recent-posts" class="widget widget_recent_entries">
+    <h2 class="widget-title">近期文章</h2>
+    <ul>
+        <li><a href="/blog/go/go-hot-update.html">go-web程序的热更新</a></li>
+        <li><a href="/blog/linux/installFusumaOnManjaro.html">Manjaro安装fusuma</a></li>
+        <li><a href="/blog/devops/installMariadbOnManjaro.html">Manjaro安装Mariadb</a></li>
+        <li><a href="/blog/go/go-build-web-app-chapter-3.html">&lt;Go:build web application&gt;的中文翻译版-第三章-连接数据</a></li>
+        <li><a href="/blog/go/go-build-web-app-catalog.html">&lt;Go:build web application&gt;的中文翻译版本目录</a></li>
+        </ul>
+</aside>
+		    <aside id="tag_cloud" class="widget widget_tag_cloud">
+    <h2 class="widget-title">标签</h2>
+    <div class="tagcloud">
+        <a href="/tags/BACK-END.html" title="BACK-END" >BACK-END</a>
+        <a href="/tags/BOOKS.html" title="BOOKS" >BOOKS</a>
+        <a href="/tags/ML.html" title="ML" >ML</a>
+        <a href="/tags/CENTOS.html" title="CENTOS" >CENTOS</a>
+        <a href="/tags/JENKINS.html" title="JENKINS" >JENKINS</a>
+        <a href="/tags/MANJARO.html" title="MANJARO" >MANJARO</a>
+        <a href="/tags/MARIADB.html" title="MARIADB" >MARIADB</a>
+        <a href="/tags/LINUX.html" title="LINUX" >LINUX</a>
+        <a href="/tags/NGINX.html" title="NGINX" >NGINX</a>
+        <a href="/tags/SSL.html" title="SSL" >SSL</a>
+        <a href="/tags/GO.html" title="GO" >GO</a>
+        <a href="/tags/Blog.html" title="Blog" >Blog</a>
+        <a href="/tags/JAVA.html" title="JAVA" >JAVA</a>
+        <a href="/tags/PATTERN.html" title="PATTERN" >PATTERN</a>
+        <a href="/tags/JVM.html" title="JVM" >JVM</a>
+        <a href="/tags/JS.html" title="JS" >JS</a>
+        <a href="/tags/JAVASCRIPT.html" title="JAVASCRIPT" >JAVASCRIPT</a>
+        <a href="/tags/SHORTCUT-KEY.html" title="SHORTCUT-KEY" >SHORTCUT-KEY</a>
+        <a href="/tags/fusuma.html" title="fusuma" >fusuma</a>
+        <a href="/tags/PHP.html" title="PHP" >PHP</a>
+        <a href="/tags/STRING.html" title="STRING" >STRING</a>
+        <a href="/tags/SWOOLE.html" title="SWOOLE" >SWOOLE</a>
+        <a href="/tags/PYTHON.html" title="PYTHON" >PYTHON</a>
+        <a href="/tags/MACHINE-LEARNING.html" title="MACHINE-LEARNING" >MACHINE-LEARNING</a>
+        <a href="/tags/SCRAPY.html" title="SCRAPY" >SCRAPY</a>
+        <a href="/tags/CRAWLER.html" title="CRAWLER" >CRAWLER</a>
+        <a href="/tags/SPRING-CLOUD.html" title="SPRING-CLOUD" >SPRING-CLOUD</a>
+        <a href="/tags/Spring.html" title="Spring" >Spring</a>
+        <a href="/tags/Cloud.html" title="Cloud" >Cloud</a>
+        <a href="/tags/%E7%AE%80%E4%BB%8B.html" title="简介" >简介</a>
+        <a href="/tags/BLOG.html" title="BLOG" >BLOG</a>
+        <a href="/tags/DEV.html" title="DEV" >DEV</a>
+        <a href="/tags/RULE.html" title="RULE" >RULE</a>
+        <a href="/tags/VIM.html" title="VIM" >VIM</a>
+        <a href="/tags/SPACEVIM.html" title="SPACEVIM" >SPACEVIM</a>
+        <a href="/tags/GitBlog.html" title="GitBlog" >GitBlog</a>
+        </div>
+</aside>
+		    <aside id="text" class="widget widget_text">
+    <h2 class="widget-title">介绍</h2>	
+    <div class="textwidget">
+    	<p>“What I cannot create, I do not understand.” – Richard Feynman</p>
+    </div>
+</aside>
+	    </div><!-- .widget-area -->
+    </div><!-- .secondary -->
+</div><!-- .sidebar -->  
+	    <div id="content" class="site-content">
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+        
+            <article class="post hentry">
+<header class="entry-header">
+    <h1 class="entry-title">&lt;深入理解Java虚拟机&gt;学习笔记-第二章</h1>
+</header><!-- .entry-header -->
+<div class="entry-content">
+<!--
+author: Jimersy Lee
+head: 
+date: 2016-08-11
+title: <深入理解Java虚拟机>学习笔记-第二章
+tags: JAVA,JVM
+images: 
+category: java
+status: publish
+summary: 
+-->
+<h1>Java与C++的区别</h1>
+<p>项目地址: <a href="'http://github.com/jimersylee/javaStudy'"><a href="http://github.com/jimersylee/javaStudy">http://github.com/jimersylee/javaStudy</a></a></p>
+<h2>2.1 概述</h2>
+<p>内存管理领域</p>
+<ul>
+<li>c,c++开发人员拥有最高权利,可以操作每一个对象,又需要维护每个对象的开始与销毁</li>
+<li>java开发人员不需要为每一个对象写配对的delete/free代码,不容易出现内存泄露与内存溢出问题,不过,出现内存方面的问题,排查又是一项异常艰难的工作
+<h2>2.2运行时数据区域</h2></li>
+<li>方法区Method Area</li>
+<li>虚拟机栈VM Stack</li>
+<li>本地方法栈Native Method Stack</li>
+<li>堆 Heap</li>
+<li>程序计数器 program Counter Register
+<h3>2.2.1 程序计数器</h3>
+<p>java虚拟机通过线程轮换来分配处理器执行时间,为了线程切换后能恢复到正确的执行位置,每条线程都需要一个独立的程序计数器,为<em>线程私有</em>内存</p>
+<h3>2.2.2 Java虚拟机栈</h3>
+<p>与程序计数器一样,Java虚拟机栈也是线程私有的,它的生命周期与线程相同.</p>
+<h3>2.2.3 本地方法栈</h3>
+<p>本地方法栈为虚拟机使用到的Native方法服务</p>
+<h3>2.2.4 Java堆</h3>
+<p>Java堆(Heap)是Java虚拟机所管理的 内存中最大的一块,Java对是被所有线程共享的一块内存区域,在虚拟机启动时创建.此内存区域的唯一目的就是存放对象实例.
+Java堆是垃圾收集器管理的主要区域
+现在的收集器基本采用分代收集算法</p>
+<h4>Java堆</h4></li>
+<li>新生代</li>
+<li>老年代
+更细致</li>
+<li>Eden空间</li>
+<li>From Survivor空间</li>
+<li>To Survivor空间</li>
+</ul>
+<p>Java堆可以处于物理上不连续的空间中,只要逻辑上连续即可,既可以实现成固定大小的,也可以是可扩展的,通过 <em>-Xmx</em> 和 <em>-Xms</em>控制,如果堆中没有足够的内存完成实例分配,则报 <em>OutOfMemory</em> 异常</p>
+<h3>2.2.5</h3>
+<p>方法区与Java堆一样,是各个线程共享的内存区域,用于存放已被虚拟机加载的类信息,敞亮,静态变量,即时编译器编译后的代码等数据</p>
+<p>HotSpot上,方法区习惯性称为 <em>永久代(Permanent Generation)</em> </p>
+<p>永久代有 <em>-XX:MaxPermSize</em> 上限</p>
+<h3>2.2.6 运行时常量池</h3>
+<p>运行时常量池(Runtime Constant Pool)是方法区的一部分.用于存放编译期生成的各种字面量和符号引用.</p>
+<p>当常量池无法申请到内存报OutOfMemory异常</p>
+<h3>直接内存</h3>
+<p>JDK1.4中新加入NIO(New Input/Output)类,引入了一种基于通道(Channel)与缓冲区(Buffer)的I/O方式,它可以使用Native函数库直接分配堆外内存,然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用记性操作.
+作用:提高性能
+直接内存不收Java堆大小的限制,但是受本机总内存限制.除了设置 -Xmx等参数信息,也要注意直接内存</p>
+<h2>2.3 HotSpot虚拟机对象探秘</h2>
+<h3>2.3.1 对象的创建</h3>
+<h4>划分内存</h4>
+<p>虚拟机遇到一条new指令时,首先检查常量池中有没有这个类的符号引用,检查是否已被加载,解析,初始化过.如果没有,那必须先执行相应的类加载过程
+通过检查之后,接下来虚拟机将为新生对象分配内存.</p>
+<p><em>指针碰撞(Bump the Pointer):</em> 如果内存是规整的,那么就将指针从已使用内存向空闲内存移动对象大小的距离</p>
+<p><em>空闲列表(Free List):</em> 如果内存是不规整的,已使用的内存和空闲的内存项目交错,虚拟机就必须尾货一个列表,记录那些内存块是可用的,分配内存块,更新列表</p>
+<p>选择那种分配方式由垃圾收集器是否带有压缩整理功能决定</p>
+<p>指针碰撞,代用Compact过程的收集器</p>
+<ul>
+<li>Serial</li>
+<li>ParNew</li>
+</ul>
+<p>空闲列表,基于Mark-Sweep算法的收集器</p>
+<ul>
+<li>CMS</li>
+</ul>
+<h4>保证线程安全</h4>
+<ol>
+<li>对分配内存空间的动作进行同步处理---实际上虚拟机采用CAS配上失败重试的方式保证更新操作的原子性</li>
+<li>把内存分配动作按照线程划分在不同的空间之中进行,即每个线程在Java堆中预先分配一小块内存,称为本地线程分配缓冲(Thread Local Allocation Buffer).虚拟机是否使用TLAB,可以通过-XX:+/-UseTLAB 参数设定
+<h3>2.3.2 对象的内存布局</h3>
+<p>在HotSpot虚拟机中,对象在内存中存储的布局可以分为3块区域</p></li>
+<li>对象头(Header)
+<ol>
+<li>运行时数据,如哈希码,GC分代你年龄,锁状态标识,线程持有的锁,偏向线程Id,偏向时间戳</li>
+<li>类型指针,虚拟机通过这个指针确定这个对象是哪个类的示例</li>
+</ol></li>
+<li>实例数据(Instance Data)
+<ol>
+<li>各种类型的字段内容</li>
+</ol></li>
+<li>对齐填充(Padding)
+<ol>
+<li>不是必然存在,由于HotSpot Vm的自动内存管理系统要求对象起始地址必须是8字节的整数倍,当对象实例数据部分没有对齐时,就需要通过对齐填充来补全
+<h3>2.3.3 对象的访问定位</h3>
+<p>主流方式</p></li>
+</ol></li>
+</ol>
+<p>HotSpot采用直接指针方式</p>
+<ol>
+<li>使用句柄
+<ul>
+<li>原理:划分出一块内存作为句柄池.reference中存储的就是对象的句柄地址,句柄中包含了对象实例数据与类型数据各自的具体地址信息</li>
+<li>优点:reference中存储的是稳定的句柄地址,在对象被移动时,只会改变句柄中的实例数据指针,而reference本身不需要修改</li>
+</ul></li>
+<li>直接指针
+<ul>
+<li>原理:Java堆对象的布局中就必须考虑如何放置访问类型数据的相关信息,而reference中存储的直接就是对象地址</li>
+<li>优点:速度更快,少了一次通过句柄定位指针的开销</li>
+</ul></li>
+</ol>
+<h2>2.4 实战:OutOfMemoryError异常</h2>
+<ol>
+<li>通过代码验证Java虚拟机规范中描述的各个运行时区域存储的内容</li>
+<li>根据异常的信息快速判断是哪个区域的内存一处,知道什么的样的代码可能导致这些区域内存溢出,以及出现这些异常后如何处理</li>
+</ol>
+<h2>2.4.1 Java堆溢出</h2>
+<p>复现过程,设置jvm启动参数来实现,本文使用Idea,在Run/Debug configuration中的VM options选项中填入如下参数</p>
+<pre><code>-Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</code></pre>
+<p>以上代码限制Java堆的大小为20MB,不可扩展(将堆的最小值 -Xms参数与最大值-Xmx参数设置为一样即可避免堆自动扩展),通过-XX:+HeapDumpOnOutOfMemoryError可以让虚拟机在出现内存溢出异常时Dump出当前的内存对转储快照以便时候进行分析</p>
+<p>代码清单</p>
+<pre><code>import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * VM Args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError
+ * @author jimersylee 
+ */
+public class HeapOOM {
+    private static class OOMObject{
+
+    }
+    public static void main(String[] args){
+        List&lt;OOMObject&gt; list=new ArrayList&lt;&gt;();
+        while(true){
+            list.add(new OOMObject());
+        }
+    }
+}</code></pre>
+<p>运行结果</p>
+<pre><code>java.lang.OutOfMemoryError: Java heap space
+Dumping heap to java_pid27497.hprof ...
+Exception in thread "main" Heap dump file created [27789642 bytes in 0.164 secs]
+java.lang.OutOfMemoryError: Java heap space</code></pre>
+<h2>2.4.2 虚拟机栈和本地方法栈溢出</h2>
+<p>对于HotSpot来说,虽然-Xoss参数(设置本地方法栈大小)存在,但实际上是无效的,栈容量实际由-Xss参数设定.关于虚拟机栈和本地方法栈,在Java虚拟机中描述了两种异常:</p>
+<ul>
+<li>如果线程请求的栈深度大于虚拟机所允许的最大深度,将抛出StackOverflowError异常.</li>
+<li>如果虚拟机在扩展栈时无法申请到足够的内存空间,则抛出OutOfMemoryError异常.</li>
+</ul>
+<p>将实验范围限制于单线程操作,下面两种方法均无法让虚拟机产生OutOfMemoryError异常,尝试的结果都是StackOverflowError异常,测试代码2-4</p>
+<ul>
+<li>使用-Xss参数减少栈内存容量.结果抛出StackOverflowError异常,异常出现时输出的堆栈深度相应缩小</li>
+<li>定义了大量的本地变量,增大此方法帧中本地变量表的长度.结果:抛出StackOverflowError异常时堆栈深度相应缩小</li>
+</ul>
+<p>代码清单2-4 </p>
+<pre><code>/**
+ * 虚拟机和本地方法栈OOM测试(仅作为第一点测试程序)
+ * VM Args:-Xss228k
+ * @author Jimersy Lee
+ */
+public class JavaVMStackSOF {
+    private int stackLength=1;
+    public void stackLeak(){
+        stackLength++;
+        stackLeak();
+    }
+    public static void main(String[] args) throws Throwable{
+        JavaVMStackSOF oom=new JavaVMStackSOF();
+        try {
+            oom.stackLeak();
+        }catch (Throwable e){
+            System.out.println("stack length:"+oom.stackLength);
+            throw e;
+        }
+    }
+}</code></pre>
+<p>运行结果</p>
+<pre><code>Exception in thread "main" java.lang.StackOverflowError
+   stack length:1517
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:11)
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:12)
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:12)
+    at JVM.chapter2.JavaVMStackSOF.stackLeak(JavaVMStackSOF.java:12)
+.....后续异常堆栈信息省略</code></pre>
+<p>实验结果表明:在单个线程下,无论是由于栈帧太大或是虚拟机栈容量太小,当内存无法分配的时候,虚拟机抛出都是StackOverflowError异常</p>
+<p>如果测试时不限于单线程,通过不断地建立线程的方式到时可以产生内存溢出异常,如代码清单2-5所示.但是这样的内存溢出异常与栈空间足够大并不存在任何关联,或者准确地说,在这种情况下,为每个线程的栈分配的内存越大,反而越容易产生内存溢出异常.</p>
+<p>代码清单2-5 创建线程导致内存溢出异常</p>
+<pre><code>/**
+ * 创建线程导致内存溢出异常
+ * VM Args: -Xss2M
+ * @author Jimersy Lee
+ * todo:没有等到抛出异常
+ */
+public class JavaVMStackOOM {
+    private void dontStop(){
+        while (true){
+
+        }
+    }
+
+    public void stackLeakByThread(){
+        int count=0;
+        while(true){
+            Thread thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    dontStop();
+                }
+            });
+            thread.start();
+            System.out.println(count++);
+        }
+    }
+    public static void main(String[] args){
+        JavaVMStackOOM oom=new JavaVMStackOOM();
+        oom.stackLeakByThread();
+    }
+}</code></pre>
+<h2>2.4.3 方法区和运行时常量池溢出</h2>
+<p>运行时常量池是方法区的一部分,因此这两个区域的溢出测试放在一起进行.</p>
+<p>jdk1.6之前的版本,常量池分配在永久代中,可以通过-XX:PermSize和-XX:MaxPermSize限制方法区大小,从而间接限制其中常量池的容量</p>
+<p>代码清单2-6 运行时常量池导致的内存溢出异常</p>
+<pre><code>import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 运行时常量池导致的内存溢出异常,适用版本jdk1.6,1.8已经去除永久代
+ * @author jimersylee
+ * VM Args: -XX:PermSize=10m -XX:MaxPermSize=10m
+ * String.intern()是一个Native方法,它的作用是:如果字符串常量池中已经包含一个等于此String对象的字符串,则返回代表池中这个字符串的String对象;否则,将此String对象包含的字符串添加到常量池中,并且返回此String对象的引用
+ */
+public class RuntimeConstantPoolOOM {
+    public static void main(String[] args){
+        //使用List保持着常量池引用,避免Full GC回收常量池行为
+        List&lt;String&gt; list=new ArrayList&lt;&gt;();
+        //10MB的PermSize在Integer范围内足够产生OOM了
+        int i=0;
+        while (true){
+            list.add(String.valueOf(i++).intern());
+            System.out.println(list.size());
+        }
+
+    }
+}</code></pre>
+<p>关于字符串常量池的实现问题,引出一个有意思的影响</p>
+<pre><code>/**
+ * String.intern()返回引用测试
+ */
+public class StringIntern {
+    public static void main(String[] args) {
+        String str1 = new StringBuilder("计算机").append("软件").toString();
+        System.out.println(str1.intern()==str1);
+
+        String str2=new StringBuilder("ja").append("va").toString();
+        System.out.println(str2.intern()==str2);
+    }
+}</code></pre>
+<p>jdk1.6中,得到两个false;jdk1.7以后,得到true,和false;</p>
+<p>jdk1.6中,intern()方法会把首次遇到的字符串实例复制到永久代中,返回的也是永久代中的这个字符串实例的引用,而StringBuilder创建的字符串实例在Java堆上,必然不是同一个引用,将返回false;</p>
+<p>jdk1.7中,intern()实现不会在复制实例,只是在常量池中记录首次出现的实例引用,因此intern()返回的引用和由StringBuilder创建的那个字符创实例是同一个.</p>
+<p>方法区用于存放Class的相关信息,如类名,访问修饰符,常量池,字段描述,方法描述</p>
+<p>对于这些区域的测试,基本思路是运行时产生大量的类去填满方法区,直到溢出</p>
+<h2>2.2.4 本机直接内存溢出</h2>
+<p>DirectMemory容量可以通过-XX:MaxDirectMemorySize指定,如果不指定,则默认与Java堆最大值(-Xmx指定)一样</p>
+<p>由DirectMemory导致的内存溢出,一个明显的特征是在Heap Dump文件中不会看见明显的异常,如果读者发现OOM之后的Dump文件很小,而程序中又直接或间接使用了NIO,那就可以考虑检查一下是不是这方面的原因</p>
+<h2>本章小结</h2>
+<p>通过本章的学习,我们明白了虚拟机中的内存是如何划分的,哪部分区域,什么样的代码和操作可能导致内存溢出异常.Java虽然有垃圾收集机制,但是内存溢出离我们并不遥远,本章只是讲解了各个区域出现异常的原因,下一章将详细讲解Java垃圾收集机制为了避免内存溢出异常的出现做出了哪些努力</p>
+</div><!-- .entry-content --><footer class="entry-footer">
+	    <span class="posted-on">
+        <span class="screen-reader-text">Posted on </span>
+        <time class="entry-date published">2016-08-11</time>
+    </span>
+		
+	    <span class="byline">
+        <span class="author vcard">
+            <span class="screen-reader-text">Author </span>
+            Jimersy Lee
+        </span>
+    </span>
+        
+        <span class="cat-links">
+        <span class="screen-reader-text">Categories </span>
+          
+           <a href="/category/java.html" rel="category">java</a>
+            </span>
+        
+    
+        <span class="tags-links">
+    	
+        <span class="screen-reader-text">Tags </span>
+          
+           <a href="/tags/JAVA.html" rel="tag">JAVA</a>
+          
+           <a href="/tags/JVM.html" rel="tag">JVM</a>
+            </span>
+    </footer><!-- .entry-footer --></article><!-- #post-## -->            <!-- UY BEGIN -->
+<div class="post hentry" id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2142981"></script>
+<!-- UY END -->
+            
+        </main><!-- .site-main -->
+    </div><!-- .content-area -->
+</div><!-- .site-content -->	    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <a href="https://github.com/jimersylee">Github</a>
+        <a href="https://coding.net/u/code008">Coding.net</a>
+        <a href="https://coding.net/u/code008/score/share">码力值</a>
+        <a href="https://resume.jimersylee.com">简历</a>
+        <a href="https://www.jimersylee.com">个人网站</a>
+    </div><!-- .site-info -->
+</footer><!-- .site-footer -->
+	
+</div><!-- .site -->
+<script type="text/javascript" src="/theme/default/js/skip-link-focus-fix.js?ver=2.3.2"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var screenReaderText = {"expand":"<span class=\"screen-reader-text\">\u5c55\u5f00\u5b50\u83dc\u5355<\/span>","collapse":"<span class=\"screen-reader-text\">\u6298\u53e0\u5b50\u83dc\u5355<\/span>"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="/theme/default/js/functions.js?ver=2.3.2"></script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

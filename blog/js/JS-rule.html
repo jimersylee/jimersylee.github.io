@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="keywords" content="JS,JAVASCRIPT,js,Jimersy Lee&#039;s Blog">
+	<meta name="description" content="本文列出了使用js的12条军规">
+
+	<!--[if lt IE 9]>
+	<script src="/theme/default/js/html5.js"></script>
+	<![endif]-->
+	<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+	
+	<title>JS规则-使用js的最佳实践|Jimersy Lee&#039;s Blog</title>
+	
+	<link rel="stylesheet" href="/theme/default/css/genericons.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/style.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/markdown.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="alternate" type="application/rss+xml" title="Jimersy Lee&#039;s Blog" href="/feed.xml" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="/theme/default/css/ie.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" href="/theme/default/css/ie7.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery.js?ver=2.3.2"></script>
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery-migrate.min.js?ver=2.3.2"></script>
+	
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?ad6130507d4c044cd731ac40594106a0";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	
+</head>
+
+<body>
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	
+	    <div id="sidebar" class="sidebar">
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-branding">
+			<h1 class="site-title"><a href="/" rel="home">Jimersy Lee&#039;s Blog</a></h1>
+				<p class="site-description">Just for fun</p>
+				<button class="secondary-toggle">菜单和挂件</button>
+		</div><!-- .site-branding -->
+	</header><!-- .site-header -->
+	<div id="secondary" class="secondary">
+		<div id="widget-area" class="widget-area" role="complementary">
+		
+			<aside id="categories" class="widget widget_categories">
+    <h2 class="widget-title">分类目录</h2>
+    <ul>
+                <li class="cat-item"><a href="/category/books.html" >books</a></li>
+                <li class="cat-item"><a href="/category/devops.html" >devops</a></li>
+                <li class="cat-item"><a href="/category/go.html" >go</a></li>
+                <li class="cat-item"><a href="/category/java.html" >java</a></li>
+                <li class="cat-item"><a href="/category/js.html" >js</a></li>
+                <li class="cat-item"><a href="/category/linux.html" >linux</a></li>
+                <li class="cat-item"><a href="/category/php.html" >php</a></li>
+                <li class="cat-item"><a href="/category/python.html" >python</a></li>
+                <li class="cat-item"><a href="/category/spring.html" >spring</a></li>
+                <li class="cat-item"><a href="/category/thoughts.html" >thoughts</a></li>
+                <li class="cat-item"><a href="/category/GitBlog.html" >GitBlog</a></li>
+            </ul>
+</aside>
+		    <aside class="widget widget_archive">
+    <h2 class="widget-title">文章归档</h2>
+    <ul>
+        <li><a href="/archive/201809.html">2018-09</a></li>
+        <li><a href="/archive/201709.html">2017-09</a></li>
+        <li><a href="/archive/201707.html">2017-07</a></li>
+        <li><a href="/archive/201704.html">2017-04</a></li>
+        <li><a href="/archive/201608.html">2016-08</a></li>
+        <li><a href="/archive/201607.html">2016-07</a></li>
+        <li><a href="/archive/201605.html">2016-05</a></li>
+        <li><a href="/archive/201510.html">2015-10</a></li>
+        <li><a href="/archive/201508.html">2015-08</a></li>
+        <li><a href="/archive/201507.html">2015-07</a></li>
+        <li><a href="/archive/201505.html">2015-05</a></li>
+        <li><a href="/archive/201504.html">2015-04</a></li>
+        <li><a href="/archive/201503.html">2015-03</a></li>
+        <li><a href="/archive/201411.html">2014-11</a></li>
+        <li><a href="/archive/201408.html">2014-08</a></li>
+        <li><a href="/archive/201407.html">2014-07</a></li>
+        <li><a href="/archive/201401.html">2014-01</a></li>
+        </ul>
+</aside>
+		    <aside id="recent-posts" class="widget widget_recent_entries">
+    <h2 class="widget-title">近期文章</h2>
+    <ul>
+        <li><a href="/blog/go/go-hot-update.html">go-web程序的热更新</a></li>
+        <li><a href="/blog/linux/installFusumaOnManjaro.html">Manjaro安装fusuma</a></li>
+        <li><a href="/blog/devops/installMariadbOnManjaro.html">Manjaro安装Mariadb</a></li>
+        <li><a href="/blog/go/go-build-web-app-chapter-3.html">&lt;Go:build web application&gt;的中文翻译版-第三章-连接数据</a></li>
+        <li><a href="/blog/go/go-build-web-app-catalog.html">&lt;Go:build web application&gt;的中文翻译版本目录</a></li>
+        </ul>
+</aside>
+		    <aside id="tag_cloud" class="widget widget_tag_cloud">
+    <h2 class="widget-title">标签</h2>
+    <div class="tagcloud">
+        <a href="/tags/BACK-END.html" title="BACK-END" >BACK-END</a>
+        <a href="/tags/BOOKS.html" title="BOOKS" >BOOKS</a>
+        <a href="/tags/ML.html" title="ML" >ML</a>
+        <a href="/tags/CENTOS.html" title="CENTOS" >CENTOS</a>
+        <a href="/tags/JENKINS.html" title="JENKINS" >JENKINS</a>
+        <a href="/tags/MANJARO.html" title="MANJARO" >MANJARO</a>
+        <a href="/tags/MARIADB.html" title="MARIADB" >MARIADB</a>
+        <a href="/tags/LINUX.html" title="LINUX" >LINUX</a>
+        <a href="/tags/NGINX.html" title="NGINX" >NGINX</a>
+        <a href="/tags/SSL.html" title="SSL" >SSL</a>
+        <a href="/tags/GO.html" title="GO" >GO</a>
+        <a href="/tags/Blog.html" title="Blog" >Blog</a>
+        <a href="/tags/JAVA.html" title="JAVA" >JAVA</a>
+        <a href="/tags/PATTERN.html" title="PATTERN" >PATTERN</a>
+        <a href="/tags/JVM.html" title="JVM" >JVM</a>
+        <a href="/tags/JS.html" title="JS" >JS</a>
+        <a href="/tags/JAVASCRIPT.html" title="JAVASCRIPT" >JAVASCRIPT</a>
+        <a href="/tags/SHORTCUT-KEY.html" title="SHORTCUT-KEY" >SHORTCUT-KEY</a>
+        <a href="/tags/fusuma.html" title="fusuma" >fusuma</a>
+        <a href="/tags/PHP.html" title="PHP" >PHP</a>
+        <a href="/tags/STRING.html" title="STRING" >STRING</a>
+        <a href="/tags/SWOOLE.html" title="SWOOLE" >SWOOLE</a>
+        <a href="/tags/PYTHON.html" title="PYTHON" >PYTHON</a>
+        <a href="/tags/MACHINE-LEARNING.html" title="MACHINE-LEARNING" >MACHINE-LEARNING</a>
+        <a href="/tags/SCRAPY.html" title="SCRAPY" >SCRAPY</a>
+        <a href="/tags/CRAWLER.html" title="CRAWLER" >CRAWLER</a>
+        <a href="/tags/SPRING-CLOUD.html" title="SPRING-CLOUD" >SPRING-CLOUD</a>
+        <a href="/tags/Spring.html" title="Spring" >Spring</a>
+        <a href="/tags/Cloud.html" title="Cloud" >Cloud</a>
+        <a href="/tags/%E7%AE%80%E4%BB%8B.html" title="简介" >简介</a>
+        <a href="/tags/BLOG.html" title="BLOG" >BLOG</a>
+        <a href="/tags/DEV.html" title="DEV" >DEV</a>
+        <a href="/tags/RULE.html" title="RULE" >RULE</a>
+        <a href="/tags/VIM.html" title="VIM" >VIM</a>
+        <a href="/tags/SPACEVIM.html" title="SPACEVIM" >SPACEVIM</a>
+        <a href="/tags/GitBlog.html" title="GitBlog" >GitBlog</a>
+        </div>
+</aside>
+		    <aside id="text" class="widget widget_text">
+    <h2 class="widget-title">介绍</h2>	
+    <div class="textwidget">
+    	<p>“What I cannot create, I do not understand.” – Richard Feynman</p>
+    </div>
+</aside>
+	    </div><!-- .widget-area -->
+    </div><!-- .secondary -->
+</div><!-- .sidebar -->  
+	    <div id="content" class="site-content">
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+        
+            <article class="post hentry">
+<header class="entry-header">
+    <h1 class="entry-title">JS规则-使用js的最佳实践</h1>
+</header><!-- .entry-header -->
+<div class="entry-content">
+<!--
+author: Jimersy Lee
+head: 
+date: 2015-10-13
+title: JS规则-使用js的最佳实践
+tags: JS,JAVASCRIPT
+images: 
+category: js
+status: publish
+summary: 本文列出了使用js的12条军规
+-->
+<h1>1. JS应该放到 .js 文件中</h1>
+<p>“额，只有那么几行而已…”，是的，我的意思是所有的 JS 都应该放在.js文件中。为什么呢？因为这有助于可读性，节省带宽。行内 JavaScript 在每次页面加载时都会重新下载，相反的，单独的.js文件则会被缓存起来。正如你所看到的，这个规则有助于支持如下一长串的其他规则。这就是为什么它的规则# 1。</p>
+<h1>2. JS 应该是静态的</h1>
+<p>我看到过很多程序员喜欢动态的使用JavaScript。他们喜欢像使用服务器端语言如C#, Ruby, Java那样来动态的使用JavaScript。千万不要这么做。你失去了代码着色、语法高亮显示和智能感知的支持。记住，JavaScript 应该属于一个.js文件(见规则 #1)。</p>
+<p>然而，使用JSON引入动态行为。我把这称为JavaScript配置对象模式。具体方法如下：把JSON注入到你应用程序的头部，并根据业务逻辑 的需要利用这些数据。你可能会想：“嘿，这违背了规则 #1”。我把 JSON 看作是数据，而不是代码，所以我破例，为了支持静态的、单独的JavaScript文件。</p>
+<p>StackOverflow 使用的这种模式，Google 也是。</p>
+<h1>3. JS 应该被压缩</h1>
+<p>压缩可以减小文件体积，从而提升页面加载速度。记住，性能也是一项功能。因为，为了压缩，你需要把 JS 放到一个单独的文件中(见规则 #1)。压缩JS曾经很麻烦，但现在完全是简单自动化的。有一打的方式可以做到，而Gulp和gulp-uglify是一种低摩擦和自动化的办法。</p>
+<h1>4. JS 应该位于页面底部</h1>
+<p>如果你把&lt;script>标签放在&lt;head>中，它会阻碍页面渲染。位于&lt;head>中的脚本必须在页面显示前加载，因此把&lt;script>放在底部的 </body> 前面可以先显示页面，而不用等 JS 文件下载完毕。这有助于提升感知性能。如果你的JavaSctipe必须位于&lt;head>中，可以考虑使用 jQuery 的$(document).ready这样你的脚本可以等到 DOM 加载完毕后再执行。</p>
+<h1>5. JS 应该实时的 Linted</h1>
+<p>Linting 遵循代码风格、发现错别字、有助于避免错误。有很多这样的工具，我建议使用ESLint。你可以使用 Gulp 的gulp-eslint来运行它。Gulp 可以查看你所有的 JS 文件，并在你每次保存的时候运行 linter。另外，你需要把你的 JS 代码放在单独的 .js 文件中才能运行 linter 。</p>
+<h1>6.JS应该有自动化测试</h1>
+<p>在过去的几年中，我们知道了测试的重要性。但它在很大程度上忽略了在JavaScript，直到最近才被重视。现在典型的JavaScript应用需要测试的部分远比你实际手动测试到的要多。使用JavaScript处理这么多的逻辑，关键的是具有自动测试。</p>
+<p>您可以通过工具，如Selenium自动化集成测试。然而，集成测试往往是脆弱的，所以我建议专注于自动化单元测试。自动化单元测试有多种选择。如果你是新手， 我建议你使用Jasmine，而如果你想要终极配置，可以使用MochawithChai。</p>
+<h1>7. JS 需要封装</h1>
+<p>前些年我们了解了全局变量的风险，值得庆幸的是，现在有很多的方法来封装JS：</p>
+<ul>
+<li>Immediately Invoked Function Expressions(aka IIFE)</li>
+<li>Revealing Modules</li>
+<li>AMD(typically viaRequireJS)</li>
+<li>CommonJS(used byNode.js, use in browser viaBrowserifyorWebpack)</li>
+<li>ES6 modules</li>
+</ul>
+<p>ES6模块是未来。好消息是，虽然在浏览器中还不能很好的支持，但你可以用Babel来使用它。</p>
+<p>如果你不想transpile，CommonJS可能是你最佳的选择。由于 Node 使用的CommonJS 模式，所以你可以使用npm来下载数千个包。CommonJS 不能在浏览器中运行，所以你可能需要Browserify，Webpack, orJSPM.</p>
+<h1>8. JS 依赖应当明确</h1>
+<p>这条规则与上述规则紧密相关。一旦你开始封装JavaScript，您需要一个简单的方法来引用其他模块。这就是常说的现代模块系统CommonJS和ES6模块的好处。你只需要在文件顶部指定依赖，就像Java 或 C# 那样一句声明：</p>
+<p>//CommonJS
+var react = require('react');
+//ES6 Modules
+import React from 'React'</p>
+<h1>9.Transpile to JS</h1>
+<p>最新版本的JavaScript，EcmaScript 2015(被大家熟知的名字是ES6) 官方版本在 6月份发布了。浏览器还不能很好的支持它的很多特性，但这并无关紧要。你可以用Babel来体验它的新特性。Babel 把 ES6 transpile 到 ES5，如果你能忍受这么做，你现在就可以享受 ES6 的新特性。JavaScript预计一年发布一次的新版本了，所以你可能一直需要transpiling 。</p>
+<p>或者你喜欢强类型？那么你可以考虑TypeScript。</p>
+<h1>10.JS应该自动构建</h1>
+<p>我们已经谈到了linting、压缩、transpilation 和测试。但如何才能让这一切自动发生？很简单：使用自动构建。Gulp 就是这样一个结合了所有功能的工具。不过你也可以选择Grunt和Webpack。或者如果你是一个高手，你也可以使用npm 来构建。问题的关键是，不要指望人记得手动运行这些东西的，自动化是一个非常棒的选择。</p>
+<h1>11. 使用框架或者库</h1>
+<p>拿一些现成的东西来用。想保持轻量级？试试Backbone或Knockout。或者jQuery就够了。想要更多更全功能的？试试Angular，Ember,，或者ReactwithFlux。</p>
+<p>关键是：</p>
+<p>不要试图从头开始。站在巨人的肩膀上。</p>
+<p>不管你选择哪个框架，都应该分开你的关注，这就是下一点..</p>
+<h1>12. JS Should Separate Concerns</h1>
+<p>把 JS代码放到一个文件中的习惯很容易养成，或者盲目跟从你的框架的意见。当你移动到客户端的时候，不要忘记你在服务器端学到的经验教训。</p>
+<p>这里并不仅仅意味着就像你在Angular 和 Knockout等 MVC 框架中那样分离模型、视图、控制器。编写JavaScript的时候应该像服务器端开发者那样思考问题。把你的业务逻辑和数据访问分离出来。</p>
+<p>这意味着AJAX调用都应该在一个地方。创建一个集中的客户端“数据访问层”。业务逻辑模块应包含纯JavaScript的。这使得逻辑易于重用，易于测试，升级也不受影响。</p>
+</div><!-- .entry-content --><footer class="entry-footer">
+	    <span class="posted-on">
+        <span class="screen-reader-text">Posted on </span>
+        <time class="entry-date published">2015-10-13</time>
+    </span>
+		
+	    <span class="byline">
+        <span class="author vcard">
+            <span class="screen-reader-text">Author </span>
+            Jimersy Lee
+        </span>
+    </span>
+        
+        <span class="cat-links">
+        <span class="screen-reader-text">Categories </span>
+          
+           <a href="/category/js.html" rel="category">js</a>
+            </span>
+        
+    
+        <span class="tags-links">
+    	
+        <span class="screen-reader-text">Tags </span>
+          
+           <a href="/tags/JS.html" rel="tag">JS</a>
+          
+           <a href="/tags/JAVASCRIPT.html" rel="tag">JAVASCRIPT</a>
+            </span>
+    </footer><!-- .entry-footer --></article><!-- #post-## -->            <!-- UY BEGIN -->
+<div class="post hentry" id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2142981"></script>
+<!-- UY END -->
+            
+        </main><!-- .site-main -->
+    </div><!-- .content-area -->
+</div><!-- .site-content -->	    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <a href="https://github.com/jimersylee">Github</a>
+        <a href="https://coding.net/u/code008">Coding.net</a>
+        <a href="https://coding.net/u/code008/score/share">码力值</a>
+        <a href="https://resume.jimersylee.com">简历</a>
+        <a href="https://www.jimersylee.com">个人网站</a>
+    </div><!-- .site-info -->
+</footer><!-- .site-footer -->
+	
+</div><!-- .site -->
+<script type="text/javascript" src="/theme/default/js/skip-link-focus-fix.js?ver=2.3.2"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var screenReaderText = {"expand":"<span class=\"screen-reader-text\">\u5c55\u5f00\u5b50\u83dc\u5355<\/span>","collapse":"<span class=\"screen-reader-text\">\u6298\u53e0\u5b50\u83dc\u5355<\/span>"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="/theme/default/js/functions.js?ver=2.3.2"></script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

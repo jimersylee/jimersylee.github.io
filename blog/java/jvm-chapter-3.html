@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="keywords" content="JAVA,JVM,java,Jimersy Lee&#039;s Blog">
+	<meta name="description" content="项目地址: http://github.com/jimersylee/javaStudy">
+
+	<!--[if lt IE 9]>
+	<script src="/theme/default/js/html5.js"></script>
+	<![endif]-->
+	<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+	
+	<title>&lt;深入理解Java虚拟机&gt;学习笔记-第三章|Jimersy Lee&#039;s Blog</title>
+	
+	<link rel="stylesheet" href="/theme/default/css/genericons.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/style.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/markdown.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="alternate" type="application/rss+xml" title="Jimersy Lee&#039;s Blog" href="/feed.xml" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="/theme/default/css/ie.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" href="/theme/default/css/ie7.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery.js?ver=2.3.2"></script>
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery-migrate.min.js?ver=2.3.2"></script>
+	
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?ad6130507d4c044cd731ac40594106a0";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	
+</head>
+
+<body>
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	
+	    <div id="sidebar" class="sidebar">
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-branding">
+			<h1 class="site-title"><a href="/" rel="home">Jimersy Lee&#039;s Blog</a></h1>
+				<p class="site-description">Just for fun</p>
+				<button class="secondary-toggle">菜单和挂件</button>
+		</div><!-- .site-branding -->
+	</header><!-- .site-header -->
+	<div id="secondary" class="secondary">
+		<div id="widget-area" class="widget-area" role="complementary">
+		
+			<aside id="categories" class="widget widget_categories">
+    <h2 class="widget-title">分类目录</h2>
+    <ul>
+                <li class="cat-item"><a href="/category/books.html" >books</a></li>
+                <li class="cat-item"><a href="/category/devops.html" >devops</a></li>
+                <li class="cat-item"><a href="/category/go.html" >go</a></li>
+                <li class="cat-item"><a href="/category/java.html" >java</a></li>
+                <li class="cat-item"><a href="/category/js.html" >js</a></li>
+                <li class="cat-item"><a href="/category/linux.html" >linux</a></li>
+                <li class="cat-item"><a href="/category/php.html" >php</a></li>
+                <li class="cat-item"><a href="/category/python.html" >python</a></li>
+                <li class="cat-item"><a href="/category/spring.html" >spring</a></li>
+                <li class="cat-item"><a href="/category/thoughts.html" >thoughts</a></li>
+                <li class="cat-item"><a href="/category/GitBlog.html" >GitBlog</a></li>
+            </ul>
+</aside>
+		    <aside class="widget widget_archive">
+    <h2 class="widget-title">文章归档</h2>
+    <ul>
+        <li><a href="/archive/201809.html">2018-09</a></li>
+        <li><a href="/archive/201709.html">2017-09</a></li>
+        <li><a href="/archive/201707.html">2017-07</a></li>
+        <li><a href="/archive/201704.html">2017-04</a></li>
+        <li><a href="/archive/201608.html">2016-08</a></li>
+        <li><a href="/archive/201607.html">2016-07</a></li>
+        <li><a href="/archive/201605.html">2016-05</a></li>
+        <li><a href="/archive/201510.html">2015-10</a></li>
+        <li><a href="/archive/201508.html">2015-08</a></li>
+        <li><a href="/archive/201507.html">2015-07</a></li>
+        <li><a href="/archive/201505.html">2015-05</a></li>
+        <li><a href="/archive/201504.html">2015-04</a></li>
+        <li><a href="/archive/201503.html">2015-03</a></li>
+        <li><a href="/archive/201411.html">2014-11</a></li>
+        <li><a href="/archive/201408.html">2014-08</a></li>
+        <li><a href="/archive/201407.html">2014-07</a></li>
+        <li><a href="/archive/201401.html">2014-01</a></li>
+        </ul>
+</aside>
+		    <aside id="recent-posts" class="widget widget_recent_entries">
+    <h2 class="widget-title">近期文章</h2>
+    <ul>
+        <li><a href="/blog/go/go-hot-update.html">go-web程序的热更新</a></li>
+        <li><a href="/blog/linux/installFusumaOnManjaro.html">Manjaro安装fusuma</a></li>
+        <li><a href="/blog/devops/installMariadbOnManjaro.html">Manjaro安装Mariadb</a></li>
+        <li><a href="/blog/go/go-build-web-app-chapter-3.html">&lt;Go:build web application&gt;的中文翻译版-第三章-连接数据</a></li>
+        <li><a href="/blog/go/go-build-web-app-catalog.html">&lt;Go:build web application&gt;的中文翻译版本目录</a></li>
+        </ul>
+</aside>
+		    <aside id="tag_cloud" class="widget widget_tag_cloud">
+    <h2 class="widget-title">标签</h2>
+    <div class="tagcloud">
+        <a href="/tags/BACK-END.html" title="BACK-END" >BACK-END</a>
+        <a href="/tags/BOOKS.html" title="BOOKS" >BOOKS</a>
+        <a href="/tags/ML.html" title="ML" >ML</a>
+        <a href="/tags/CENTOS.html" title="CENTOS" >CENTOS</a>
+        <a href="/tags/JENKINS.html" title="JENKINS" >JENKINS</a>
+        <a href="/tags/MANJARO.html" title="MANJARO" >MANJARO</a>
+        <a href="/tags/MARIADB.html" title="MARIADB" >MARIADB</a>
+        <a href="/tags/LINUX.html" title="LINUX" >LINUX</a>
+        <a href="/tags/NGINX.html" title="NGINX" >NGINX</a>
+        <a href="/tags/SSL.html" title="SSL" >SSL</a>
+        <a href="/tags/GO.html" title="GO" >GO</a>
+        <a href="/tags/Blog.html" title="Blog" >Blog</a>
+        <a href="/tags/JAVA.html" title="JAVA" >JAVA</a>
+        <a href="/tags/PATTERN.html" title="PATTERN" >PATTERN</a>
+        <a href="/tags/JVM.html" title="JVM" >JVM</a>
+        <a href="/tags/JS.html" title="JS" >JS</a>
+        <a href="/tags/JAVASCRIPT.html" title="JAVASCRIPT" >JAVASCRIPT</a>
+        <a href="/tags/SHORTCUT-KEY.html" title="SHORTCUT-KEY" >SHORTCUT-KEY</a>
+        <a href="/tags/fusuma.html" title="fusuma" >fusuma</a>
+        <a href="/tags/PHP.html" title="PHP" >PHP</a>
+        <a href="/tags/STRING.html" title="STRING" >STRING</a>
+        <a href="/tags/SWOOLE.html" title="SWOOLE" >SWOOLE</a>
+        <a href="/tags/PYTHON.html" title="PYTHON" >PYTHON</a>
+        <a href="/tags/MACHINE-LEARNING.html" title="MACHINE-LEARNING" >MACHINE-LEARNING</a>
+        <a href="/tags/SCRAPY.html" title="SCRAPY" >SCRAPY</a>
+        <a href="/tags/CRAWLER.html" title="CRAWLER" >CRAWLER</a>
+        <a href="/tags/SPRING-CLOUD.html" title="SPRING-CLOUD" >SPRING-CLOUD</a>
+        <a href="/tags/Spring.html" title="Spring" >Spring</a>
+        <a href="/tags/Cloud.html" title="Cloud" >Cloud</a>
+        <a href="/tags/%E7%AE%80%E4%BB%8B.html" title="简介" >简介</a>
+        <a href="/tags/BLOG.html" title="BLOG" >BLOG</a>
+        <a href="/tags/DEV.html" title="DEV" >DEV</a>
+        <a href="/tags/RULE.html" title="RULE" >RULE</a>
+        <a href="/tags/VIM.html" title="VIM" >VIM</a>
+        <a href="/tags/SPACEVIM.html" title="SPACEVIM" >SPACEVIM</a>
+        <a href="/tags/GitBlog.html" title="GitBlog" >GitBlog</a>
+        </div>
+</aside>
+		    <aside id="text" class="widget widget_text">
+    <h2 class="widget-title">介绍</h2>	
+    <div class="textwidget">
+    	<p>“What I cannot create, I do not understand.” – Richard Feynman</p>
+    </div>
+</aside>
+	    </div><!-- .widget-area -->
+    </div><!-- .secondary -->
+</div><!-- .sidebar -->  
+	    <div id="content" class="site-content">
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+        
+            <article class="post hentry">
+<header class="entry-header">
+    <h1 class="entry-title">&lt;深入理解Java虚拟机&gt;学习笔记-第三章</h1>
+</header><!-- .entry-header -->
+<div class="entry-content">
+<!--
+author: Jimersy Lee
+head: 
+date: 2016-08-20
+title: <深入理解Java虚拟机>学习笔记-第三章
+tags: JAVA,JVM
+images: 
+category: java
+status: publish
+summary: 
+-->
+<h1>第三章 垃圾收集器与内存分配策略</h1>
+<p>项目地址: <a href="'http://github.com/jimersylee/javaStudy'"><a href="http://github.com/jimersylee/javaStudy">http://github.com/jimersylee/javaStudy</a></a></p>
+<h2>3.1概述</h2>
+<p>垃圾收集(Garbage Collection,GC),大部分人都把这项技术当做Java语言的伴生产物,事实上,1960年诞生于MIT的Lisp蚕食第一门真正使用内存动态分配和垃圾收集技术的语言</p>
+<p>GC的3件事情</p>
+<ul>
+<li>那些内存需要回收</li>
+<li>什么时候回收</li>
+<li>如何回收</li>
+</ul>
+<p>目前GC的技术已经相当成熟,为什么我们要了解</p>
+<ul>
+<li>当需要排查各种内存溢出,内存泄露问题时</li>
+<li>当垃圾收集成为系统达到更高并发量瓶颈时</li>
+</ul>
+<h2>3.2对象已死吗</h2>
+<p>Java堆中存在对象实例,垃圾收集器在对堆进行回收前,第一件事就是要确定哪些对象还&quot;活着&quot;,哪些已经&quot;死去&quot;</p>
+<h2>3.2.1 引用计数算法</h2>
+<p>给对象中添加一个引用计数器:每当有一个地方引用它时,计数器加1;当引用失效时,计数器减1;任何时刻计数器为0的对象就是不可能再被使用的</p>
+<p>引用计数算法(Reference Counting)的实现简单,判定效率也高,例如FlashPlayer,Python都使用引用计数算法了内存管理,但是Java虚拟机中没有选用引用计数算法来管理内存,其实最重要的原因是它很难解决对象之间相互循环引用的问题</p>
+<p>testGC()方法,虽然两个对象已经不可能被访问,但是因为互相引用着,导致他们计数器都不为0,于是引用计数算法无法通知GC收集器来回收它们</p>
+<p>GC日志中包含了6747K-&gt;416K(51200K),意味着虚拟机并没有因为这两个对象互相引用就不回收它们,这也从侧面说明虚拟机并不是通过引用计数算法来判断对象是否是存活的</p>
+<h2>3.2.2 可达性分析算法</h2>
+<p>在主流的商用程序语言(Java,C#,甚至古老的Lisp)的主流实现中,都是通过可达性分析(Reachability Analysis)来判定对象是否存活的.这个算法的基本思路就是通过一系列的称为&quot;GC Roots&quot;的对象作为起始点,从这些节点开始向下搜索,搜索所走过的路径称为引用链(Reference Chain),当一个对象到GC Roots没有任何引用链(用图论的话来说,就是从GC Root到这个对象不可达),则证明此对象是不可用的.</p>
+<p>在Java语言中,可作为GC Roots的对象包括下面几种:</p>
+<ul>
+<li>虚拟机栈(栈帧中的本地变量表)中引用的对象</li>
+<li>方法区中类静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中JNI(Native方法)引用的对象</li>
+</ul>
+<h2>3.2.3 再谈引用</h2>
+<p>jdk1.2后,对引用的概念进行了扩充</p>
+<ul>
+<li>强引用
+类型Object obj=new Object();这类的,只要强引用还在,垃圾收集器永远不会回收掉被引用的对象</li>
+<li>软引用
+软引用用来描述一些还有用但并非必需的对象.在系统将要发生内存溢出异常之前,将会把这些对象列进回收范围内进行二次回收.如果这次回收还没有足够的内存,才会抛出内存溢出异常.在JDK1.2后,提供了SoftReference类来实现软引用.</li>
+<li>弱引用
+弱引用也是用来描述非必需对象.当垃圾收集器工作时,无论当前内存是否足够,都会回收掉只被弱引用关联的对象.在JDK1.2后,提供了WeakReference类实现弱引用.</li>
+<li>虚引用
+虚引用也称为幽灵引用或者幻影引用.一个对象是否有虚引用的存在,完全不会对其生存时间构成影响,也无法通过虚引用来获得一个对象实例.为一个对象设置虚引用是为了能在这个对象被回收时能收到系统通知.在JDK1.2后,提供了PhantomReference类实现虚引用</li>
+</ul>
+<h2>3.2.4 生存还是死亡</h2>
+<p>即使在可达性分析算法中不可达的对象,也并非是&quot;非死不可&quot;的,要宣告一个对象死亡,至少经历两次标记过程
+代码清单3-2 一次对象自我拯救的演示</p>
+<pre><code>/**
+ * 此代码演示了两点
+ * 1.对象可以在被GC时自我拯救
+ * 2.这个自救机会只有一次
+ *
+ * @author jimersylee
+ */
+public class FinalizeEscapeGC {
+    public static FinalizeEscapeGC SAVE_HOOK = null;
+
+    public void isAlive() {
+        System.out.println("yes,i am still alive");
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        System.out.println("finalize method executed");
+        FinalizeEscapeGC.SAVE_HOOK = this;
+    }
+
+    public static void main(String[] args) throws Throwable {
+        SAVE_HOOK = new FinalizeEscapeGC();
+        //对象第一次成功拯救自己演示
+
+        //释放对象
+        SAVE_HOOK = null;
+        System.gc();
+        //因为finalize方法优先度低,所以暂停0.5秒等待它
+        Thread.sleep(500);
+        if (SAVE_HOOK != null) {
+            SAVE_HOOK.isAlive();
+        } else {
+            System.out.println("no,i am dead :(");
+        }
+
+        //下面这段代码与上面的完全相同,但是这次自救却失败了
+        SAVE_HOOK = null;
+        System.gc();
+        //因为finalize方法优先度低,所以暂停0.5秒等待它
+        Thread.sleep(500);
+        if (SAVE_HOOK != null) {
+            SAVE_HOOK.isAlive();
+        } else {
+            System.out.println("no,i am dead :(");
+        }
+    }
+}
+</code></pre>
+<h2>3.2.5 回收方法区</h2>
+</div><!-- .entry-content --><footer class="entry-footer">
+	    <span class="posted-on">
+        <span class="screen-reader-text">Posted on </span>
+        <time class="entry-date published">2016-08-20</time>
+    </span>
+		
+	    <span class="byline">
+        <span class="author vcard">
+            <span class="screen-reader-text">Author </span>
+            Jimersy Lee
+        </span>
+    </span>
+        
+        <span class="cat-links">
+        <span class="screen-reader-text">Categories </span>
+          
+           <a href="/category/java.html" rel="category">java</a>
+            </span>
+        
+    
+        <span class="tags-links">
+    	
+        <span class="screen-reader-text">Tags </span>
+          
+           <a href="/tags/JAVA.html" rel="tag">JAVA</a>
+          
+           <a href="/tags/JVM.html" rel="tag">JVM</a>
+            </span>
+    </footer><!-- .entry-footer --></article><!-- #post-## -->            <!-- UY BEGIN -->
+<div class="post hentry" id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2142981"></script>
+<!-- UY END -->
+            
+        </main><!-- .site-main -->
+    </div><!-- .content-area -->
+</div><!-- .site-content -->	    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <a href="https://github.com/jimersylee">Github</a>
+        <a href="https://coding.net/u/code008">Coding.net</a>
+        <a href="https://coding.net/u/code008/score/share">码力值</a>
+        <a href="https://resume.jimersylee.com">简历</a>
+        <a href="https://www.jimersylee.com">个人网站</a>
+    </div><!-- .site-info -->
+</footer><!-- .site-footer -->
+	
+</div><!-- .site -->
+<script type="text/javascript" src="/theme/default/js/skip-link-focus-fix.js?ver=2.3.2"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var screenReaderText = {"expand":"<span class=\"screen-reader-text\">\u5c55\u5f00\u5b50\u83dc\u5355<\/span>","collapse":"<span class=\"screen-reader-text\">\u6298\u53e0\u5b50\u83dc\u5355<\/span>"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="/theme/default/js/functions.js?ver=2.3.2"></script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

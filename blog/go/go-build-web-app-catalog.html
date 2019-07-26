@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="keywords" content="GO,go,Jimersy Lee&#039;s Blog">
+	<meta name="description" content="的中文翻译版本">
+
+	<!--[if lt IE 9]>
+	<script src="/theme/default/js/html5.js"></script>
+	<![endif]-->
+	<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+	
+	<title>&lt;Go:build web application&gt;的中文翻译版本目录|Jimersy Lee&#039;s Blog</title>
+	
+	<link rel="stylesheet" href="/theme/default/css/genericons.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/style.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/markdown.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="alternate" type="application/rss+xml" title="Jimersy Lee&#039;s Blog" href="/feed.xml" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="/theme/default/css/ie.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" href="/theme/default/css/ie7.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery.js?ver=2.3.2"></script>
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery-migrate.min.js?ver=2.3.2"></script>
+	
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?ad6130507d4c044cd731ac40594106a0";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	
+</head>
+
+<body>
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	
+	    <div id="sidebar" class="sidebar">
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-branding">
+			<h1 class="site-title"><a href="/" rel="home">Jimersy Lee&#039;s Blog</a></h1>
+				<p class="site-description">Just for fun</p>
+				<button class="secondary-toggle">菜单和挂件</button>
+		</div><!-- .site-branding -->
+	</header><!-- .site-header -->
+	<div id="secondary" class="secondary">
+		<div id="widget-area" class="widget-area" role="complementary">
+		
+			<aside id="categories" class="widget widget_categories">
+    <h2 class="widget-title">分类目录</h2>
+    <ul>
+                <li class="cat-item"><a href="/category/books.html" >books</a></li>
+                <li class="cat-item"><a href="/category/devops.html" >devops</a></li>
+                <li class="cat-item"><a href="/category/go.html" >go</a></li>
+                <li class="cat-item"><a href="/category/java.html" >java</a></li>
+                <li class="cat-item"><a href="/category/js.html" >js</a></li>
+                <li class="cat-item"><a href="/category/linux.html" >linux</a></li>
+                <li class="cat-item"><a href="/category/php.html" >php</a></li>
+                <li class="cat-item"><a href="/category/python.html" >python</a></li>
+                <li class="cat-item"><a href="/category/spring.html" >spring</a></li>
+                <li class="cat-item"><a href="/category/thoughts.html" >thoughts</a></li>
+                <li class="cat-item"><a href="/category/GitBlog.html" >GitBlog</a></li>
+            </ul>
+</aside>
+		    <aside class="widget widget_archive">
+    <h2 class="widget-title">文章归档</h2>
+    <ul>
+        <li><a href="/archive/201809.html">2018-09</a></li>
+        <li><a href="/archive/201709.html">2017-09</a></li>
+        <li><a href="/archive/201707.html">2017-07</a></li>
+        <li><a href="/archive/201704.html">2017-04</a></li>
+        <li><a href="/archive/201608.html">2016-08</a></li>
+        <li><a href="/archive/201607.html">2016-07</a></li>
+        <li><a href="/archive/201605.html">2016-05</a></li>
+        <li><a href="/archive/201510.html">2015-10</a></li>
+        <li><a href="/archive/201508.html">2015-08</a></li>
+        <li><a href="/archive/201507.html">2015-07</a></li>
+        <li><a href="/archive/201505.html">2015-05</a></li>
+        <li><a href="/archive/201504.html">2015-04</a></li>
+        <li><a href="/archive/201503.html">2015-03</a></li>
+        <li><a href="/archive/201411.html">2014-11</a></li>
+        <li><a href="/archive/201408.html">2014-08</a></li>
+        <li><a href="/archive/201407.html">2014-07</a></li>
+        <li><a href="/archive/201401.html">2014-01</a></li>
+        </ul>
+</aside>
+		    <aside id="recent-posts" class="widget widget_recent_entries">
+    <h2 class="widget-title">近期文章</h2>
+    <ul>
+        <li><a href="/blog/go/go-hot-update.html">go-web程序的热更新</a></li>
+        <li><a href="/blog/linux/installFusumaOnManjaro.html">Manjaro安装fusuma</a></li>
+        <li><a href="/blog/devops/installMariadbOnManjaro.html">Manjaro安装Mariadb</a></li>
+        <li><a href="/blog/go/go-build-web-app-chapter-3.html">&lt;Go:build web application&gt;的中文翻译版-第三章-连接数据</a></li>
+        <li><a href="/blog/go/go-build-web-app-catalog.html">&lt;Go:build web application&gt;的中文翻译版本目录</a></li>
+        </ul>
+</aside>
+		    <aside id="tag_cloud" class="widget widget_tag_cloud">
+    <h2 class="widget-title">标签</h2>
+    <div class="tagcloud">
+        <a href="/tags/BACK-END.html" title="BACK-END" >BACK-END</a>
+        <a href="/tags/BOOKS.html" title="BOOKS" >BOOKS</a>
+        <a href="/tags/ML.html" title="ML" >ML</a>
+        <a href="/tags/CENTOS.html" title="CENTOS" >CENTOS</a>
+        <a href="/tags/JENKINS.html" title="JENKINS" >JENKINS</a>
+        <a href="/tags/MANJARO.html" title="MANJARO" >MANJARO</a>
+        <a href="/tags/MARIADB.html" title="MARIADB" >MARIADB</a>
+        <a href="/tags/LINUX.html" title="LINUX" >LINUX</a>
+        <a href="/tags/NGINX.html" title="NGINX" >NGINX</a>
+        <a href="/tags/SSL.html" title="SSL" >SSL</a>
+        <a href="/tags/GO.html" title="GO" >GO</a>
+        <a href="/tags/Blog.html" title="Blog" >Blog</a>
+        <a href="/tags/JAVA.html" title="JAVA" >JAVA</a>
+        <a href="/tags/PATTERN.html" title="PATTERN" >PATTERN</a>
+        <a href="/tags/JVM.html" title="JVM" >JVM</a>
+        <a href="/tags/JS.html" title="JS" >JS</a>
+        <a href="/tags/JAVASCRIPT.html" title="JAVASCRIPT" >JAVASCRIPT</a>
+        <a href="/tags/SHORTCUT-KEY.html" title="SHORTCUT-KEY" >SHORTCUT-KEY</a>
+        <a href="/tags/fusuma.html" title="fusuma" >fusuma</a>
+        <a href="/tags/PHP.html" title="PHP" >PHP</a>
+        <a href="/tags/STRING.html" title="STRING" >STRING</a>
+        <a href="/tags/SWOOLE.html" title="SWOOLE" >SWOOLE</a>
+        <a href="/tags/PYTHON.html" title="PYTHON" >PYTHON</a>
+        <a href="/tags/MACHINE-LEARNING.html" title="MACHINE-LEARNING" >MACHINE-LEARNING</a>
+        <a href="/tags/SCRAPY.html" title="SCRAPY" >SCRAPY</a>
+        <a href="/tags/CRAWLER.html" title="CRAWLER" >CRAWLER</a>
+        <a href="/tags/SPRING-CLOUD.html" title="SPRING-CLOUD" >SPRING-CLOUD</a>
+        <a href="/tags/Spring.html" title="Spring" >Spring</a>
+        <a href="/tags/Cloud.html" title="Cloud" >Cloud</a>
+        <a href="/tags/%E7%AE%80%E4%BB%8B.html" title="简介" >简介</a>
+        <a href="/tags/BLOG.html" title="BLOG" >BLOG</a>
+        <a href="/tags/DEV.html" title="DEV" >DEV</a>
+        <a href="/tags/RULE.html" title="RULE" >RULE</a>
+        <a href="/tags/VIM.html" title="VIM" >VIM</a>
+        <a href="/tags/SPACEVIM.html" title="SPACEVIM" >SPACEVIM</a>
+        <a href="/tags/GitBlog.html" title="GitBlog" >GitBlog</a>
+        </div>
+</aside>
+		    <aside id="text" class="widget widget_text">
+    <h2 class="widget-title">介绍</h2>	
+    <div class="textwidget">
+    	<p>“What I cannot create, I do not understand.” – Richard Feynman</p>
+    </div>
+</aside>
+	    </div><!-- .widget-area -->
+    </div><!-- .secondary -->
+</div><!-- .sidebar -->  
+	    <div id="content" class="site-content">
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+        
+            <article class="post hentry">
+<header class="entry-header">
+    <h1 class="entry-title">&lt;Go:build web application&gt;的中文翻译版本目录</h1>
+</header><!-- .entry-header -->
+<div class="entry-content">
+<!--
+author: Jimersy Lee
+head: 
+date: 2017-09-20
+title: <Go:build web application>的中文翻译版本目录
+tags: GO
+images: 
+category: go
+status: publish
+summary: <Go:build web application>的中文翻译版本
+-->
+<h2><Go:build web application>的中文翻译版本</h2>
+<h1>目录</h1>
+<h2>模块1:学习Go的Web开发</h2>
+<h3>第一章:介绍和安装Go环境</h3>
+<ul>
+<li>安装Go</li>
+<li>构建一个项目</li>
+<li>引入包</li>
+<li>介绍net包</li>
+<li>你好,Web</li>
+<li>本章总结</li>
+</ul>
+<h3>第二章:服务和路由</h3>
+<ul>
+<li>直接的文件服务</li>
+<li>基本路由</li>
+<li>使用Gorilla实现更复杂的路由</li>
+<li>转发请求</li>
+<li>处理基本的错误</li>
+<li>本章总结</li>
+</ul>
+<h3>第三章:连接数据</h3>
+<ul>
+<li>连接一个数据库</li>
+<li>使用GUID美化URLs</li>
+<li>处理404错误</li>
+<li>总结</li>
+</ul>
+<h3>第四章:使用模板</h3>
+<ul>
+<li>介绍模板,上下文和可视化</li>
+<li>HTML模板和文本模板</li>
+<li>渲染变量和安全性</li>
+<li>使用逻辑和控制结构</li>
+<li>本章总结</li>
+</ul>
+<h3>第五章:使用RESTful APIs进行前端集成</h3>
+<ul>
+<li>设置基本的API结构</li>
+<li>RESTful架构和最佳实践</li>
+<li>创建我们的第一个API</li>
+<li>实现安全</li>
+<li>使用POST创建数据</li>
+<li>使用PUT更改数据</li>
+<li>本章总结</li>
+</ul>
+<h3>第六章:Session和Cookies</h3>
+<ul>
+<li>设置cookies</li>
+<li>存储用户的信息</li>
+<li>初始化一个服务端的session</li>
+<li>本章总结</li>
+</ul>
+<h3>第七章:微服务和通讯</h3>
+<ul>
+<li>介绍引入微服务</li>
+<li>使用微服务的利弊</li>
+<li>理解微服务的内核</li>
+<li>微服务之间的通讯</li>
+<li>在线上放一个信息</li>
+<li>从其他服务读取信息</li>
+<li>本章总结</li>
+</ul>
+<h3>第八章:记录日志和测试</h3>
+<ul>
+<li>介绍Go中的日志</li>
+<li>记录日志到IO中</li>
+<li>格式化你的输出</li>
+<li>使用panics和fatal errors</li>
+<li>介绍Go中的测试</li>
+<li>本章总结</li>
+</ul>
+<h3>第九章:安全</h3>
+<ul>
+<li>在任何地方使用HTTPS-实现TLS</li>
+<li>防止SQL注入</li>
+<li>防范XSS攻击</li>
+<li>防范CSRF跨站攻击</li>
+<li>加密cookies</li>
+<li>使用安全中间件</li>
+<li>本章总结</li>
+</ul>
+<h3>第十章:缓存,代理和提高性能</h3>
+<ul>
+<li>确定瓶颈</li>
+<li>实现反向代理</li>
+<li>实现缓存</li>
+<li>实现HTTP/2</li>
+<li>本章总结</li>
+</ul>
+<h2>模块2:Go 编程蓝皮书</h2>
+<h3>第一章:使用Web Sockets构建的聊天应用</h3>
+<ul>
+<li>一个简单的Web服务器</li>
+<li>在服务器上建模一个聊天室和客户端</li>
+<li>构建一个使用HTML和JavaScript的聊天客户端</li>
+<li>跟踪代码获取内在的流程</li>
+<li>本章总结</li>
+</ul>
+<h3>第二章:增加权限</h3>
+<ul>
+<li>拦截所有请求</li>
+<li>创建一个社交化的登录页面</li>
+<li>动态路径</li>
+<li>OAuth2</li>
+<li>把你的APP告诉权限提供者</li>
+<li>实现额外的登录</li>
+<li>本章总结</li>
+</ul>
+<h3>第三章:3个方法去实现文件缩略图</h3>
+<ul>
+<li>在权限服务器上的头像</li>
+<li>实现Gravatar</li>
+<li>上传头像图片</li>
+<li>整合3种实现</li>
+<li>本章总结</li>
+</ul>
+<h3>第四章:查询域名的命令行工具</h3>
+<ul>
+<li>命令行工具的管道设计</li>
+<li>5个简单的程序</li>
+<li>编写所有5个程序</li>
+<li>本章总结</li>
+</ul>
+<h3>第五章:构建分布式系统,与复杂的数据交互</h3>
+<ul>
+<li>系统设计</li>
+<li>安装环境</li>
+<li>获取Twitter的投票</li>
+<li>计算投票</li>
+<li>运行我们的解决方案</li>
+<li>本章总结</li>
+</ul>
+<h3>第六章:通过RESTful web数据接口对外提供数据和功能</h3>
+<ul>
+<li>RESTful API 设计</li>
+<li>在处理器间共享数据</li>
+<li>包装处理函数</li>
+<li>响应</li>
+<li>理解请求</li>
+<li>一个简单的主函数去处理我们的API</li>
+<li>处理节点</li>
+<li>一个web客户端去消费API</li>
+<li>运行解决方案</li>
+<li>本章总结</li>
+</ul>
+<h3>第七章:随机推荐Web服务</h3>
+<ul>
+<li>项目预览</li>
+<li>用代码展示数据</li>
+<li>构造随机推荐</li>
+<li>本章总结</li>
+</ul>
+<h3>第八章:文件备份系统</h3>
+<ul>
+<li>解决方案设计</li>
+<li>备份包</li>
+<li>用户命令行工具</li>
+<li>备份守护工具</li>
+<li>测试解决方案</li>
+<li>本章总结</li>
+</ul>
+<h2>模块3:精通Go的高并发</h2>
+<h3>第一章:介绍Go并发编程</h3>
+<ul>
+<li>介绍协程</li>
+<li>实现延迟控制机制</li>
+<li>理解协程与协同</li>
+<li>实现通道</li>
+<li>关闭与协程</li>
+<li>构建一个使用协程和通道的爬虫</li>
+<li>本章总结</li>
+</ul>
+<h3>第二章:理解并发模型</h3>
+<ul>
+<li>理解协程如何工作</li>
+<li>同步和异步协程</li>
+<li>可视化并发</li>
+<li>RSS实战</li>
+<li>CSP的一点介绍</li>
+<li>Go和角色模型</li>
+<li>面向对象</li>
+<li>使用并发</li>
+<li>管理线程</li>
+<li>使用同步和互斥锁住数据</li>
+<li>本章总结</li>
+</ul>
+<h3>第三章:开发并行策略</h3>
+<ul>
+<li>在复杂的并发中提高效率</li>
+<li>使用竞争检查识别竞争条件</li>
+<li>同步我们的并发操作</li>
+<li>项目-多用户预约日历</li>
+<li>一个多用户预约日历</li>
+<li>风格说明</li>
+<li>不变性说明</li>
+<li>本章总结</li>
+</ul>
+<h3>第四章:应用中的数据完整性</h3>
+<ul>
+<li>深入理解互斥与同步</li>
+<li>协程的代价</li>
+<li>处理文件</li>
+<li>更底层-实现C</li>
+<li>分布式的Go</li>
+<li>几种常见的一致性模型</li>
+<li>使用memcached</li>
+<li>本章总结</li>
+</ul>
+<h3>第五章:锁,区块和更好的通道</h3>
+<ul>
+<li>理解Go中的区块方法</li>
+<li>清除协程</li>
+<li>创建通道的通道</li>
+<li>Pprof-一个令人惊叹的工具</li>
+<li>处理死锁和错误</li>
+<li>本章总结</li>
+</ul>
+<h3>第六章:C10K-Go中的一个无锁的Web服务器</h3>
+<ul>
+<li>攻克C10K问题</li>
+<li>创建我们的C10K Web服务器</li>
+<li>提供页面服务</li>
+<li>多线程和利用多核</li>
+<li>探索我们的Web服务器</li>
+<li>本章总结</li>
+</ul>
+<h3>第七章:性能与可扩展性</h3>
+<ul>
+<li>Go的高性能</li>
+<li>使用App Engine</li>
+<li>分布式的Go</li>
+<li>一些有用的库</li>
+<li>内存维护</li>
+<li>本章总结</li>
+</ul>
+<h3>第八章:并发程序架构</h3>
+<ul>
+<li>设计我们的并发程序</li>
+<li>确定我们的需求</li>
+<li>在Go中使用NoSQL作为数据存储</li>
+<li>监控文件系统的变化</li>
+<li>管理日志文件</li>
+<li>处理配置文件</li>
+<li>检测文件变化</li>
+<li>备份文件</li>
+<li>设计Web接口</li>
+<li>还原文件的历史-命令行</li>
+<li>检查服务器的健康度</li>
+<li>本章总结</li>
+</ul>
+<h3>第九章:在Go中记录日志和测试并发</h3>
+<ul>
+<li>处理错误和记录日志</li>
+<li>使用log4go包作为健壮的日志组件</li>
+<li>使用runtime包作为细粒度的堆栈跟踪组件</li>
+<li>本章总结</li>
+</ul>
+<h3>第十章:先进的并发和最佳实践</h3>
+<ul>
+<li>使用channels跨越基础</li>
+<li>构建工作者</li>
+<li>实现空通道区块</li>
+<li>使用tomb实现对协程更多的细粒度的控制</li>
+<li>使用通道定时</li>
+<li>通过并发模式构建负载均衡器</li>
+<li>选择单向和双向通道</li>
+<li>使用泛型通道</li>
+<li>使用Go的单元测试</li>
+<li>使用Google的App Engine</li>
+<li>使用最佳实践</li>
+<li>本章总结</li>
+</ul>
+</div><!-- .entry-content --><footer class="entry-footer">
+	    <span class="posted-on">
+        <span class="screen-reader-text">Posted on </span>
+        <time class="entry-date published">2017-09-20</time>
+    </span>
+		
+	    <span class="byline">
+        <span class="author vcard">
+            <span class="screen-reader-text">Author </span>
+            Jimersy Lee
+        </span>
+    </span>
+        
+        <span class="cat-links">
+        <span class="screen-reader-text">Categories </span>
+          
+           <a href="/category/go.html" rel="category">go</a>
+            </span>
+        
+    
+        <span class="tags-links">
+    	
+        <span class="screen-reader-text">Tags </span>
+          
+           <a href="/tags/GO.html" rel="tag">GO</a>
+            </span>
+    </footer><!-- .entry-footer --></article><!-- #post-## -->            <!-- UY BEGIN -->
+<div class="post hentry" id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2142981"></script>
+<!-- UY END -->
+            
+        </main><!-- .site-main -->
+    </div><!-- .content-area -->
+</div><!-- .site-content -->	    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <a href="https://github.com/jimersylee">Github</a>
+        <a href="https://coding.net/u/code008">Coding.net</a>
+        <a href="https://coding.net/u/code008/score/share">码力值</a>
+        <a href="https://resume.jimersylee.com">简历</a>
+        <a href="https://www.jimersylee.com">个人网站</a>
+    </div><!-- .site-info -->
+</footer><!-- .site-footer -->
+	
+</div><!-- .site -->
+<script type="text/javascript" src="/theme/default/js/skip-link-focus-fix.js?ver=2.3.2"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var screenReaderText = {"expand":"<span class=\"screen-reader-text\">\u5c55\u5f00\u5b50\u83dc\u5355<\/span>","collapse":"<span class=\"screen-reader-text\">\u6298\u53e0\u5b50\u83dc\u5355<\/span>"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="/theme/default/js/functions.js?ver=2.3.2"></script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

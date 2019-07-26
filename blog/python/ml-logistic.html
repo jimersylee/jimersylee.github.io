@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="keywords" content="PYTHON,MACHINE-LEARNING,python,Jimersy Lee&#039;s Blog">
+	<meta name="description" content="Logistic回归,从疝气病预测兵马的死亡率">
+
+	<!--[if lt IE 9]>
+	<script src="/theme/default/js/html5.js"></script>
+	<![endif]-->
+	<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+	
+	<title>&lt;机器学习实战&gt;学习笔记之Logistic|Jimersy Lee&#039;s Blog</title>
+	
+	<link rel="stylesheet" href="/theme/default/css/genericons.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/style.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="stylesheet" href="/theme/default/css/markdown.css?ver=2.3.2" type="text/css" media="all" />
+	<link rel="alternate" type="application/rss+xml" title="Jimersy Lee&#039;s Blog" href="/feed.xml" />
+	<!--[if lt IE 9]>
+	<link rel="stylesheet" href="/theme/default/css/ie.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" href="/theme/default/css/ie7.css?ver=2.3.2" type="text/css" media="all" />
+	<![endif]-->
+	
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery.js?ver=2.3.2"></script>
+	<script type="text/javascript" src="/theme/default/js/jquery/jquery-migrate.min.js?ver=2.3.2"></script>
+	
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?ad6130507d4c044cd731ac40594106a0";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	
+</head>
+
+<body>
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+	
+	    <div id="sidebar" class="sidebar">
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-branding">
+			<h1 class="site-title"><a href="/" rel="home">Jimersy Lee&#039;s Blog</a></h1>
+				<p class="site-description">Just for fun</p>
+				<button class="secondary-toggle">菜单和挂件</button>
+		</div><!-- .site-branding -->
+	</header><!-- .site-header -->
+	<div id="secondary" class="secondary">
+		<div id="widget-area" class="widget-area" role="complementary">
+		
+			<aside id="categories" class="widget widget_categories">
+    <h2 class="widget-title">分类目录</h2>
+    <ul>
+                <li class="cat-item"><a href="/category/books.html" >books</a></li>
+                <li class="cat-item"><a href="/category/devops.html" >devops</a></li>
+                <li class="cat-item"><a href="/category/go.html" >go</a></li>
+                <li class="cat-item"><a href="/category/java.html" >java</a></li>
+                <li class="cat-item"><a href="/category/js.html" >js</a></li>
+                <li class="cat-item"><a href="/category/linux.html" >linux</a></li>
+                <li class="cat-item"><a href="/category/php.html" >php</a></li>
+                <li class="cat-item"><a href="/category/python.html" >python</a></li>
+                <li class="cat-item"><a href="/category/spring.html" >spring</a></li>
+                <li class="cat-item"><a href="/category/thoughts.html" >thoughts</a></li>
+                <li class="cat-item"><a href="/category/GitBlog.html" >GitBlog</a></li>
+            </ul>
+</aside>
+		    <aside class="widget widget_archive">
+    <h2 class="widget-title">文章归档</h2>
+    <ul>
+        <li><a href="/archive/201809.html">2018-09</a></li>
+        <li><a href="/archive/201709.html">2017-09</a></li>
+        <li><a href="/archive/201707.html">2017-07</a></li>
+        <li><a href="/archive/201704.html">2017-04</a></li>
+        <li><a href="/archive/201608.html">2016-08</a></li>
+        <li><a href="/archive/201607.html">2016-07</a></li>
+        <li><a href="/archive/201605.html">2016-05</a></li>
+        <li><a href="/archive/201510.html">2015-10</a></li>
+        <li><a href="/archive/201508.html">2015-08</a></li>
+        <li><a href="/archive/201507.html">2015-07</a></li>
+        <li><a href="/archive/201505.html">2015-05</a></li>
+        <li><a href="/archive/201504.html">2015-04</a></li>
+        <li><a href="/archive/201503.html">2015-03</a></li>
+        <li><a href="/archive/201411.html">2014-11</a></li>
+        <li><a href="/archive/201408.html">2014-08</a></li>
+        <li><a href="/archive/201407.html">2014-07</a></li>
+        <li><a href="/archive/201401.html">2014-01</a></li>
+        </ul>
+</aside>
+		    <aside id="recent-posts" class="widget widget_recent_entries">
+    <h2 class="widget-title">近期文章</h2>
+    <ul>
+        <li><a href="/blog/go/go-hot-update.html">go-web程序的热更新</a></li>
+        <li><a href="/blog/linux/installFusumaOnManjaro.html">Manjaro安装fusuma</a></li>
+        <li><a href="/blog/devops/installMariadbOnManjaro.html">Manjaro安装Mariadb</a></li>
+        <li><a href="/blog/go/go-build-web-app-chapter-3.html">&lt;Go:build web application&gt;的中文翻译版-第三章-连接数据</a></li>
+        <li><a href="/blog/go/go-build-web-app-catalog.html">&lt;Go:build web application&gt;的中文翻译版本目录</a></li>
+        </ul>
+</aside>
+		    <aside id="tag_cloud" class="widget widget_tag_cloud">
+    <h2 class="widget-title">标签</h2>
+    <div class="tagcloud">
+        <a href="/tags/BACK-END.html" title="BACK-END" >BACK-END</a>
+        <a href="/tags/BOOKS.html" title="BOOKS" >BOOKS</a>
+        <a href="/tags/ML.html" title="ML" >ML</a>
+        <a href="/tags/CENTOS.html" title="CENTOS" >CENTOS</a>
+        <a href="/tags/JENKINS.html" title="JENKINS" >JENKINS</a>
+        <a href="/tags/MANJARO.html" title="MANJARO" >MANJARO</a>
+        <a href="/tags/MARIADB.html" title="MARIADB" >MARIADB</a>
+        <a href="/tags/LINUX.html" title="LINUX" >LINUX</a>
+        <a href="/tags/NGINX.html" title="NGINX" >NGINX</a>
+        <a href="/tags/SSL.html" title="SSL" >SSL</a>
+        <a href="/tags/GO.html" title="GO" >GO</a>
+        <a href="/tags/Blog.html" title="Blog" >Blog</a>
+        <a href="/tags/JAVA.html" title="JAVA" >JAVA</a>
+        <a href="/tags/PATTERN.html" title="PATTERN" >PATTERN</a>
+        <a href="/tags/JVM.html" title="JVM" >JVM</a>
+        <a href="/tags/JS.html" title="JS" >JS</a>
+        <a href="/tags/JAVASCRIPT.html" title="JAVASCRIPT" >JAVASCRIPT</a>
+        <a href="/tags/SHORTCUT-KEY.html" title="SHORTCUT-KEY" >SHORTCUT-KEY</a>
+        <a href="/tags/fusuma.html" title="fusuma" >fusuma</a>
+        <a href="/tags/PHP.html" title="PHP" >PHP</a>
+        <a href="/tags/STRING.html" title="STRING" >STRING</a>
+        <a href="/tags/SWOOLE.html" title="SWOOLE" >SWOOLE</a>
+        <a href="/tags/PYTHON.html" title="PYTHON" >PYTHON</a>
+        <a href="/tags/MACHINE-LEARNING.html" title="MACHINE-LEARNING" >MACHINE-LEARNING</a>
+        <a href="/tags/SCRAPY.html" title="SCRAPY" >SCRAPY</a>
+        <a href="/tags/CRAWLER.html" title="CRAWLER" >CRAWLER</a>
+        <a href="/tags/SPRING-CLOUD.html" title="SPRING-CLOUD" >SPRING-CLOUD</a>
+        <a href="/tags/Spring.html" title="Spring" >Spring</a>
+        <a href="/tags/Cloud.html" title="Cloud" >Cloud</a>
+        <a href="/tags/%E7%AE%80%E4%BB%8B.html" title="简介" >简介</a>
+        <a href="/tags/BLOG.html" title="BLOG" >BLOG</a>
+        <a href="/tags/DEV.html" title="DEV" >DEV</a>
+        <a href="/tags/RULE.html" title="RULE" >RULE</a>
+        <a href="/tags/VIM.html" title="VIM" >VIM</a>
+        <a href="/tags/SPACEVIM.html" title="SPACEVIM" >SPACEVIM</a>
+        <a href="/tags/GitBlog.html" title="GitBlog" >GitBlog</a>
+        </div>
+</aside>
+		    <aside id="text" class="widget widget_text">
+    <h2 class="widget-title">介绍</h2>	
+    <div class="textwidget">
+    	<p>“What I cannot create, I do not understand.” – Richard Feynman</p>
+    </div>
+</aside>
+	    </div><!-- .widget-area -->
+    </div><!-- .secondary -->
+</div><!-- .sidebar -->  
+	    <div id="content" class="site-content">
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main" role="main">
+        
+            <article class="post hentry">
+<header class="entry-header">
+    <h1 class="entry-title">&lt;机器学习实战&gt;学习笔记之Logistic</h1>
+</header><!-- .entry-header -->
+<div class="entry-content">
+<!--
+author: Jimersy Lee
+head: 
+date: 2016-05-05
+title: <机器学习实战>学习笔记之Logistic
+tags: PYTHON,MACHINE-LEARNING
+images: 
+category: python
+status: publish
+summary: Logistic回归,从疝气病预测兵马的死亡率
+-->
+<p>项目地址:<a href="http://github.com/jimersylee/MachineLearningAction"><a href="http://github.com/jimersylee/MachineLearningAction">http://github.com/jimersylee/MachineLearningAction</a></a></p>
+<h1>Logistic回归</h1>
+<h2>本章内容</h2>
+<ul>
+<li>Sigmoid函数和Logistic回归分类器</li>
+<li>最优化理论初步</li>
+<li>梯度下降最优化算法</li>
+<li>数据中的缺失项处理</li>
+</ul>
+<h2>最优化算法</h2>
+<p>比如如何在最短时间内从A点到B点?如何投入最少的工作量获得最大的收益</p>
+<h2>Logistic回归的一般过程</h2>
+<ol>
+<li>收集数据:采用任意方法收集数据</li>
+<li>准备数据:由于需要进行距离计算,因此要求数据类型为数值型.另外,结构化数据格式则最佳</li>
+<li>分析数据:采用任意方法对数据进行分析</li>
+<li>训练算法:大部分时间将将用于测试,训练的目的是为了找到最佳的分类回归系数</li>
+<li>测试算法:一旦训练步骤完成,分类将会很快</li>
+<li>使用算法:首先,我们需要输入一些数据,并将其转换成对应的结构化数值;接着,基于训练好的回归系数就可以对这些数值进行简单的回归计算,判定他们属于那个类别了;在这之后,我们就可以在输出的类别上做一些其他分析工作</li>
+</ol>
+<h2>基于Logistic回归和Sigmoid函数的分类</h2>
+<p>优点:计算代价不高,易于理解和实现
+缺点:容易欠拟合,分类精度可能不高
+适用数据类型:数值型和标称型数据</p>
+<p>我们想要的函数,能够接受所有的输入然后预测出类别.
+使用单位阶跃函数
+Sigmoid函数
+f(z)=1/(1+e^-z)</p>
+<h2>训练算法:随机梯度上升</h2>
+<p>梯度上升算法在每次更新回归系数时都需要遍历整个数据集,当数据集增加时,计算复杂度就太高了.
+改进方法是一次禁用一个样本点来更新回归系数,该方法成为随机梯度上升算法.</p>
+<h2>报错,未解决</h2>
+<p>weights = weights + alpha <em> error </em> dataMatIn[i]
+ValueError: operands could not be broadcast together with shapes (3,) (0,) </p>
+<h1>示例:从疝气病预测兵马的死亡率</h1>
+<p>本节使用Logistic回归来预测患有疝气病的马的存货问题
+样本数据包含368个样本和28个特征
+<em>有30%的数据的值是缺失的</em>.下面将介绍如何处理数据集中的数据确实问题,然后再用Logistic回归和随机梯度上升算法来预测病马的生死</p>
+<h2>准备数据</h2>
+<p>数据缺失是个麻烦的问题.如何解决</p>
+<ul>
+<li>使用可用特征的均值来填补缺失值</li>
+<li>使用特殊值来填补缺失值,如-1</li>
+<li>忽略有缺失值的样本</li>
+<li>使用相似样本的均值填补缺失值</li>
+<li>使用另外的机器学习算法来预测缺失值</li>
+</ul>
+<pre><code>
+from numpy import *
+import matplotlib.pyplot as plt
+
+def loadDataSet():
+    """
+    载入测试数据
+    :return:
+    """
+    dataMat = []
+    labelMat = []
+    fr = open('testSet.txt')
+    for line in fr.readlines():
+        lineArr = line.strip().split()
+        dataMat.append([1.0, float(lineArr[0]), float(lineArr[1])])  # 为了计算方便,将X0设置为1.0
+        labelMat.append(int(lineArr[2]))
+    return dataMat, labelMat
+
+def sigmoid(inX):
+    """
+    Sigmoid函数,单位阶跃函数
+    :param inX:
+    :return:
+    """
+    return 1.0 / (1 + exp(-inX))
+
+def gradAscent(dataMatIn, classLabels):
+    """
+    梯度上升算法
+    :param dataMatIn: 输入的数据矩阵,存放的100*3的矩阵
+    :param classLabels: 输入的数据类别矩阵
+    :return:返回训练好的迭代次数
+    """
+    # 转换为NumPy矩阵类型
+    dataMatrix = mat(dataMatIn)
+    labelMat = mat(classLabels).transpose()  # 初始为1*100的行向量,为了便于矩阵运算,使用transpose转置为列向量100*1
+
+    m, n = shape(dataMatrix)  # 得到矩阵大小
+    alpha = 0.001  # 目标移动的步长
+    maxCycles = 500  # 最大迭代次数
+    weights = ones((n, 1))
+
+    for k in range(maxCycles):
+        # 矩阵相乘,下面两行,计算真实类别与预测类别的差值,接下来就是按照该差值的方向调整回归系数
+        h = sigmoid(dataMatrix * weights)  # 代表的不是一次乘积计算,事实上该运算包含了300次的乘积,变量h不是一个数,而是一个列向量,100
+        error = (labelMat - h)
+        weights = weights + alpha * dataMatrix.transpose() * error
+    return weights
+
+def stocGradAscent0(dataMatIn, classLabels):
+    m, n = shape(dataMatIn)
+    alpha = 0.01
+    weights = ones(n)
+    for i in range(m):
+        h = sigmoid(sum(dataMatIn[i] * weights))  # h是向量
+        error = classLabels[i] - h  # error是向量
+        weights = weights + alpha * error * dataMatIn[i]
+    return weights
+
+def stocGradAscent1(dataMatIn, classLabels, numIter=150):
+    """
+    改进的随机梯度上升算法
+    :param dataMatIn:
+    :param classLabels:
+    :param numIter:
+    :return:
+    """
+    m, n = shape(dataMatIn)
+    weights = ones(n)
+    for j in range(numIter):
+        dataIndex = range(m)
+        for i in range(m):
+            alpha = 4 / (1.0 + j + i) + 0.01  # alpha每次迭代时需要调整
+            randIndex = int(random.uniform(0, len(dataIndex)))  # 随机选取更新
+            h = sigmoid(sum(dataMatIn[randIndex] * weights))
+            error = classLabels[randIndex] - h
+            weights = weights + alpha * error * dataMatIn[randIndex]
+            del (dataIndex[randIndex])
+    return weights
+
+def plotBestFit(weights):
+    """
+    画出数据集和Logistic回归最佳拟合直线的函数
+    :param weights:系数
+    :return:
+    """
+    weights = weights.getA()
+    dataMat, labelMat = loadDataSet()
+    dataArr = array(dataMat)
+    n = shape(dataArr)[0]
+    xcord1 = []
+    ycord1 = []
+    xcord2 = []
+    ycord2 = []
+
+    for i in range(n):
+        if int(labelMat[i]) == 1:
+            xcord1.append(dataArr[i, 1])
+            ycord1.append(dataArr[i, 2])
+        else:
+            xcord2.append(dataArr[i, 1])
+            ycord2.append(dataArr[i, 2])
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(xcord1, ycord1, s=30, c='red', marker='s')
+    ax.scatter(xcord2, ycord2, s=30, c="green")
+    x = arange(-3.0, 3.0, 0.1)
+    y = (-weights[0] - weights[1] * x) / weights[2]
+    ax.plot(x, y)
+    plt.xlabel("X1")
+    plt.ylabel("X2")
+    plt.show()
+
+def classifyVector(inX, weights):
+    prob = sigmoid(sum(inX * weights))
+    if prob &gt; 0.5:
+        return 1.0
+    else:
+        return 0.0
+
+def colicTest():
+    """
+    疝气病马死亡分类测试
+    :return:
+    """
+    frTrain = open('horseColicTraining.txt')
+    frTest = open('horseColicTest.txt')
+    trainingSet = []
+    trainingLabels = []
+    for line in frTrain.readlines():
+        currLine = line.strip().split('\t')
+        lineArr = []
+        for i in range(21):
+            lineArr.append(float(currLine[i]))
+        trainingSet.append(lineArr)
+        trainingLabels.append(float(currLine[i]))
+    trainWeights = stocGradAscent1(array(trainingSet), trainingLabels, 500)
+    errorCount = 0
+    numTestVec = 0.0
+    for line in frTest.readlines():
+        numTestVec += 1.0
+        currLine = line.strip().split('\t')
+        lineArr = []
+        for i in range(21):
+            lineArr.append(float(currLine[i]))
+        if int(classifyVector(array(lineArr), trainWeights)) != int(currLine[21]):
+            errorCount += 1
+    errorRate = (float(errorCount / numTestVec))
+    print "the error rate of this test is: %f" % errorRate
+    return errorRate
+
+def multiTest():
+    numTests = 10
+    errorSum = 0.0
+    for k in range(numTests):
+        errorSum += colicTest()
+    print "after %d iterations the average error rate is: %f" % (numTests, errorSum / float(numTests))
+
+def testCal():
+    dataArr, labelMat = loadDataSet()
+    weights = gradAscent(dataArr, labelMat)
+    print weights
+    """
+    得到一组回归系数,它确定了不同类别数据之间的分割线
+    [[ 4.12414349]
+     [ 0.48007329]
+     [-0.6168482 ]]
+    """
+
+def testGradAscent():
+    """
+    测试梯度上升算法,画图
+    :return:
+    """
+    dataArr, labelMat = loadDataSet()
+    weights = gradAscent(dataArr, labelMat)
+    plotBestFit(weights)
+
+def testStocGradAscent0():
+    """
+    测试随机梯度上升算法,画图
+    :return:
+    """
+    dataArr, labelMat = loadDataSet()
+    weights = stocGradAscent0(dataArr, labelMat)
+    plotBestFit(weights)
+
+def testStocGradAscent1():
+    """
+    测试随机梯度上升算法,画图
+    :return:
+    """
+    dataArr, labelMat = loadDataSet()
+    weights = stocGradAscent1(dataArr, labelMat)
+    plotBestFit(weights)
+
+# testCal()
+
+#testGradAscent()
+
+# testStocGradAscent0()
+multiTest()</code></pre>
+</div><!-- .entry-content --><footer class="entry-footer">
+	    <span class="posted-on">
+        <span class="screen-reader-text">Posted on </span>
+        <time class="entry-date published">2016-05-05</time>
+    </span>
+		
+	    <span class="byline">
+        <span class="author vcard">
+            <span class="screen-reader-text">Author </span>
+            Jimersy Lee
+        </span>
+    </span>
+        
+        <span class="cat-links">
+        <span class="screen-reader-text">Categories </span>
+          
+           <a href="/category/python.html" rel="category">python</a>
+            </span>
+        
+    
+        <span class="tags-links">
+    	
+        <span class="screen-reader-text">Tags </span>
+          
+           <a href="/tags/PYTHON.html" rel="tag">PYTHON</a>
+          
+           <a href="/tags/MACHINE-LEARNING.html" rel="tag">MACHINE-LEARNING</a>
+            </span>
+    </footer><!-- .entry-footer --></article><!-- #post-## -->            <!-- UY BEGIN -->
+<div class="post hentry" id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2142981"></script>
+<!-- UY END -->
+            
+        </main><!-- .site-main -->
+    </div><!-- .content-area -->
+</div><!-- .site-content -->	    <footer id="colophon" class="site-footer" role="contentinfo">
+    <div class="site-info">
+        <a href="https://github.com/jimersylee">Github</a>
+        <a href="https://coding.net/u/code008">Coding.net</a>
+        <a href="https://coding.net/u/code008/score/share">码力值</a>
+        <a href="https://resume.jimersylee.com">简历</a>
+        <a href="https://www.jimersylee.com">个人网站</a>
+    </div><!-- .site-info -->
+</footer><!-- .site-footer -->
+	
+</div><!-- .site -->
+<script type="text/javascript" src="/theme/default/js/skip-link-focus-fix.js?ver=2.3.2"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var screenReaderText = {"expand":"<span class=\"screen-reader-text\">\u5c55\u5f00\u5b50\u83dc\u5355<\/span>","collapse":"<span class=\"screen-reader-text\">\u6298\u53e0\u5b50\u83dc\u5355<\/span>"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="/theme/default/js/functions.js?ver=2.3.2"></script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/github.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>
