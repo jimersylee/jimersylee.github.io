@@ -1,0 +1,174 @@
+
+/* Normalization
+*********************************************************************************************/
+
+.dp-panel div,
+.dp-panel span,
+.dp-panel object,
+.dp-panel iframe,
+.dp-panel h1,
+.dp-panel h2,
+.dp-panel h3,
+.dp-panel p,
+.dp-panel a,
+.dp-panel em,
+.dp-panel img,
+.dp-panel strong,
+.dp-panel ol,
+.dp-panel ul,
+.dp-panel li,
+.dp-panel fieldset,
+.dp-panel form,
+.dp-panel label,
+.dp-panel section,
+.dp-panel video,
+body.dp-install {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+.dp-panel a,
+body.dp-install a {
+    text-decoration: none;
+}
+
+.dp-panel ol,
+.dp-panel ul { 
+    list-style: none;
+}
+
+/* The Install Screen
+*********************************************************************************************/
+
+body.dp-install {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #808080;
+    text-align: center;
+    text-rendering: optimizeLegibility;
+}
+
+body.dp-install .dp-icon-dropplets {
+    background-color: #1096d7;
+    font-family: "dropplets";
+    font-size: 110px;
+    line-height: 160px;
+    color: #ffffff;
+    width: 160px;
+    height: 160px;
+    float: left;
+    margin: -80px 0 0 80px;
+}
+
+.dp-panel .dp-panel a.dropplets:hover,
+.dp-panel .dp-panel a.dropplets-text:hover {
+    box-shadow: inset 0 0 20px rgba(20, 100, 140, 0.75);
+    text-shadow: 0 0 10px rgba(20, 100, 140, 0.75);
+}
+
+body.dp-install form {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.01);
+    width: 320px;
+    height: 340px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -171px 0 0 -161px;
+}
+
+body.dp-install form h2 {
+    font-size: 20px;
+    color: #404040;
+    font-weight: normal;
+    width: 320px;
+    max-width: 100% !important;
+    float: left;
+    margin: 24px 0 10px;
+}
+
+body.dp-install form p {
+    width: 300px;
+    float: left;
+    margin: 0 0 24px;
+    padding: 0 10px;
+}
+
+body.dp-install form input[type="password"] {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    outline: none;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #404040;
+    text-align: center;
+    width: 258px;
+    float: left;
+    margin: 0 0 10px 10px;
+    padding: 10px 20px;
+}
+
+body.dp-install form button {
+    background-color: #4ebb44;
+    border: none;
+    font-family: "dropplets";
+    color: #ffffff;
+    font-size: 40px;
+    text-align: center;
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    bottom: -35px;
+    left: 160px;
+    margin-left: -35px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-transition-duration: 0.1s;
+    -webkit-transition-duration: 0.1s;
+}
+
+body.dp-install form button:hover {
+    box-shadow: inset 0 0 20px rgba(54, 124, 49, 0.75);
+    text-shadow: 0 0 10px rgba(54, 124, 49, 0.75);
+}
+
+
+/* Side Admin Panel
+*********************************************************************************************/
+
+.dp-dropplets-icon {
+    background-color: #2abb9b;
+    font-family: "FontAwesome";
+    font-size: 16px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 35px;
+    width: 35px;
+    height: 35px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1900;
+}
+
+.dp-dropplets-prev {
+	top: 55px;
+}
+
+.dp-dropplets-next {
+	top: 100px;
+}
+
+.dp-dropplets-icon:hover {
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.15);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+}

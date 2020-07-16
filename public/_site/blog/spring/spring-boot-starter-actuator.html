@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>actuator模块简介|Jimersy Lee's Blog </title>
+    
+    <meta name="keywords" content="SPRING-CLOUD,spring,Jimersy Lee,jimersylee,java,php,python,js,html,github">
+	<meta name="description" content="spring-boot-starter-actuator模块简介,此模块提供监控与采集功能,通过在pom中引用此依赖,可以方便地使用其功能">
+    <link rel="stylesheet" type="text/css" href="http://local.v4.blog.com/theme/beach/css/style.css?ver=2.3.2">
+    <link rel="stylesheet" type="text/css" href="http://local.v4.blog.com/theme/beach/css/markdown.css?ver=2.3.2">
+    <link rel="alternate" type="application/rss+xml" title="Jimersy Lee's Blog" href="http://local.v4.blog.com/feed.xml" />
+    
+    <!--[if IE]>
+	<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<![endif]-->
+	
+    <!--[if IE 6]>
+	<script src="http://local.v4.blog.com/theme/beach/js/belatedPNG.js"></script>
+	<script>
+    	DD_belatedPNG.fix('*');
+	</script>
+	<![endif]-->
+	
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?3f9957e676a9733fcd02eb9f0e5f9416";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	</head>
+
+<body>
+    <section id="page">
+        <div id="pagewrap">
+        		<section id="sidebar">
+	    <h2>分类</h2>
+    <ul>
+            <li>
+            <a href="http://local.v4.blog.com/category/linux.html">linux</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/python.html">python</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/js.html">js</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/devops.html">devops</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/spring.html">spring</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/go.html">go</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/thoughts.html">thoughts</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/books.html">books</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/java.html">java</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/php.html">php</a>
+        </li>
+        </ul>
+        
+        <h2>标签</h2>
+    <ul>
+            <li>
+            <a href="http://local.v4.blog.com/tags/LINUX.html">LINUX</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SHORTCUT-KEY.html">SHORTCUT-KEY</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/CENTOS.html">CENTOS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/MANJARO.html">MANJARO</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/fusuma.html">fusuma</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/VIM.html">VIM</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SPACEVIM.html">SPACEVIM</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/PYTHON.html">PYTHON</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/MACHINE-LEARNING.html">MACHINE-LEARNING</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SCRAPY.html">SCRAPY</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/CRAWLER.html">CRAWLER</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JS.html">JS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JAVASCRIPT.html">JAVASCRIPT</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/NGINX.html">NGINX</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SSL.html">SSL</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JENKINS.html">JENKINS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/HARBOR.html">HARBOR</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/DEVOPS.html">DEVOPS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/MARIADB.html">MARIADB</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/Spring.html">Spring</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/Cloud.html">Cloud</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/%E7%AE%80%E4%BB%8B.html">简介</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SPRING-CLOUD.html">SPRING-CLOUD</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/GO.html">GO</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/Blog.html">Blog</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/BLOG.html">BLOG</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/DEV.html">DEV</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/RULE.html">RULE</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/ML.html">ML</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/BOOKS.html">BOOKS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/BACK-END.html">BACK-END</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JAVA.html">JAVA</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/PATTERN.html">PATTERN</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JVM.html">JVM</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/PHP.html">PHP</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SWOOLE.html">SWOOLE</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/STRING.html">STRING</a>
+        </li>
+        </ul>
+        
+        <h2>归档</h2>
+    <ul>
+            <li>
+            <a href="http://local.v4.blog.com/archive/202006.html">2020-06</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/202005.html">2020-05</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/202002.html">2020-02</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201809.html">2018-09</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201709.html">2017-09</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201707.html">2017-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201704.html">2017-04</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201608.html">2016-08</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201607.html">2016-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201605.html">2016-05</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201510.html">2015-10</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201508.html">2015-08</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201507.html">2015-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201505.html">2015-05</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201504.html">2015-04</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201503.html">2015-03</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201411.html">2014-11</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201408.html">2014-08</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201407.html">2014-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201401.html">2014-01</a>
+        </li>
+        </ul>
+    </section>        	<section id="contents">
+	<header id="mainheader">
+		<h1><a href="http://local.v4.blog.com/"><span>Jimersy Lee's Blog</span></a></h1>
+	</header>
+	
+	<section id="main">
+	<article class="post">
+    <header>
+    	        <h2>actuator模块简介</h2>
+		        <p class="postinfo">SPRING-CLOUD,spring | <time>2017-04-29</time> | by <i>Jimersy Lee</i></p>
+    </header>
+
+    <section class="entry">
+        <p>
+        		<!--
+author: Jimersy Lee
+head: 
+date: 2017-04-29
+title: actuator模块简介
+tags: SPRING-CLOUD
+images: 
+category: spring
+status: publish
+summary: spring-boot-starter-actuator模块简介,此模块提供监控与采集功能,通过在pom中引用此依赖,可以方便地使用其功能
+-->
+<p>此模块提供监控与采集功能,通过在pom中引用此依赖,可以方便地使用其功能</p>
+<pre><code>&lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+<h2>原生端点</h2>
+<ul>
+<li>应用配置类:获取应用程序中加载的应用配置,环境变量,自动化配置报告等与SpringBoot应用密切相关的配置类信息</li>
+<li>度量指标类:获取应用程序运行过程中用户监控的度量指标,比如内存信息,线程池信息,HTTP请求统计等</li>
+<li>操作控制类:提供了对应用的关闭操作类功能</li>
+</ul>
+<h3>应用配置类</h3>
+<ul>
+<li>
+<p>/autoconfig:该端点用来获取应用的自动化配置报告.包括条件匹配成功以及不成功的配置</p>
+<ul>
+<li>positiveMatches中返回是条件匹配成功的自动化配置</li>
+<li>negativeMatches中返回的是条件匹配不成功的自动化配置</li>
+</ul>
+</li>
+<li>
+<p>/beans:该端点用来获取应用上下文中创建的所有Bean</p>
+<pre><code>[
+    {
+        "context":"application",
+        "parent":null,
+        "beans":[
+            {
+                "bean":"helloApplication",
+                "aliases":[
+
+                ],
+                "scope":"singleton",
+                "type":"com.jimersylee.hello.HelloApplication$$EnhancerBySpringCGLIB$$d3ebe421",
+                "resource":"null",
+                "dependencies":[
+
+                ]
+            },</code></pre>
+<p>每个Bean中都包含了下面这些信息</p>
+<ul>
+<li>bean:Bean的名称</li>
+<li>scope:Bean的作用域</li>
+<li>type:Bean的Java类型</li>
+<li>resource:class文件的具体路径</li>
+<li>dependencies:依赖的Bean名称</li>
+</ul>
+</li>
+<li>
+<p>/configprops:该端点用来获取应用中配置的属性信息报告,可以通过使用endpoints.configprops.enabled=false来关闭</p>
+</li>
+<li>
+<p>env:该端点与/configprops不同,它用来获取应用所有可用的环境属性报告</p>
+<pre><code>{
+    "profiles":[
+
+    ],
+    "server.ports":{
+        "local.server.port":8080
+    },
+    "servletContextInitParams":{
+
+    },
+    "systemProperties":{
+        "java.runtime.name":"Java(TM) SE Runtime Environment",
+        "awt.useSystemAAFontSettings":"gasp",
+        "sun.boot.library.path":"/opt/jdk1.8.0_144/jre/lib/amd64",
+        "java.vm.version":"25.144-b01",
+        "maven.multiModuleProjectDirectory":"/home/jimersylee/projects/java/spring-cloud-action/hello",
+        ...</code></pre>
+</li>
+<li>
+<p>/mappings:该端点用来返回所有Spring MVC的控制器映射关系报告.</p>
+<pre><code>{
+    "/webjars/**":{
+        "bean":"resourceHandlerMapping"
+    },
+    "/**":{
+        "bean":"resourceHandlerMapping"
+    },
+    "/**/favicon.ico":{
+        "bean":"faviconHandlerMapping"
+    },
+    "{[/hello]}":{
+        "bean":"requestMappingHandlerMapping",
+        "method":"public java.lang.String com.jimersylee.hello.web.HelloController.index()"
+    },
+    "{[/error],produces=[text/html]}":{
+        "bean":"requestMappingHandlerMapping",
+        "method":"public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)"
+    },
+    .
+    .
+    .</code></pre>
+</li>
+<li>
+<p>/info:该端点用来返回一些应用自定义的信息.我们可以在application.properties中通过info前缀来设置一些属性,比如:</p>
+<pre><code>info.app.name=spring-boot-hello
+info.app.version=v1.0.0 </code></pre>
+<p>再访问/info.获得下面的报告</p>
+<pre><code>{
+    "app":{
+        "name":"spring-boot-hello",
+        "version":"v1.0.0"
+    }
+}</code></pre>
+</li>
+</ul>
+<h3>度量指标类</h3>
+<ul>
+<li>
+<p>/metrics:该端点用来返回当前应用的各类重要度量指标,比如内存信息,线程信息,垃圾回收信息等</p>
+<pre><code>{
+    "mem":565018,
+    "mem.free":427032,
+    "processors":4,
+    "instance.uptime":1276647,
+    "uptime":1287345,
+    "systemload.average":1.98,
+    "heap.committed":496128,
+    "heap.init":176128,
+    "heap.used":69095,
+    "heap":2494464,
+    "nonheap.committed":70608,
+    "nonheap.init":2496,
+    "nonheap.used":68891,
+    "nonheap":0,
+    ...</code></pre>
+<ul>
+<li>系统信息:处理器processors,运行时间uptime和instance.uptime,系统平均负载,systemload.average</li>
+<li>mem.*:内存概要信息</li>
+<li>heap.*:堆内存使用情况.</li>
+<li>nonheap.*:非堆内存使用情况.</li>
+<li>threads.*:线程使用情况,包括线程数,守护线程数(daemon),线程峰值(peak)</li>
+<li>classes.*:应用加载和卸载的类统计.</li>
+<li>gc.*:垃圾收集器的详细信息.包括垃圾回收次数gc.ps_scavenge.count,垃圾回收消耗时间gc.ps_scavenge.time,标记-清除算法的次数gc.ps_marksweep.count,标记-清除算法的消耗时间,gc.ps_marksweep.time</li>
+<li>httpsessions.*:Tomcat容器的会话使用情况.</li>
+<li>gauge.*:HTTP请求的性能指标之一,如gauge.response.hello: 5,它表示上一次hello请求的延迟时间为5毫秒</li>
+<li>counter.*:HTTP请求的性能指标之一,,它主要作为计数器来使用.如counter.status.200.hello:11代表hello请求返回的200状态的次数为11</li>
+</ul>
+<p>我们还可以通过/metrics/{name}接口来更细粒度地获取度量信息,如果可以通过访问/metrics/mem.free来获取当前可用内存数量</p>
+</li>
+<li>
+<p>/health:获取健康指标信息.
+有时候我们还会用到Spring Boot封装的产品进行开发,比如RocketMQ.我们需要实现org.springframework.boot.actuate.health.HealthIndicator接口来实现一个对RocketMQ的检测器类</p>
+<pre><code>@Component
+public class RocketMQHealthIndicator implements HealthIndicator {
+    @Override
+    public Health health() {
+        int errorCode=this._check();
+        if(errorCode!=0){
+            return Health.down().withDetail("Error Code",errorCode).build();
+        }
+        return Health.up().build();
+    }
+
+    private int _check() {
+        //对监控对象的检测操作
+
+        return 0;
+    }
+}
+</code></pre>
+<p>返回结果</p>
+<pre><code>{
+    "status": "UP",
+    "rocketMQ": {
+        "status": "UP"
+    },
+    "diskSpace": {
+        "status": "UP",
+        "total": 125484777472,
+        "free": 65173798912,
+        "threshold": 10485760
+    }
+}</code></pre>
+</li>
+<li>
+<p>/dump:该端点用来暴露程序运行中的线程信息</p>
+</li>
+<li>
+<p>/trace:该端点用来返回基本的HTTP跟踪信息,始终保留最近的100条请求记录</p>
+</li>
+</ul>
+<h3>操作类控制器</h3>
+<p>可以进行关键操作,需要通过属性来配置开启操作.在原生端点中,只提供了一个用来关闭应用的端点:/shutdown(后续引入Eureka之后,会引入更多控制端点).我们可以通过配置开启它</p>
+<pre><code>endpoint.shutdown.enable=true</code></pre>
+<p>由于开放关闭应用本身是一件非常危险的事,需要对其加入一定的保护机制,比如定制actuator的端口路径,整合Spring Security进行安全校验.</p>
+				</p>
+    </section>
+</article>	<section id="comments">
+				<div class="post-content">
+			<div id="disqus_thread"></div>
+			<script>
+var disqus_config = function () {
+	this.page.url = location.href;
+	this.page.identifier = 'e2b90c1937d33901c8bb0a3450a4998f';
+};
+(function() {
+	var d = document, s = d.createElement('script');
+	s.src = '//jimersylee.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+			</script>
+			<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		</div>
+			</section>
+</section>
+    
+    <footer id="pagefooter">
+    <div class="footerwrap">
+        <p class="siteinfo">Copyright &copy 2015 Gtiblog. All Rights Reserved. <a href="http://www.gitblog.cn">Proudly powered by Gitblog</a></p>
+    </div>
+</footer> 
+</section>
+        	<div class="clear"></div>
+        </div>
+    </section>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/magula.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PHP字符串常用函数学习|Jimersy Lee's Blog </title>
+    
+    <meta name="keywords" content="PHP,STRING,php,Jimersy Lee,jimersylee,java,php,python,js,html,github">
+	<meta name="description" content="包括字符串的常用操作">
+    <link rel="stylesheet" type="text/css" href="http://local.v4.blog.com/theme/beach/css/style.css?ver=2.3.2">
+    <link rel="stylesheet" type="text/css" href="http://local.v4.blog.com/theme/beach/css/markdown.css?ver=2.3.2">
+    <link rel="alternate" type="application/rss+xml" title="Jimersy Lee's Blog" href="http://local.v4.blog.com/feed.xml" />
+    
+    <!--[if IE]>
+	<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<![endif]-->
+	
+    <!--[if IE 6]>
+	<script src="http://local.v4.blog.com/theme/beach/js/belatedPNG.js"></script>
+	<script>
+    	DD_belatedPNG.fix('*');
+	</script>
+	<![endif]-->
+	
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?3f9957e676a9733fcd02eb9f0e5f9416";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	</head>
+
+<body>
+    <section id="page">
+        <div id="pagewrap">
+        		<section id="sidebar">
+	    <h2>分类</h2>
+    <ul>
+            <li>
+            <a href="http://local.v4.blog.com/category/linux.html">linux</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/python.html">python</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/js.html">js</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/devops.html">devops</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/spring.html">spring</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/go.html">go</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/thoughts.html">thoughts</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/books.html">books</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/java.html">java</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/category/php.html">php</a>
+        </li>
+        </ul>
+        
+        <h2>标签</h2>
+    <ul>
+            <li>
+            <a href="http://local.v4.blog.com/tags/LINUX.html">LINUX</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SHORTCUT-KEY.html">SHORTCUT-KEY</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/CENTOS.html">CENTOS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/MANJARO.html">MANJARO</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/fusuma.html">fusuma</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/VIM.html">VIM</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SPACEVIM.html">SPACEVIM</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/PYTHON.html">PYTHON</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/MACHINE-LEARNING.html">MACHINE-LEARNING</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SCRAPY.html">SCRAPY</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/CRAWLER.html">CRAWLER</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JS.html">JS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JAVASCRIPT.html">JAVASCRIPT</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/NGINX.html">NGINX</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SSL.html">SSL</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JENKINS.html">JENKINS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/HARBOR.html">HARBOR</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/DEVOPS.html">DEVOPS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/MARIADB.html">MARIADB</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/Spring.html">Spring</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/Cloud.html">Cloud</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/%E7%AE%80%E4%BB%8B.html">简介</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SPRING-CLOUD.html">SPRING-CLOUD</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/GO.html">GO</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/Blog.html">Blog</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/BLOG.html">BLOG</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/DEV.html">DEV</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/RULE.html">RULE</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/ML.html">ML</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/BOOKS.html">BOOKS</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/BACK-END.html">BACK-END</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JAVA.html">JAVA</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/PATTERN.html">PATTERN</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/JVM.html">JVM</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/PHP.html">PHP</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/SWOOLE.html">SWOOLE</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/tags/STRING.html">STRING</a>
+        </li>
+        </ul>
+        
+        <h2>归档</h2>
+    <ul>
+            <li>
+            <a href="http://local.v4.blog.com/archive/202006.html">2020-06</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/202005.html">2020-05</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/202002.html">2020-02</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201809.html">2018-09</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201709.html">2017-09</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201707.html">2017-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201704.html">2017-04</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201608.html">2016-08</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201607.html">2016-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201605.html">2016-05</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201510.html">2015-10</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201508.html">2015-08</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201507.html">2015-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201505.html">2015-05</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201504.html">2015-04</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201503.html">2015-03</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201411.html">2014-11</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201408.html">2014-08</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201407.html">2014-07</a>
+        </li>
+            <li>
+            <a href="http://local.v4.blog.com/archive/201401.html">2014-01</a>
+        </li>
+        </ul>
+    </section>        	<section id="contents">
+	<header id="mainheader">
+		<h1><a href="http://local.v4.blog.com/"><span>Jimersy Lee's Blog</span></a></h1>
+	</header>
+	
+	<section id="main">
+	<article class="post">
+    <header>
+    	        <h2>PHP字符串常用函数学习</h2>
+		        <p class="postinfo">PHP,STRING,php | <time>2015-07-09</time> | by <i>Jimersy Lee</i></p>
+    </header>
+
+    <section class="entry">
+        <p>
+        		<!--
+author: Jimersy Lee
+head: 
+date: 2015-07-09
+title: PHP字符串常用函数学习
+tags: PHP,STRING
+images: 
+category: php
+status: publish
+summary: 包括字符串的常用操作
+-->
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="content-type" content="text/html;charset=utf-8"&gt;
+&lt;body&gt;
+
+&lt;/body&gt;
+&lt;/head&gt;
+&lt;/html&gt;
+&lt;?php
+
+echo '1 int crc32(string str),产生32位长的crc多项式,比如crc32("helllo")&lt;br/&gt;';
+echo crc32 ("jkkajjjk\n");
+echo '&lt;br/&gt;';
+
+echo '2 string bin2hex(string str) , 把二进制转换为十六进制,比如bin2hex("helloworld")&lt;br/&gt;';
+echo bin2hex("hello world");
+echo '&lt;br/&gt;';
+
+echo '3 string chop(string str),移除str后面多余的空白,返回新的字符串&lt;br/&gt;';
+echo 'kkkj l ';
+echo 'hahah';
+echo chop("kkkj l ");
+echo 'hahah';
+echo '&lt;br/&gt;';
+
+echo '4 string chr(int ascii),返回指定ascii码表示的字符,如chr(100)&lt;br/&gt;';
+echo chr(100);
+echo '&lt;br/&gt;';
+echo '5 int ord(string str),返回str字符串第一个字符的ascii码,如ord("d"),&lt;br/&gt;';
+echo ord("d");
+echo "&lt;br/&gt;";
+echo '6 string chunk_split(string str,int chunklen, string end),把字符串没隔一定数目就分割,如chunk_split("jasdjkasjdkasadas",5,"|"),就是把字符串每5个字符用|分割&lt;br/&gt;';
+echo chunk_split("jasdjkasjdkasadas",5,"|");
+echo '&lt;br/&gt;';
+echo '7 string crypt(string str,string salt),单向加密,无解密函数~';
+echo '&lt;br/&gt;';
+echo crypt("hello world","kk");
+echo '&lt;br/&gt;';
+echo '
+CRYPT_STD_DES - 基于标准 DES 算法的散列使用 "./0-9A-Za-z" 字符中的两个字符作为盐值。在盐值中使用非法的字符将导致 crypt() 失败。
+CRYPT_EXT_DES - 扩展的基于 DES 算法的散列。其盐值为 9 个字符的字符串，由 1 个下划线后面跟着 4 字节循环次数和 4 字节盐值组成。它们被编码成可打印字符，每个字符 6 位，有效位最少的优先。0 到 63 被编码为 "./0-9A-Za-z"。在盐值中使用非法的字符将导致 crypt() 失败。
+CRYPT_MD5 - MD5 散列使用一个以 $1$ 开始的 12 字符的字符串盐值。
+CRYPT_BLOWFISH - Blowfish 算法使用如下盐值：“$2a$”，一个两位 cost 参数，“$” 以及 64 位由 “./0-9A-Za-z” 中的字符组合而成的字符串。在盐值中使用此范围之外的字符将导致 crypt() 返回一个空字符串。两位 cost 参数是循环次数以 2 为底的对数，它的范围是 04-31，超出这个范围将导致 crypt() 失败。
+CRYPT_SHA256 - SHA-256 算法使用一个以 $5$ 开头的 16 字符字符串盐值进行散列。如果盐值字符串以 “rounds=&lt;N&gt;$” 开头，N 的数字值将被用来指定散列循环的执行次数，这点很像 Blowfish 算法的 cost 参数。默认的循环次数是 5000，最小是 1000，最大是 999,999,999。超出这个范围的 N 将会被转换为最接近的值。
+CRYPT_SHA512 - SHA-512 算法使用一个以 $6$ 开头的 16 字符字符串盐值进行散列。如果盐值字符串以 “rounds=&lt;N&gt;$” 开头，N 的数字值将被用来指定散列循环的执行次数，这点很像 Blowfish 算法的 cost 参数。默认的循环次数是 5000，最小是 1000，最大是 999,999,999。超出这个范围的 N 将会被转换为最接近的值。
+
+';
+
+if (CRYPT_STD_DES == 1)
+{
+echo "Standard DES: ".crypt("hello world")."\n&lt;br /&gt;";
+}
+else
+{
+echo "Standard DES not supported.\n&lt;br /&gt;";
+}
+
+if (CRYPT_EXT_DES == 1)
+{
+echo "Extended DES: ".crypt("hello world")."\n&lt;br /&gt;";
+}
+else
+{
+echo "Extended DES not supported.\n&lt;br /&gt;";
+}
+
+if (CRYPT_MD5 == 1)
+{
+echo "MD5: ".crypt("hello world")."\n&lt;br /&gt;";
+}
+else
+{
+echo "MD5 not supported.\n&lt;br /&gt;";
+}
+
+if (CRYPT_BLOWFISH == 1)
+{
+echo "Blowfish: ".crypt("hello world");
+}
+else
+{
+echo "Blowfish DES not supported.";
+}
+
+echo '&lt;br/&gt;';
+
+echo ' 8 array explode (string separator, string string [, int limit]),传回一个字符串的数组，以参数 separator为界线将参数 string切开，如果有设定参数 limit，则传回的数组最多将会包含 limit个元素，而最后一个元素将会包含 string全部剩余的部份。&lt;br/&gt;';
+$pizza="haa kkkk kllom lljjijj iioo ";
+$pieces=explode(" ",$pizza);
+foreach($pieces as $val){
+echo $val;
+
+}
+echo '&lt;br/&gt;';
+
+echo '9 string implode (string glue, array pieces) 以参数glue将数组pieces的各个元素结合起来成字符串返回.与join(string glue,array pieces)相同用法&lt;br/&gt;';
+
+echo implode (":", $pieces);
+echo '&lt;br/&gt;';
+
+echo '10 array split (string pattern, string string [, int limit]),以正则把字符串切开 '
+
+?&gt;</code></pre>
+				</p>
+    </section>
+</article>	<section id="comments">
+				<div class="post-content">
+			<div id="disqus_thread"></div>
+			<script>
+var disqus_config = function () {
+	this.page.url = location.href;
+	this.page.identifier = 'a193bb6ffa1eff4a0e8d7479f23852b3';
+};
+(function() {
+	var d = document, s = d.createElement('script');
+	s.src = '//jimersylee.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+			</script>
+			<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		</div>
+			</section>
+</section>
+    
+    <footer id="pagefooter">
+    <div class="footerwrap">
+        <p class="siteinfo">Copyright &copy 2015 Gtiblog. All Rights Reserved. <a href="http://www.gitblog.cn">Proudly powered by Gitblog</a></p>
+    </div>
+</footer> 
+</section>
+        	<div class="clear"></div>
+        </div>
+    </section>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/8.6/styles/magula.min.css">
+<script src="//cdn.bootcss.com/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

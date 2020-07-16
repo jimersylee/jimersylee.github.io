@@ -1,0 +1,50 @@
+<div class="container">
+	<span class="content-title">{{ blog.title }}</span>
+	<div class="content">
+		<article class="full">
+			<div class="read">
+				<div class="post">
+					<h2>{{ blog.title }}</h2>
+					<p>
+					{{ blog.content | raw }}
+					</p>
+				</div>
+				<div class="meta">
+					<span>{{ blog.date | date('Y-m-d') }} {{ blog.author }}</span>
+				</div>
+			</div>
+		</article>
+		{% if site.disqus %}
+		<div class="post-content">
+			<div id="disqus_thread"></div>
+			<script>
+var disqus_config = function () {
+	this.page.url = location.href;
+	this.page.identifier = '{{ blog.blogId }}';
+};
+(function() {
+	var d = document, s = d.createElement('script');
+	s.src = '//{{ site.disqus }}.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+			</script>
+			<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		</div>
+		{% elseif site.youyan %}
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{site.youyan}}"></script>
+<!-- UY END -->
+		{% endif %}
+	</div>
+	<div id="{% if site.disqus %}
+	disqus
+	{% elseif site.youyan %}
+	youyan
+	{% else %}
+	comment
+	{% endif %}"></div>
+</div>
+
+{% include "_includes/footer.html" %}

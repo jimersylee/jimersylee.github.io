@@ -1,0 +1,32 @@
+{% extends "_layouts/struct.html" %}
+
+{% block main %}
+<section id="main">
+	{% include "_includes/post.html" %}
+	<section id="comments">
+		{% if site.disqus %}
+		<div class="post-content">
+			<div id="disqus_thread"></div>
+			<script>
+var disqus_config = function () {
+	this.page.url = location.href;
+	this.page.identifier = '{{ blog.blogId }}';
+};
+(function() {
+	var d = document, s = d.createElement('script');
+	s.src = '//{{ site.disqus }}.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+			</script>
+			<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		</div>
+		{% elseif site.youyan %}
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{site.youyan}}"></script>
+<!-- UY END -->
+		{% endif %}
+	</section>
+</section>
+{% endblock %}

@@ -1,15 +1,15 @@
 #GitBlog配置文件，使用4个空格代替Tab
 ---
-url: /
+url: http://local.v4.blog.com/
 title: Jimersy Lee's Blog
 subtitle: Just for fun
-theme: default
+theme: quest
 enableCache: true
 highlight: true
 mathjax: true
 katex: false
-youyan: 2142981
-baiduAnalytics: ad6130507d4c044cd731ac40594106a0
+disqus: jimersylee
+baiduAnalytics: 3f9957e676a9733fcd02eb9f0e5f9416
 keywords: Jimersy Lee,jimersylee,java,php,python,js,html,github
 description: >
     这是Jimersy Lee的个人博客
@@ -22,7 +22,7 @@ author:
     avatar:
 blog:
     recentSize: 5
-    pageSize: 6
+    pageSize: 10
     pageBarSize: 5
     allBlogsForPage: false
 text:
