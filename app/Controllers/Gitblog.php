@@ -24,6 +24,9 @@ class Gitblog extends BaseController
 
     //博客路径
     private $blogPath;
+    /**
+     * @var Markdown
+     */
     private $markdown;
     /**
      * @var Pager
@@ -294,8 +297,6 @@ class Gitblog extends BaseController
             $this->init();
         } else {
             $this->response->setBody($html);
-            $cacheHeaderVal = strtoupper(substr($cacheKey, 0, 32));
-            $this->response->setHeader("Cache-Key", $cacheHeaderVal);
             $flag = true;
         }
 
@@ -468,7 +469,7 @@ class Gitblog extends BaseController
     public function blog($blogId = null)
     {
         if ($this->loadOutCache()) {
-            return $this->response->send();
+            return $this->response->getBody();
         }
 
         if (!$blogId) {
@@ -484,7 +485,7 @@ class Gitblog extends BaseController
         $this->setData("pageName", "blog");
         $this->setData("blog", $blog);
 
-        return $this->render('detail.html');
+        $this->render('detail.html');
     }
 
     //feed.xml
@@ -527,20 +528,18 @@ class Gitblog extends BaseController
     {
         $htmlPage = $this->twig->render($tpl, $this->data);
 
-        if (!$this->export) {
-            //不是cli导出
-            //是否使用缓存呢
-            if ($this->confObj['enableCache']) {
-                $cacheKey = $this->getCacheKey();
-                cache()->save($cacheKey, $htmlPage, GB_PAGE_CACHE_TIME);
-            }
-            $this->response->setBody($htmlPage);
-            return $this->response->send();
-        } else {
-            //是cli导出
+        if ($this->export) {
             return $htmlPage;
-
         }
+
+        //不是cli导出
+        //是否使用缓存呢
+        if ($this->confObj['enableCache']) {
+            $cacheKey = $this->getCacheKey();
+            cache()->save($cacheKey, $htmlPage, GB_PAGE_CACHE_TIME);
+        }
+        $this->response->setBody($htmlPage);
+        return $this->response->sendBody();
 
     }
 
