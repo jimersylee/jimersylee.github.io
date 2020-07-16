@@ -528,15 +528,20 @@ class Gitblog extends BaseController
         $htmlPage = $this->twig->render($tpl, $this->data);
 
         if (!$this->export) {
+            //不是cli导出
             //是否使用缓存呢
             if ($this->confObj['enableCache']) {
                 $cacheKey = $this->getCacheKey();
                 cache()->save($cacheKey, $htmlPage, GB_PAGE_CACHE_TIME);
             }
+            $this->response->setBody($htmlPage);
+            return $this->response->send();
+        } else {
+            //是cli导出
+            return $htmlPage;
+
         }
-        $this->response->setBody($htmlPage);
-        $this->response->send();
-        return $htmlPage;
+
     }
 
     //计算缓存Key
