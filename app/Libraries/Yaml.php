@@ -38,7 +38,7 @@ class Yaml
             "youyan" => "",
             "disqus" => "",
             "baiduAnalytics" => "",
-            "keywords" => "GitBlog,博客,Markdown博客,jockchou",
+            "keywords" => "博客,Markdown博客,jockchou",
             "description" => "GitBlog是一个简单易用的Markdown博客系统",
             "version" => "2.1",
             "author" => array(

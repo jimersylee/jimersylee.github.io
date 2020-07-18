@@ -2,18 +2,17 @@
 author: Jimersy Lee
 head: 
 date: 2017-09-20
-title: <Go:build web application>的中文翻译版本目录
+title: Go:build web application的中文翻译版本目录
 tags: GO
 images: 
 category: go
 status: publish
-summary: <Go:build web application>的中文翻译版本
+summary: Go:build web application 的中文翻译版本
 -->
 
-## <Go:build web application>的中文翻译版本
 
 # 目录
-## 模块1:学习Go的Web开发
+## 模块1:学习Go的Web开发xxx
 ### 第一章:介绍和安装Go环境
 - 安装Go
 - 构建一个项目

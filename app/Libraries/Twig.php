@@ -33,7 +33,7 @@ class Twig
     /**
      * @var string
      */
-    private $ext = '.html';
+    private $ext = '.twig';
 
     /**
      * Twig constructor.
@@ -73,7 +73,7 @@ class Twig
     public function render(string $file, array $array): string
     {
         try {
-            $template = $this->environment->load($file);
+            $template = $this->environment->load($file.$this->ext);
         } catch (Error $error_Loader) {
             throw new PageNotFoundException($error_Loader);
         }

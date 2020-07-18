@@ -1,17 +1,17 @@
-{% extends "block/base.html" %}
+{% extends "block/base.twig" %}
 
 {% block keywords %}{% if tag %}{{ tag.name }},{% endif %}{% if category %}{{ category.name }},{% endif %}{{ parent() }}{% endblock %}
 
 {% block header %}
-    {% include "block/header.html" %}
+    {% include "block/header.twig" %}
 {% endblock %}
 
 {% block content %}
-    {% include "block/homeContent.html" %}
+    {% include "block/homeContent.twig" %}
 {% endblock %}
 
 
 {% block footer %}
-    {% include "block/footer.html" %}
+    {% include "block/footer.twig" %}
 {% endblock %}
 

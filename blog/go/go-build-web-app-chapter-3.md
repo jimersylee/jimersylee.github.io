@@ -2,7 +2,7 @@
 author: Jimersy Lee
 head: 
 date: 2017-09-22
-title: <Go:build web application>的中文翻译版-第三章-连接数据
+title: Go:build web application 的中文翻译版-第三章-连接数据
 tags: GO
 images: 
 category: go

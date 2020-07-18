@@ -8,7 +8,7 @@
     	{% endif%}
     	
     	{% if navObj or keyword %}
-    		{% include "block/breadcrumbs.html" %}
+    		{% include "block/breadcrumbs.twig" %}
     	{% endif %}
 	<div class="quest-row site-content">
 		<div class="container">
@@ -18,17 +18,17 @@
 						{% if blogList %}
 							{% for blog in blogList %}
 								{% if blog.title %}
-					        	{% include "blog/blog.html" %}
+					        	{% include "blog/blog.twig" %}
 					        	{% endif %}
 					        {% endfor %}
-							{% include "block/nav.html" %}
+							{% include "block/nav.twig" %}
 						{% else %}
-							{% include "block/noresult.html" %}
+							{% include "block/noresult.twig" %}
 						{% endif %}
 					</div>
 					<!-- #main -->
 				</div>
-				{% include "block/secondary.html" %}
+				{% include "block/secondary.twig" %}
 			</div>
 			<!-- .row -->
 		</div>

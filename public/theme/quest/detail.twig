@@ -1,4 +1,4 @@
-{% extends "block/base.html" %}
+{% extends "block/base.twig" %}
 
 {% block title %}{{ blog.title }}|{{ site.title }}{% endblock %}
 
@@ -7,14 +7,14 @@
 {% block description %}{{ blog.summary | replace({'\n': ''}) | striptags | slice(0, 140) }}{% endblock %}
 
 {% block header %}
-    {% include "block/header.html" %}
+    {% include "block/header.twig" %}
 {% endblock %}
 
 {% block content %}
-    {% include "block/content.html" %}
+    {% include "block/content.twig" %}
 {% endblock %}
 
 
 {% block footer %}
-    {% include "block/footer.html" %}
+    {% include "block/footer.twig" %}
 {% endblock %}

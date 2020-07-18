@@ -18,8 +18,6 @@ class WordPress
     {
         helper("xml");
         helper("file");
-//        $this->CI->load->helper('xml');
-//        $this->CI->load->helper('file');
         $this->wpPath = str_replace("\\", "/", dirname(APPPATH)) . '/wordpress.xml';
     }
 

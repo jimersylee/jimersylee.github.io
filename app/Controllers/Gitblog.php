@@ -7,6 +7,11 @@ use App\Libraries\Pager;
 use App\Libraries\Twig;
 use App\Libraries\Yaml;
 
+/**
+ * 主控制器,实现网站绝大多数功能
+ * Class Gitblog
+ * @package App\Controllers
+ */
 class Gitblog extends BaseController
 {
 
@@ -310,7 +315,6 @@ class Gitblog extends BaseController
             return true;
         }
 
-        //$categoryId = (int)$categoryId;
         $categoryId = urldecode($categoryId);
         $pageNo = (int)$pageNo;
         $pageSize = $this->confObj['blog']['pageSize'];
@@ -338,7 +342,7 @@ class Gitblog extends BaseController
         $this->setData("pages", $pageData['pages']);
         $this->setData("blogList", $pageData['blogList']);
 
-        return $this->render('index.html');
+        return $this->render('index');
     }
 
     //按月归档下的博客列表
@@ -374,7 +378,7 @@ class Gitblog extends BaseController
         $this->setData("pages", $pageData['pages']);
         $this->setData("blogList", $pageData['blogList']);
 
-        return $this->render('index.html');
+        return $this->render('index');
     }
 
     //标签下的博客列表
@@ -384,9 +388,6 @@ class Gitblog extends BaseController
             return $this->response->send();
         }
 
-        $this->pageName = "tags";
-
-        //$tagId = (int)$tagId;
         $tagId = urldecode($tagId);
         $pageNo = (int)$pageNo;
         $pageSize = $this->confObj['blog']['pageSize'];
@@ -414,7 +415,7 @@ class Gitblog extends BaseController
         $this->setData("pages", $pageData['pages']);
         $this->setData("blogList", $pageData['blogList']);
 
-        return $this->render('index.html');
+        return $this->render('index');
     }
 
     //首页，博客列表
@@ -445,7 +446,7 @@ class Gitblog extends BaseController
         $this->setData("pages", $pageData['pages']);
         $this->setData("blogList", $pageData['blogList']);
 
-        return $this->render('index.html');
+        return $this->render('index');
     }
 
     public function search()
@@ -462,7 +463,7 @@ class Gitblog extends BaseController
         $this->setData("keyword", $keyword);
         $this->setData("blogList", $blogList);
 
-        return $this->render('index.html');
+        return $this->render('index');
     }
 
     //博客详情页
@@ -485,7 +486,7 @@ class Gitblog extends BaseController
         $this->setData("pageName", "blog");
         $this->setData("blog", $blog);
 
-        $this->render('detail.html');
+        return $this->render('detail');
     }
 
     //feed.xml
@@ -514,7 +515,7 @@ class Gitblog extends BaseController
     public function go404()
     {
         $this->response->setStatusCode(404);
-        $this->render("404.html");
+        $this->render("404");
     }
 
     //设置渲染数据
@@ -534,7 +535,7 @@ class Gitblog extends BaseController
 
         //不是cli导出
         //是否使用缓存呢
-        if ($this->confObj['enableCache']) {
+        if ($this->confObj['enableCache'] && ENVIRONMENT!="develop") {
             $cacheKey = $this->getCacheKey();
             cache()->save($cacheKey, $htmlPage, GB_PAGE_CACHE_TIME);
         }
