@@ -14,7 +14,6 @@ use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use Twig\Environment;
 use Twig\Error\Error;
-use Twig\Extension\CoreExtension;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
@@ -73,7 +72,7 @@ class Twig
     public function render(string $file, array $array): string
     {
         try {
-            $template = $this->environment->load($file.$this->ext);
+            $template = $this->environment->load($file . $this->ext);
         } catch (Error $error_Loader) {
             throw new PageNotFoundException($error_Loader);
         }

@@ -41,6 +41,9 @@ class Gitblog extends BaseController
      * @var Yaml
      */
     private $yaml;
+    /**
+     * @var Twig
+     */
     private $twig;
 
     function __construct()
@@ -480,13 +483,15 @@ class Gitblog extends BaseController
         $blog = $this->markdown->getBlogById($blogId);
 
         if ($blog == null) {
-            return $this->go404();
+            $this->go404();
+            return;
         }
 
         $this->setData("pageName", "blog");
         $this->setData("blog", $blog);
 
-        return $this->render('detail');
+        $this->render('detail');
+        return;
     }
 
     //feed.xml
@@ -535,7 +540,7 @@ class Gitblog extends BaseController
 
         //不是cli导出
         //是否使用缓存呢
-        if ($this->confObj['enableCache'] && ENVIRONMENT!="develop") {
+        if ($this->confObj['enableCache'] && ENVIRONMENT != "develop") {
             $cacheKey = $this->getCacheKey();
             cache()->save($cacheKey, $htmlPage, GB_PAGE_CACHE_TIME);
         }
