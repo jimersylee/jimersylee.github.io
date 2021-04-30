@@ -28,7 +28,7 @@ GitBlog是一个简单易用的Markdown博客系统，它不需要数据库，�
 
 ## 四. 环境要求 ##
 
-- PHP 5.2.4+ 
+- PHP 5.2.4+ 建议php7.0+ 
 - mbstring扩展支持 
 - php.ini开启short_open_tag = On 
 
@@ -37,7 +37,7 @@ GitBlog是一个简单易用的Markdown博客系统，它不需要数据库，�
 1. 下载GitBlog源代码  
 2. 解压上传到你的PHP网站根目录  
 3. 打开浏览器，访问网站首页  
-4. 上传Markdown文件到`posts`文件夹  
+4. 上传Markdown文件到`blog`文件夹  
 
 ## 六. 详细说明 ##
 
@@ -58,49 +58,31 @@ GitBlog是一个简单易用的Markdown博客系统，它不需要数据库，�
 
 ## 七. 问题及bug反馈 ##
 
-如果在实际使用过程中对GitBlog有新的功能需求，或者在使用GitBlog的过程中发现了Bug，欢迎反馈给我。可以直接在Github上提交，也可以发邮件至`164068300[AT]qq.com`与我取得联系，我将及时回复。如果你自己制作了漂亮好用的主题，也非常欢迎你提交给我，我会在这里展示你的主题链接。如果你正在使用GitBlog，也可以告诉我，我将也会在这里列出使用者名单。如果你想和其他GitBlog使用者讨论交流，欢迎加入QQ群`84692078`。
 
 ## 八. 使用者列表 ##
 
-- [Weeds][20]
-- [橙子][21]
-- [jockchou][22]
-- [GitBlog Doc][23]
-- [zxy][24]  
-- [ckeyer][25]
-- [江湖隐行客][26]
-- [liyu34][27]
+
 
 
 ## 九. 感谢 ##
 
 GitBlog的成长需要喜欢Markdown，喜欢写博客的各位亲们支持！感谢你们使用GitBlog，感激你们对Gitblog的良好建议和Bug反馈。
 
-QQ群：`84692078`  
-作者邮箱：`164068300[AT]qq.com`    
+# 优化
+* php升级为7.4版本
+* markdown解析器升级为composer导入
 
 
-[1]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/install.md
-[2]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/struct.md
-[3]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/config.md
-[4]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/edit.md
-[5]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/other-func.md
-[6]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/cache.md
-[7]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/export.md
-[8]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/theme.md
-[9]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/nginx.md
-[10]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/apache.md
-[11]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/sae.md
-[12]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/github-pages.md
-[13]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/update.md
-[14]:https://github.com/jockchou/gitblogdoc/tree/master/posts/gitblog/wordpress.md
+# 待测试
+[x]feed
+[x]导出静态网站
+[]wordpresss导入
+[x]文章搜索功能
+[x]404
 
 
-[20]: http://blog.hiweeds.net
-[21]: http://xiaochengzi.gitblog.cn
-[22]: http://jockchou.com
-[23]: https://github.com/jockchou/gitblogdoc
-[24]: http://zxy.link
-[25]: http://blog.ckeyer.com
-[26]: http://wangzugang.net
-[27]: http://liyu34.xyz
+# 更新日志
+* 20200718
+    * quest模板全部改成twig后缀,便于IDE识别模板引擎
+    * 渲染页面的时候直接选择模板名,不带后缀
+    * develop环境不缓存页面内容

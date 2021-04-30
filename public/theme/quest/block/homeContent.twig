@@ -1,0 +1,38 @@
+<div id="content">
+		{% if category %}
+			{% set navObj=category %}
+    	{% elseif tag %}
+    		{% set navObj=tag %}
+    	{% elseif yearMonth %}
+    		{% set navObj=yearMonth %}
+    	{% endif%}
+    	
+    	{% if navObj or keyword %}
+    		{% include "block/breadcrumbs.twig" %}
+    	{% endif %}
+	<div class="quest-row site-content">
+		<div class="container">
+			<div class="row">
+				<div id="primary" class="content-area col-md-9">
+					<div id="main" class="site-main" role="main">
+						{% if blogList %}
+							{% for blog in blogList %}
+								{% if blog.title %}
+					        	{% include "blog/blog.twig" %}
+					        	{% endif %}
+					        {% endfor %}
+							{% include "block/nav.twig" %}
+						{% else %}
+							{% include "block/noresult.twig" %}
+						{% endif %}
+					</div>
+					<!-- #main -->
+				</div>
+				{% include "block/secondary.twig" %}
+			</div>
+			<!-- .row -->
+		</div>
+		<!-- .container -->
+	</div>
+	<!-- .quest-row -->
+</div><!-- #content -->

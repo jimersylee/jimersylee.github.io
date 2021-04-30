@@ -1,0 +1,58 @@
+{% extends "_layouts/default.html" %}
+{% block content %}
+<a title="首页" class="fa fa-paper-plane dp-dropplets-icon" href="{{ site.url }}"></a>
+<article class="single ">
+	<div class="row">
+		<div class="one-quarter meta">
+			<div class="thumbnail">
+				{% set headUrl = "{{ site.url }}blog/img/logo_64x64.png" %}
+				{% if blog.authorHead %}
+				{% set headUrl = blog.authorHead %}
+				{% endif %}
+				<img src="{{ headUrl }}" alt="{{ blog.author }}" />
+			</div>
+
+			<ul>
+				<li>{{ blog.author }}</li>
+				<li>{{ blog.date | date("Y-m-d")}}</li>
+				<li>
+					{% if attribute(blog.category, 0) %}
+					{% for category in blog.category %}  
+					<a href="{{ category.url }}">{{ category.name }}</a>
+					{% endfor %}
+					{% endif %}
+				</li>
+				<li></li>
+			</ul>
+		</div>
+
+		<div class="three-quarters post">
+			<h2>{{ blog.title }}</h2>
+			{{ blog.content | raw }}
+
+			<br/>
+			{% if site.disqus %}
+			<div id="disqus_thread"></div>
+			<script>
+var disqus_config = function () {
+	this.page.url = location.href;
+	this.page.identifier = '{{ blog.blogId }}';
+};
+(function() {
+	var d = document, s = d.createElement('script');
+	s.src = '//{{ site.disqus }}.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+})();
+			</script>
+			<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		{% elseif site.youyan %}
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid={{site.youyan}}"></script>
+<!-- UY END -->
+		{% endif %}
+		</div>
+	</div>
+</article>	
+{% endblock %}

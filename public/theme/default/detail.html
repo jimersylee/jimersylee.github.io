@@ -1,0 +1,20 @@
+{% extends "block/base.html" %}
+
+{% block title %}{{ blog.title }}|{{ site.title }}{% endblock %}
+
+{% block keywords %}{{ blog.keywords }},{{ site.title }}{% endblock %}
+
+{% block description %}{{ blog.summary | replace({'\n': ''}) | striptags | slice(0, 140) }}{% endblock %}
+
+{% block sidebar %}
+    {% include "block/sidebar.html" %}  
+{% endblock %}
+
+{% block content %}
+    {% include "block/content.html" %}
+{% endblock %}
+
+
+{% block footer %}
+    {% include "block/footer.html" %}
+{% endblock %}
