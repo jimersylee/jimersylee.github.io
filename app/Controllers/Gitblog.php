@@ -173,7 +173,10 @@ class Gitblog extends BaseController
             }
 
             $fileContent = $this->blog($blogId);
-            write_file(GB_SITE_DIR . '/' . $siteURL, $fileContent);
+            if (is_string($fileContent)) {
+                write_file(GB_SITE_DIR . '/' . $siteURL, $fileContent);
+            }
+
         }
         echo "export detail page success\n";
 
